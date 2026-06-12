@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrackFlow — Logistics Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    /* ── TOKENS ──────────────────────────────────────────── */
+    :root {
+      --bg:         #080d14;
+      --bg-2:       #0d1520;
+      --bg-3:       #111c2b;
+      --surface:    #0f1e30;
+      --border:     #1a3050;
+      --cyan:       #00e5ff;
+      --cyan-dim:   #00b8cc;
+      --cyan-glow:  rgba(0,229,255,0.12);
+      --amber:      #ffab00;
+      --green:      #00e676;
+      --red:        #ff5252;
+      --text-1:     #e8f4fb;
+      --text-2:     #7a9bb5;
+      --text-3:     #3d607a;
+      --mono:       'Space Mono', monospace;
+      --sans:       'Space Grotesk', sans-serif;
+      --ease:       cubic-bezier(.25,.46,.45,.94);
+    }
+
+    /* ── RESET ───────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text-1);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── SCROLLBAR ───────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--cyan-dim); border-radius: 2px; }
+
+    /* ── GRID NOISE OVERLAY ──────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAVIGATION ──────────────────────────────────────── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%;
+      height: 64px;
+      background: rgba(8,13,20,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s var(--ease);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+      color: var(--cyan);
+      letter-spacing: .04em;
+    }
+    .nav-logo-dot {
+      width: 8px; height: 8px;
+      background: var(--cyan);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,229,255,.5); }
+      50%      { box-shadow: 0 0 0 6px rgba(0,229,255,0); }
+    }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      font-size: .82rem; font-weight: 500; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--text-2);
+      transition: color .2s; display: flex; align-items: center; gap: 6px;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-cta {
+      background: transparent;
+      border: 1px solid var(--cyan);
+      color: var(--cyan);
+      font-family: var(--mono); font-size: .78rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 8px 20px; border-radius: 2px;
+      cursor: pointer; transition: all .25s var(--ease);
+    }
+    .nav-cta:hover { background: var(--cyan); color: var(--bg); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text-1); border-radius: 2px; transition: all .3s; }
+
+    /* ── HERO ────────────────────────────────────────────── */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 120px 5% 60px;
+      overflow: hidden;
+    }
+    .hero-radar {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 700px; height: 700px; pointer-events: none;
+    }
+    .radar-ring {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      border-radius: 50%; border: 1px solid var(--border);
+    }
+    .radar-ring:nth-child(1) { width: 160px; height: 160px; }
+    .radar-ring:nth-child(2) { width: 300px; height: 300px; }
+    .radar-ring:nth-child(3) { width: 460px; height: 460px; }
+    .radar-ring:nth-child(4) { width: 620px; height: 620px; }
+    .radar-sweep {
+      position: absolute; top: 50%; left: 50%;
+      width: 310px; height: 310px;
+      transform-origin: 0 0;
+      background: conic-gradient(from 0deg, transparent 320deg, rgba(0,229,255,.3) 360deg);
+      border-radius: 0 50% 50% 0 / 0 50% 50% 0;
+      animation: sweep 4s linear infinite;
+    }
+    @keyframes sweep { to { transform: rotate(360deg); } }
+    .radar-dot {
+      position: absolute; width: 6px; height: 6px;
+      background: var(--cyan); border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+    .radar-dot:nth-child(5) { top: 30%; left: 60%; animation-delay: .5s; }
+    .radar-dot:nth-child(6) { top: 60%; left: 35%; animation-delay: 1.2s; }
+    .radar-dot:nth-child(7) { top: 45%; left: 72%; animation-delay: .8s; }
+    .radar-dot:nth-child(8) { top: 25%; left: 42%; animation-delay: 1.8s; }
+    @keyframes blink {
+      0%,100% { opacity: 1; box-shadow: 0 0 6px var(--cyan); }
+      50%      { opacity: .2; box-shadow: none; }
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono); font-size: .72rem; font-weight: 400;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 24px;
+      position: relative; z-index: 2;
+    }
+    .hero-title {
+      font-size: clamp(2.8rem, 7vw, 6rem);
+      font-weight: 700; line-height: 1.05;
+      letter-spacing: -.02em;
+      position: relative; z-index: 2;
+      margin-bottom: 24px;
+    }
+    .hero-title .accent { color: var(--cyan); }
+    .hero-sub {
+      max-width: 540px; font-size: 1.05rem; color: var(--text-2);
+      position: relative; z-index: 2; margin-bottom: 44px;
+    }
+    .hero-actions {
+      display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+      position: relative; z-index: 2;
+    }
+    .btn-primary {
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .82rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 14px 32px; border: none; border-radius: 2px;
+      cursor: pointer; transition: all .25s var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(255,255,255,.15);
+      transform: translateX(-100%);
+      transition: transform .3s var(--ease);
+    }
+    .btn-primary:hover::after { transform: translateX(0); }
+    .btn-primary:hover { box-shadow: 0 0 30px rgba(0,229,255,.35); }
+    .btn-outline {
+      background: transparent; color: var(--text-1);
+      font-family: var(--mono); font-size: .82rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 14px 32px; border: 1px solid var(--border);
+      border-radius: 2px; cursor: pointer;
+      transition: all .25s var(--ease);
+    }
+    .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+    .hero-stats {
+      position: relative; z-index: 2;
+      display: flex; gap: 48px; flex-wrap: wrap; justify-content: center;
+      margin-top: 72px; padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat-val {
+      font-family: var(--mono); font-size: 2rem; font-weight: 700;
+      color: var(--cyan);
+    }
+    .hero-stat-lbl {
+      font-size: .75rem; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--text-2); margin-top: 4px;
+    }
+
+    /* ── SECTION SHARED ──────────────────────────────────── */
+    section { position: relative; z-index: 1; padding: 100px 5%; }
+    .section-tag {
+      font-family: var(--mono); font-size: .7rem;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700; letter-spacing: -.02em; line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      max-width: 520px; color: var(--text-2); font-size: .95rem;
+    }
+    .section-header { margin-bottom: 60px; }
+
+    /* ── REVEAL ANIMATION ────────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+    .reveal-delay-5 { transition-delay: .5s; }
+
+    /* ── §1 LIVE TRACKING ────────────────────────────────── */
+    #tracking { background: var(--bg-2); }
+    .tracking-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start;
+    }
+    .track-input-wrap {
+      display: flex; gap: 0; margin-bottom: 32px;
+    }
+    .track-input {
+      flex: 1;
+      background: var(--surface); border: 1px solid var(--border);
+      border-right: none; color: var(--text-1);
+      font-family: var(--mono); font-size: .88rem;
+      padding: 14px 16px; outline: none;
+      transition: border-color .2s;
+    }
+    .track-input:focus { border-color: var(--cyan); }
+    .track-input::placeholder { color: var(--text-3); }
+    .track-btn {
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .8rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      border: none; padding: 14px 20px; cursor: pointer;
+      transition: background .2s;
+    }
+    .track-btn:hover { background: var(--cyan-dim); }
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+    }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 7px; top: 8px; bottom: 8px;
+      width: 2px; background: var(--border);
+    }
+    .tl-item {
+      position: relative; margin-bottom: 28px;
+    }
+    .tl-dot {
+      position: absolute; left: -28px; top: 4px;
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--bg-2);
+      transition: all .3s;
+    }
+    .tl-item.active .tl-dot {
+      background: var(--cyan); border-color: var(--cyan);
+      box-shadow: 0 0 10px rgba(0,229,255,.5);
+    }
+    .tl-item.done .tl-dot { background: var(--green); border-color: var(--green); }
+    .tl-label {
+      font-family: var(--mono); font-size: .72rem;
+      color: var(--cyan); letter-spacing: .08em; margin-bottom: 2px;
+    }
+    .tl-title { font-weight: 600; font-size: .9rem; margin-bottom: 2px; }
+    .tl-meta { font-size: .78rem; color: var(--text-2); }
+
+    /* Map placeholder */
+    .map-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px; overflow: hidden;
+      aspect-ratio: 16/10; position: relative;
+    }
+    .map-inner {
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 40% 55%, rgba(0,229,255,.06) 0%, transparent 60%),
+        repeating-linear-gradient(0deg, transparent, transparent 39px, var(--border) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, var(--border) 40px);
+      position: relative;
+    }
+    .map-pin {
+      position: absolute; width: 12px; height: 12px;
+      background: var(--cyan); border-radius: 50%;
+      box-shadow: 0 0 16px var(--cyan);
+      animation: map-pulse 2s ease-in-out infinite;
+    }
+    @keyframes map-pulse {
+      0%,100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: .7; }
+    }
+    .map-pin-start { top: 65%; left: 15%; background: var(--green); box-shadow: 0 0 16px var(--green); }
+    .map-pin-curr  { top: 40%; left: 50%; animation-delay: .5s; }
+    .map-pin-end   { top: 20%; left: 80%; background: var(--amber); box-shadow: 0 0 16px var(--amber); }
+    .map-route {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    }
+    .map-label {
+      position: absolute; bottom: 12px; left: 12px;
+      font-family: var(--mono); font-size: .68rem; color: var(--text-2);
+    }
+
+    /* ── §2 SHIPMENT STATUS ──────────────────────────────── */
+    #shipments { background: var(--bg); }
+    .status-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 20px;
+    }
+    .shipment-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px; padding: 24px;
+      position: relative; overflow: hidden;
+      transition: border-color .3s, transform .3s var(--ease);
+      cursor: pointer;
+    }
+    .shipment-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: var(--cyan); transform: scaleX(0); transform-origin: left;
+      transition: transform .3s var(--ease);
+    }
+    .shipment-card:hover { border-color: var(--cyan-dim); transform: translateY(-4px); }
+    .shipment-card:hover::before { transform: scaleX(1); }
+    .card-id {
+      font-family: var(--mono); font-size: .7rem; color: var(--text-3);
+      letter-spacing: .1em; margin-bottom: 8px;
+    }
+    .card-route { font-weight: 600; font-size: .95rem; margin-bottom: 12px; }
+    .card-progress {
+      background: var(--bg); border-radius: 2px; height: 4px;
+      margin-bottom: 12px; overflow: hidden;
+    }
+    .card-progress-fill {
+      height: 100%; border-radius: 2px; background: var(--cyan);
+      transition: width 1s var(--ease);
+    }
+    .card-footer {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .card-eta { font-family: var(--mono); font-size: .75rem; color: var(--text-2); }
+    .badge {
+      font-family: var(--mono); font-size: .65rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 2px;
+    }
+    .badge-transit { background: rgba(0,229,255,.12); color: var(--cyan); border: 1px solid rgba(0,229,255,.25); }
+    .badge-delivered { background: rgba(0,230,118,.12); color: var(--green); border: 1px solid rgba(0,230,118,.25); }
+    .badge-delayed  { background: rgba(255,82,82,.12); color: var(--red); border: 1px solid rgba(255,82,82,.25); }
+    .badge-pending  { background: rgba(255,171,0,.12); color: var(--amber); border: 1px solid rgba(255,171,0,.25); }
+
+    /* ── §3 STATS DASHBOARD ──────────────────────────────── */
+    #dashboard { background: var(--bg-2); }
+    .dash-grid {
+      display: grid; grid-template-columns: repeat(4,1fr) 2fr; gap: 20px;
+    }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 28px 24px;
+      position: relative; overflow: hidden;
+    }
+    .stat-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+      background: linear-gradient(to top, var(--cyan-glow), transparent);
+      pointer-events: none;
+    }
+    .stat-icon {
+      font-size: 1.4rem; margin-bottom: 12px; color: var(--cyan);
+    }
+    .stat-icon i { font-size: 1.4rem; }
+    .stat-val {
+      font-family: var(--mono); font-size: 2.2rem; font-weight: 700;
+      color: var(--cyan); line-height: 1; margin-bottom: 6px;
+    }
+    .stat-lbl { font-size: .8rem; color: var(--text-2); text-transform: uppercase; letter-spacing: .08em; }
+    .stat-delta {
+      font-family: var(--mono); font-size: .72rem; margin-top: 10px;
+    }
+    .delta-up { color: var(--green); }
+    .delta-dn { color: var(--red); }
+
+    /* Sparkline chart */
+    .chart-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 28px 24px;
+      grid-column: span 1;
+    }
+    .chart-title {
+      font-size: .8rem; text-transform: uppercase; letter-spacing: .1em;
+      color: var(--text-2); margin-bottom: 20px;
+    }
+    .chart-bars {
+      display: flex; gap: 6px; align-items: flex-end; height: 80px;
+    }
+    .chart-bar {
+      flex: 1; background: rgba(0,229,255,.15);
+      border-radius: 2px 2px 0 0;
+      transition: background .2s;
+      position: relative;
+    }
+    .chart-bar:hover { background: var(--cyan); }
+    .chart-bar.active { background: var(--cyan); }
+
+    /* ── §4 FLEET OVERVIEW ───────────────────────────────── */
+    #fleet { background: var(--bg); }
+    .fleet-table {
+      width: 100%; border-collapse: collapse;
+      font-size: .88rem;
+    }
+    .fleet-table th {
+      font-family: var(--mono); font-size: .68rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-3); padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+    }
+    .fleet-table td {
+      padding: 16px; border-bottom: 1px solid rgba(26,48,80,.5);
+      vertical-align: middle;
+    }
+    .fleet-table tr:hover td { background: var(--surface); }
+    .vehicle-id { font-family: var(--mono); color: var(--cyan); font-size: .82rem; }
+    .fuel-bar {
+      width: 100px; height: 6px; background: var(--border);
+      border-radius: 3px; overflow: hidden; display: inline-block;
+    }
+    .fuel-fill {
+      height: 100%; border-radius: 3px;
+      transition: width 1s var(--ease);
+    }
+    .fuel-high { background: var(--green); }
+    .fuel-mid  { background: var(--amber); }
+    .fuel-low  { background: var(--red); }
+    .status-dot {
+      display: inline-block; width: 8px; height: 8px;
+      border-radius: 50%; margin-right: 6px;
+    }
+    .dot-active { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .dot-idle   { background: var(--amber); }
+    .dot-maint  { background: var(--red); }
+
+    /* ── §5 ROUTE OPTIMIZER ──────────────────────────────── */
+    #routes { background: var(--bg-2); }
+    .route-layout {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 48px; align-items: start;
+    }
+    .route-list { display: flex; flex-direction: column; gap: 12px; }
+    .route-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 18px 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      cursor: pointer; transition: border-color .2s, transform .2s;
+    }
+    .route-item:hover, .route-item.selected {
+      border-color: var(--cyan); transform: translateX(4px);
+    }
+    .route-item.selected { background: rgba(0,229,255,.05); }
+    .route-name { font-weight: 600; font-size: .9rem; margin-bottom: 4px; }
+    .route-stops { font-size: .78rem; color: var(--text-2); font-family: var(--mono); }
+    .route-score {
+      font-family: var(--mono); font-size: 1.4rem; font-weight: 700;
+      color: var(--cyan);
+    }
+    .route-score-lbl { font-size: .65rem; color: var(--text-2); text-align: right; }
+    .route-details {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 28px;
+    }
+    .route-metric {
+      display: flex; justify-content: space-between;
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+      font-size: .88rem;
+    }
+    .route-metric:last-child { border-bottom: none; }
+    .metric-key { color: var(--text-2); }
+    .metric-val { font-family: var(--mono); font-weight: 700; }
+    .metric-val.good { color: var(--green); }
+    .metric-val.warn { color: var(--amber); }
+
+    /* ── §6 ALERTS ───────────────────────────────────────── */
+    #alerts { background: var(--bg); }
+    .alerts-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+    }
+    .alert-feed { display: flex; flex-direction: column; gap: 12px; }
+    .alert-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid var(--border);
+      border-radius: 0 4px 4px 0; padding: 16px 20px;
+      display: flex; gap: 16px; align-items: flex-start;
+      transition: transform .2s;
+    }
+    .alert-item:hover { transform: translateX(4px); }
+    .alert-item.critical { border-left-color: var(--red); }
+    .alert-item.warning  { border-left-color: var(--amber); }
+    .alert-item.info     { border-left-color: var(--cyan); }
+    .alert-icon { font-size: 1.2rem; flex-shrink: 0; width: 24px; text-align: center; padding-top: 2px; }
+    .alert-body { flex: 1; }
+    .alert-title { font-weight: 600; font-size: .88rem; margin-bottom: 3px; }
+    .alert-desc { font-size: .78rem; color: var(--text-2); }
+    .alert-time { font-family: var(--mono); font-size: .68rem; color: var(--text-3); margin-top: 4px; }
+
+    /* ── §7 ANALYTICS ────────────────────────────────────── */
+    #analytics { background: var(--bg-2); }
+    .analytics-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px;
+    }
+    .analytics-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 28px;
+    }
+    .analytics-card-title {
+      font-family: var(--mono); font-size: .72rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      color: var(--text-2); margin-bottom: 24px;
+    }
+    .line-chart { position: relative; height: 160px; }
+    .line-chart svg { width: 100%; height: 100%; }
+    .donut-chart {
+      display: flex; gap: 24px; align-items: center;
+    }
+    .donut-svg { flex-shrink: 0; }
+    .donut-legend { display: flex; flex-direction: column; gap: 10px; }
+    .legend-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .82rem;
+    }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── §8 PARTNERS / INTEGRATIONS ──────────────────────── */
+    #integrations { background: var(--bg); }
+    .integration-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap: 20px;
+    }
+    .integration-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 24px 20px;
+      display: flex; gap: 16px; align-items: center;
+      transition: border-color .25s, transform .25s;
+    }
+    .integration-card:hover { border-color: var(--cyan); transform: translateY(-4px); }
+    .integration-icon {
+      width: 44px; height: 44px; border-radius: 8px;
+      background: var(--cyan-glow); border: 1px solid rgba(0,229,255,.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0; color: var(--cyan);
+    }
+    .integration-icon i { font-size: 1.2rem; color: var(--cyan); }
+    .integration-name { font-weight: 600; font-size: .88rem; }
+    .integration-type { font-size: .75rem; color: var(--text-2); margin-top: 2px; }
+
+    /* ── §9 PRICING ──────────────────────────────────────── */
+    #pricing { background: var(--bg-2); }
+    .pricing-grid {
+      display: grid; grid-template-columns: repeat(3,1fr); gap: 24px;
+    }
+    .pricing-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 36px 28px;
+      position: relative; transition: transform .3s var(--ease);
+    }
+    .pricing-card:hover { transform: translateY(-8px); }
+    .pricing-card.featured {
+      border-color: var(--cyan);
+      background: linear-gradient(160deg, rgba(0,229,255,.06) 0%, var(--surface) 60%);
+    }
+    .pricing-popular {
+      position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .65rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 4px 14px; border-radius: 2px; white-space: nowrap;
+    }
+    .pricing-tier {
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--cyan); margin-bottom: 8px;
+    }
+    .pricing-price {
+      font-size: 2.8rem; font-weight: 700; line-height: 1;
+      margin-bottom: 4px;
+    }
+    .pricing-price sup { font-size: 1.2rem; vertical-align: top; margin-top: 8px; }
+    .pricing-period { font-size: .82rem; color: var(--text-2); margin-bottom: 28px; }
+    .pricing-features { list-style: none; margin-bottom: 32px; }
+    .pricing-features li {
+      font-size: .88rem; padding: 9px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex; gap: 10px; align-items: center; color: var(--text-2);
+    }
+    .pricing-features li i { color: var(--cyan); font-size: .75rem; flex-shrink: 0; }
+    .pricing-btn {
+      width: 100%; padding: 13px;
+      font-family: var(--mono); font-size: .78rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      border: 1px solid var(--border); background: transparent; color: var(--text-1);
+      border-radius: 2px; cursor: pointer; transition: all .25s;
+    }
+    .pricing-btn:hover, .pricing-card.featured .pricing-btn {
+      background: var(--cyan); color: var(--bg); border-color: var(--cyan);
+    }
+    .pricing-card.featured .pricing-btn:hover { opacity: .85; }
+
+    /* ── §10 CONTACT / CTA ───────────────────────────────── */
+    #contact { background: var(--bg); }
+    .contact-layout {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;
+    }
+    .contact-form { display: flex; flex-direction: column; gap: 16px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-label {
+      font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--text-2);
+    }
+    .form-input, .form-select, .form-textarea {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text-1); font-family: var(--sans); font-size: .88rem;
+      padding: 12px 14px; outline: none; border-radius: 2px;
+      transition: border-color .2s;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--cyan);
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-3); }
+    .form-select { appearance: none; cursor: pointer; }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .form-submit {
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .82rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 14px; border: none; border-radius: 2px;
+      cursor: pointer; transition: all .25s;
+      margin-top: 8px;
+    }
+    .form-submit:hover { background: var(--cyan-dim); box-shadow: 0 0 24px rgba(0,229,255,.3); }
+
+    .contact-info { display: flex; flex-direction: column; gap: 32px; }
+    .contact-item { display: flex; gap: 16px; }
+    .contact-icon {
+      width: 44px; height: 44px; border: 1px solid var(--border);
+      border-radius: 4px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; flex-shrink: 0; background: var(--surface); color: var(--cyan);
+    }
+    .contact-icon i { font-size: 1.05rem; }
+    .contact-item-title { font-weight: 600; margin-bottom: 4px; }
+    .contact-item-val { font-family: var(--mono); font-size: .82rem; color: var(--cyan); }
+
+    /* ── FOOTER ──────────────────────────────────────────── */
+    footer {
+      position: relative; z-index: 1;
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      padding: 48px 5% 28px;
+    }
+    .footer-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 40px; flex-wrap: wrap; gap: 32px;
+    }
+    .footer-brand {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 1.05rem;
+      font-weight: 700; color: var(--cyan);
+    }
+    .footer-desc { font-size: .82rem; color: var(--text-2); max-width: 240px; margin-top: 10px; }
+    .footer-links h4 {
+      font-family: var(--mono); font-size: .68rem;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 14px;
+    }
+    .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .footer-links li a { font-size: .84rem; color: var(--text-2); transition: color .2s; }
+    .footer-links li a:hover { color: var(--cyan); }
+    .footer-bottom {
+      border-top: 1px solid var(--border); padding-top: 20px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-size: .78rem; color: var(--text-3); font-family: var(--mono); }
+
+    /* ── LIVE TICKER ─────────────────────────────────────── */
+    .ticker-wrap {
+      background: var(--bg-3);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 0; overflow: hidden;
+      position: relative; z-index: 1;
+    }
+    .ticker-inner {
+      display: flex; width: max-content;
+      animation: ticker 28s linear infinite;
+    }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .ticker-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 0 40px;
+      font-family: var(--mono); font-size: .72rem; color: var(--text-2);
+      white-space: nowrap;
+    }
+    .ticker-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); flex-shrink: 0; }
+
+    /* ── TOAST ───────────────────────────────────────────── */
+    .toast-container {
+      position: fixed; bottom: 28px; right: 28px; z-index: 999;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .toast {
+      background: var(--surface); border: 1px solid var(--cyan);
+      border-left: 3px solid var(--cyan);
+      padding: 14px 18px; border-radius: 2px;
+      font-size: .85rem; max-width: 320px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+      animation: toast-in .3s var(--ease) forwards;
+      cursor: pointer;
+    }
+    .toast.removing { animation: toast-out .3s var(--ease) forwards; }
+    @keyframes toast-in  { from { opacity:0; transform: translateX(24px); } to { opacity:1; transform: translateX(0); } }
+    @keyframes toast-out { from { opacity:1; transform: translateX(0); } to { opacity:0; transform: translateX(24px); } }
+    .toast-title { font-weight: 600; margin-bottom: 3px; }
+    .toast-msg { font-size: .78rem; color: var(--text-2); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 1100px) {
+      .dash-grid { grid-template-columns: repeat(2,1fr); }
+      .analytics-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .tracking-layout,
+      .route-layout,
+      .alerts-layout,
+      .contact-layout { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+      .footer-top { flex-direction: column; }
+    }
+    @media (max-width: 640px) {
+      section { padding: 72px 5%; }
+      .dash-grid { grid-template-columns: 1fr 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-radar { width: 360px; height: 360px; }
+      .radar-ring:nth-child(4) { width: 340px; height: 340px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ────────────────────────────────────────────────── -->
+<nav class="nav" id="mainNav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    TRACKFLOW
+  </div>
+  <div class="nav-links">
+    <a href="#tracking"><i class="fa-solid fa-location-dot"></i> Live Track</a>
+    <a href="#shipments"><i class="fa-solid fa-boxes-stacked"></i> Shipments</a>
+    <a href="#fleet"><i class="fa-solid fa-truck"></i> Fleet</a>
+    <a href="#analytics"><i class="fa-solid fa-chart-line"></i> Analytics</a>
+    <a href="#pricing"><i class="fa-solid fa-tag"></i> Pricing</a>
+    <a href="#contact"><i class="fa-solid fa-headset"></i> Contact</a>
+  </div>
+  <button class="nav-cta" onclick="showToast('Demo booked','Our team will reach out shortly.')">Book Demo</button>
+  <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div id="mobileNav" style="display:none;position:fixed;top:64px;inset-x:0;background:rgba(8,13,20,.97);z-index:99;padding:28px 5%;border-bottom:1px solid var(--border);">
+  <div style="display:flex;flex-direction:column;gap:20px;">
+    <a href="#tracking" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">Live Track</a>
+    <a href="#shipments" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">Shipments</a>
+    <a href="#fleet" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">Fleet</a>
+    <a href="#analytics" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">Analytics</a>
+    <a href="#pricing" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">Pricing</a>
+    <a href="#contact" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">Contact</a>
+  </div>
+</div>
+
+<!-- ── TICKER ──────────────────────────────────────────────── -->
+<div class="ticker-wrap" style="margin-top:64px;">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 1 — HERO
+     ══════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-radar">
+    <div class="radar-ring"></div>
+    <div class="radar-ring"></div>
+    <div class="radar-ring"></div>
+    <div class="radar-ring"></div>
+    <div class="radar-sweep"></div>
+    <div class="radar-dot"></div>
+    <div class="radar-dot"></div>
+    <div class="radar-dot"></div>
+    <div class="radar-dot"></div>
+  </div>
+  <div class="hero-eyebrow reveal">Real-time Logistics Intelligence Platform</div>
+  <h1 class="hero-title reveal reveal-delay-1">
+    Every Package.<br><span class="accent">Every Mile.</span><br>Always Visible.
+  </h1>
+  <p class="hero-sub reveal reveal-delay-2">
+    TrackFlow gives your operations team millisecond-accurate shipment data, predictive ETAs, and proactive alerts — across every carrier, warehouse, and last-mile driver.
+  </p>
+  <div class="hero-actions reveal reveal-delay-3">
+    <button class="btn-primary" onclick="document.getElementById('tracking').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-location-crosshairs"></i> Track a Shipment</button>
+    <button class="btn-outline" onclick="document.getElementById('dashboard').scrollIntoView({behavior:'smooth'})"><i class="fa-solid fa-gauge-high"></i> View Dashboard</button>
+  </div>
+  <div class="hero-stats reveal reveal-delay-4">
+    <div>
+      <div class="hero-stat-val" data-count="2.4">0</div>
+      <div class="hero-stat-lbl">Million Shipments/Day</div>
+    </div>
+    <div>
+      <div class="hero-stat-val" data-count="99.97">0</div>
+      <div class="hero-stat-lbl">Uptime SLA %</div>
+    </div>
+    <div>
+      <div class="hero-stat-val" data-count="180">0</div>
+      <div class="hero-stat-lbl">Countries Covered</div>
+    </div>
+    <div>
+      <div class="hero-stat-val" data-count="8">0</div>
+      <div class="hero-stat-lbl">Seconds Avg. Refresh</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 2 — LIVE TRACKING
+     ══════════════════════════════════════════════════════════ -->
+<section id="tracking">
+  <div class="section-header">
+    <div class="section-tag reveal">Live Tracking</div>
+    <h2 class="section-title reveal reveal-delay-1">Where is your shipment<br>right now?</h2>
+    <p class="section-sub reveal reveal-delay-2">Enter any tracking number to get real-time location, status updates, and predictive delivery windows.</p>
+  </div>
+  <div class="tracking-layout">
+    <div class="reveal">
+      <div class="track-input-wrap">
+        <input class="track-input" id="trackInput" type="text" placeholder="TF-2024-XXXXXXXXX" value="TF-2024-884729K" />
+        <button class="track-btn" onclick="simulateTrack()"><i class="fa-solid fa-magnifying-glass"></i> TRACK</button>
+      </div>
+      <div class="timeline" id="trackTimeline">
+        <div class="tl-item done">
+          <div class="tl-dot"></div>
+          <div class="tl-label">STEP 1 · JUN 08</div>
+          <div class="tl-title">Order Collected</div>
+          <div class="tl-meta">Mumbai Warehouse Hub · 09:14 IST</div>
+        </div>
+        <div class="tl-item done">
+          <div class="tl-dot"></div>
+          <div class="tl-label">STEP 2 · JUN 09</div>
+          <div class="tl-title">Departed Origin Hub</div>
+          <div class="tl-meta">BOM Cargo Terminal · 22:45 IST</div>
+        </div>
+        <div class="tl-item active">
+          <div class="tl-dot"></div>
+          <div class="tl-label">STEP 3 · NOW</div>
+          <div class="tl-title">In Transit — Chennai Hub</div>
+          <div class="tl-meta">Estimated arrival in 3h 22m · On schedule</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-label">STEP 4 · JUN 13</div>
+          <div class="tl-title">Out for Delivery</div>
+          <div class="tl-meta">Local delivery partner assignment pending</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot"></div>
+          <div class="tl-label">STEP 5 · JUN 13</div>
+          <div class="tl-title">Delivered</div>
+          <div class="tl-meta">Signature required at destination</div>
+        </div>
+      </div>
+    </div>
+    <div class="map-box reveal reveal-delay-2">
+      <div class="map-inner">
+        <svg class="map-route" viewBox="0 0 600 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 90 234 Q 200 280 300 144 Q 380 60 480 72" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.6"/>
+        </svg>
+        <div class="map-pin map-pin-start"></div>
+        <div class="map-pin map-pin-curr"></div>
+        <div class="map-pin map-pin-end"></div>
+        <div class="map-label">LIVE · TRACKING ACTIVE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 3 — SHIPMENT STATUS CARDS
+     ══════════════════════════════════════════════════════════ -->
+<section id="shipments">
+  <div class="section-header">
+    <div class="section-tag reveal">Shipment Status</div>
+    <h2 class="section-title reveal reveal-delay-1">Active shipments at a glance</h2>
+    <p class="section-sub reveal reveal-delay-2">Monitor your entire portfolio in one unified dashboard. Filter by carrier, status, or destination.</p>
+  </div>
+  <div class="status-grid" id="shipmentsGrid"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 4 — STATS DASHBOARD
+     ══════════════════════════════════════════════════════════ -->
+<section id="dashboard">
+  <div class="section-header">
+    <div class="section-tag reveal">Operations Dashboard</div>
+    <h2 class="section-title reveal reveal-delay-1">Your operation,<br>quantified.</h2>
+  </div>
+  <div class="dash-grid" id="dashGrid">
+    <div class="stat-card reveal">
+      <div class="stat-icon"><i class="fa-solid fa-box-open"></i></div>
+      <div class="stat-val" data-count="14827">0</div>
+      <div class="stat-lbl">Active Shipments</div>
+      <div class="stat-delta delta-up">↑ 12.4% vs last week</div>
+    </div>
+    <div class="stat-card reveal reveal-delay-1">
+      <div class="stat-icon"><i class="fa-solid fa-truck-fast"></i></div>
+      <div class="stat-val" data-count="342">0</div>
+      <div class="stat-lbl">Vehicles On Route</div>
+      <div class="stat-delta delta-up">↑ 5.1% vs yesterday</div>
+    </div>
+    <div class="stat-card reveal reveal-delay-2">
+      <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+      <div class="stat-val" data-count="97">0</div>
+      <div class="stat-lbl">On-Time Delivery %</div>
+      <div class="stat-delta delta-up">↑ 2.3pp improvement</div>
+    </div>
+    <div class="stat-card reveal reveal-delay-3">
+      <div class="stat-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <div class="stat-val" data-count="23">0</div>
+      <div class="stat-lbl">Active Alerts</div>
+      <div class="stat-delta delta-dn">↑ 4 new in last hour</div>
+    </div>
+    <div class="chart-card reveal reveal-delay-4">
+      <div class="chart-title">Deliveries This Week</div>
+      <div class="chart-bars" id="chartBars"></div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;font-family:var(--mono);font-size:.62rem;color:var(--text-3);">
+        <span>MON</span><span>TUE</span><span>WED</span><span>THU</span><span>FRI</span><span>SAT</span><span>SUN</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 5 — FLEET OVERVIEW
+     ══════════════════════════════════════════════════════════ -->
+<section id="fleet">
+  <div class="section-header">
+    <div class="section-tag reveal">Fleet Management</div>
+    <h2 class="section-title reveal reveal-delay-1">Know every vehicle,<br>know every move.</h2>
+  </div>
+  <div style="overflow-x:auto;" class="reveal">
+    <table class="fleet-table">
+      <thead>
+        <tr>
+          <th>Vehicle ID</th>
+          <th>Driver</th>
+          <th>Current Location</th>
+          <th>Cargo</th>
+          <th>Fuel</th>
+          <th>ETA</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="fleetBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 6 — ROUTE OPTIMIZER
+     ══════════════════════════════════════════════════════════ -->
+<section id="routes">
+  <div class="section-header">
+    <div class="section-tag reveal">Route Optimizer</div>
+    <h2 class="section-title reveal reveal-delay-1">AI-powered routes.<br>Zero wasted miles.</h2>
+    <p class="section-sub reveal reveal-delay-2">Our engine recomputes optimal routes every 90 seconds using live traffic, weather, and load data.</p>
+  </div>
+  <div class="route-layout">
+    <div class="route-list reveal" id="routeList"></div>
+    <div class="route-details reveal reveal-delay-2" id="routeDetails">
+      <div class="analytics-card-title" style="margin-bottom:20px;">Select a route to view details</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 7 — ALERTS
+     ══════════════════════════════════════════════════════════ -->
+<section id="alerts">
+  <div class="section-header">
+    <div class="section-tag reveal">Alerts & Exceptions</div>
+    <h2 class="section-title reveal reveal-delay-1">Stay ahead of<br>every disruption.</h2>
+  </div>
+  <div class="alerts-layout">
+    <div class="alert-feed reveal" id="alertFeed"></div>
+    <div class="reveal reveal-delay-2">
+      <div class="analytics-card" style="margin-bottom:20px;">
+        <div class="analytics-card-title">Alert Breakdown</div>
+        <div style="display:flex;flex-direction:column;gap:12px;" id="alertBreakdown"></div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:24px;">
+        <div class="analytics-card-title" style="margin-bottom:16px;">Notification Preferences</div>
+        <div style="display:flex;flex-direction:column;gap:12px;" id="notifPrefs"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 8 — ANALYTICS
+     ══════════════════════════════════════════════════════════ -->
+<section id="analytics">
+  <div class="section-header">
+    <div class="section-tag reveal">Analytics</div>
+    <h2 class="section-title reveal reveal-delay-1">Patterns that<br>drive decisions.</h2>
+  </div>
+  <div class="analytics-grid">
+    <div class="analytics-card reveal">
+      <div class="analytics-card-title">Delivery Performance — Last 30 Days</div>
+      <div class="line-chart">
+        <svg id="lineSvg" viewBox="0 0 500 140" preserveAspectRatio="none"></svg>
+      </div>
+      <div style="display:flex;gap:20px;margin-top:16px;">
+        <div><div style="font-family:var(--mono);color:var(--cyan);font-size:1.3rem;font-weight:700;">94.2%</div><div style="font-size:.72rem;color:var(--text-2);margin-top:2px;">On-time Rate</div></div>
+        <div><div style="font-family:var(--mono);color:var(--green);font-size:1.3rem;font-weight:700;">1.8d</div><div style="font-size:.72rem;color:var(--text-2);margin-top:2px;">Avg Transit</div></div>
+        <div><div style="font-family:var(--mono);color:var(--amber);font-size:1.3rem;font-weight:700;">0.4%</div><div style="font-size:.72rem;color:var(--text-2);margin-top:2px;">Loss Rate</div></div>
+      </div>
+    </div>
+    <div class="analytics-card reveal reveal-delay-2">
+      <div class="analytics-card-title">Shipments by Region</div>
+      <div class="donut-chart">
+        <svg class="donut-svg" width="120" height="120" viewBox="0 0 120 120" id="donutSvg"></svg>
+        <div class="donut-legend" id="donutLegend"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 9 — INTEGRATIONS
+     ══════════════════════════════════════════════════════════ -->
+<section id="integrations">
+  <div class="section-header">
+    <div class="section-tag reveal">Integrations</div>
+    <h2 class="section-title reveal reveal-delay-1">Connects to the tools<br>you already use.</h2>
+    <p class="section-sub reveal reveal-delay-2">200+ pre-built connectors. REST & GraphQL APIs. Custom webhooks. Goes live in under a day.</p>
+  </div>
+  <div class="integration-grid" id="integrationGrid"></div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 10 — PRICING
+     ══════════════════════════════════════════════════════════ -->
+<section id="pricing">
+  <div class="section-header" style="text-align:center;">
+    <div class="section-tag reveal" style="justify-content:center;display:flex;">Pricing</div>
+    <h2 class="section-title reveal reveal-delay-1">Transparent pricing.<br>No hidden logistics.</h2>
+    <p class="section-sub reveal reveal-delay-2" style="margin:0 auto;">Scale from a single-warehouse startup to a global enterprise — pay only for what moves.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card reveal">
+      <div class="pricing-tier">Starter</div>
+      <div class="pricing-price"><sup>$</sup>49</div>
+      <div class="pricing-period">per month · billed annually</div>
+      <ul class="pricing-features">
+        <li><i class="fa-solid fa-check"></i>Up to 500 shipments/month</li>
+        <li><i class="fa-solid fa-check"></i>1 carrier integration</li>
+        <li><i class="fa-solid fa-check"></i>Basic tracking page</li>
+        <li><i class="fa-solid fa-check"></i>Email alerts</li>
+        <li><i class="fa-solid fa-check"></i>7-day data history</li>
+        <li><i class="fa-solid fa-check"></i>Community support</li>
+      </ul>
+      <button class="pricing-btn">Get Started</button>
+    </div>
+    <div class="pricing-card featured reveal reveal-delay-2">
+      <div class="pricing-popular">Most Popular</div>
+      <div class="pricing-tier">Professional</div>
+      <div class="pricing-price"><sup>$</sup>199</div>
+      <div class="pricing-period">per month · billed annually</div>
+      <ul class="pricing-features">
+        <li><i class="fa-solid fa-check"></i>Unlimited shipments</li>
+        <li><i class="fa-solid fa-check"></i>25 carrier integrations</li>
+        <li><i class="fa-solid fa-check"></i>Custom branded portal</li>
+        <li><i class="fa-solid fa-check"></i>SMS + Webhook alerts</li>
+        <li><i class="fa-solid fa-check"></i>90-day analytics history</li>
+        <li><i class="fa-solid fa-check"></i>Route optimizer included</li>
+        <li><i class="fa-solid fa-check"></i>Priority support 24/7</li>
+      </ul>
+      <button class="pricing-btn">Start Free Trial</button>
+    </div>
+    <div class="pricing-card reveal reveal-delay-4">
+      <div class="pricing-tier">Enterprise</div>
+      <div class="pricing-price" style="font-size:2rem;margin-bottom:2px;">Custom</div>
+      <div class="pricing-period">volume · dedicated SLA</div>
+      <ul class="pricing-features">
+        <li><i class="fa-solid fa-check"></i>Unlimited everything</li>
+        <li><i class="fa-solid fa-check"></i>200+ carrier integrations</li>
+        <li><i class="fa-solid fa-check"></i>White-label solution</li>
+        <li><i class="fa-solid fa-check"></i>Advanced AI predictions</li>
+        <li><i class="fa-solid fa-check"></i>Unlimited data retention</li>
+        <li><i class="fa-solid fa-check"></i>Fleet management module</li>
+        <li><i class="fa-solid fa-check"></i>Dedicated CSM + SLA</li>
+      </ul>
+      <button class="pricing-btn" onclick="showToast('Sales team notified','We'll contact you within 24h.')">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SECTION 10 — CONTACT
+     ══════════════════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="section-header">
+    <div class="section-tag reveal">Contact</div>
+    <h2 class="section-title reveal reveal-delay-1">Let's build something<br>that actually ships.</h2>
+  </div>
+  <div class="contact-layout">
+    <form class="contact-form reveal" onsubmit="handleContactForm(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input class="form-input" type="text" placeholder="Hari" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" type="text" placeholder="Krishnan" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" type="email" placeholder="hari@company.com" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Company</label>
+        <input class="form-input" type="text" placeholder="Your logistics company" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Shipment Volume</label>
+        <select class="form-select form-input">
+          <option>Select monthly volume</option>
+          <option>Under 500 shipments</option>
+          <option>500 – 5,000 shipments</option>
+          <option>5,000 – 50,000 shipments</option>
+          <option>50,000+ shipments</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" placeholder="Tell us about your logistics challenges..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Message &nbsp;<i class="fa-solid fa-arrow-right"></i></button>
+    </form>
+    <div class="contact-info reveal reveal-delay-2">
+      <div>
+        <h3 style="font-size:1.2rem;font-weight:700;margin-bottom:8px;">Response within 4 hours</h3>
+        <p style="color:var(--text-2);font-size:.88rem;">Our solutions engineers are available Monday–Saturday, 8am–8pm IST. Enterprise inquiries get a same-day call.</p>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fa-solid fa-envelope"></i></div>
+        <div>
+          <div class="contact-item-title">Email</div>
+          <div class="contact-item-val">hello@trackflow.io</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fa-solid fa-phone"></i></div>
+        <div>
+          <div class="contact-item-title">Phone</div>
+          <div class="contact-item-val">+91 80 4567 8900</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fa-solid fa-building"></i></div>
+        <div>
+          <div class="contact-item-title">HQ</div>
+          <div class="contact-item-val">Bengaluru, Karnataka, IN</div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon"><i class="fa-solid fa-globe"></i></div>
+        <div>
+          <div class="contact-item-title">API Status</div>
+          <div class="contact-item-val" style="color:var(--green);">All systems operational</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">
+        <div style="width:8px;height:8px;background:var(--cyan);border-radius:50%;"></div>
+        TRACKFLOW
+      </div>
+      <p class="footer-desc">Real-time logistics intelligence for operations teams that refuse to be in the dark.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="#">Live Tracking</a></li>
+        <li><a href="#">Route Optimizer</a></li>
+        <li><a href="#">Fleet Manager</a></li>
+        <li><a href="#">Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Developers</h4>
+      <ul>
+        <li><a href="#">API Reference</a></li>
+        <li><a href="#">Webhooks</a></li>
+        <li><a href="#">SDKs</a></li>
+        <li><a href="#">Status Page</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Privacy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 TrackFlow Technologies Pvt. Ltd. · Bengaluru, India</div>
+    <div style="display:flex;gap:16px;">
+      <a href="#" style="font-size:.78rem;color:var(--text-3);font-family:var(--mono);">Terms</a>
+      <a href="#" style="font-size:.78rem;color:var(--text-3);font-family:var(--mono);">Privacy</a>
+      <a href="#" style="font-size:.78rem;color:var(--text-3);font-family:var(--mono);">Security</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ── TOAST CONTAINER ────────────────────────────────────────── -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT
+     ══════════════════════════════════════════════════════════ -->
+<script>
+/* ── DATA ─────────────────────────────────────────────────── */
+const shipments = [
+  { id:'TF-884729K', route:'Mumbai → Chennai', pct:62, eta:'Jun 13, 14:30', status:'transit' },
+  { id:'TF-334501X', route:'Delhi → Pune', pct:100, eta:'Delivered Jun 10', status:'delivered' },
+  { id:'TF-991023Z', route:'Kolkata → Hyderabad', pct:35, eta:'Jun 14, 09:00', status:'transit' },
+  { id:'TF-228847Y', route:'Ahmedabad → Bengaluru', pct:10, eta:'Jun 15 (delayed)', status:'delayed' },
+  { id:'TF-447620M', route:'Chennai → Delhi', pct:0, eta:'Awaiting pickup', status:'pending' },
+  { id:'TF-661135N', route:'Bengaluru → Kochi', pct:88, eta:'Jun 12, 22:00', status:'transit' },
+];
+
+const fleet = [
+  { id:'TF-V001', driver:'Rajesh Kumar', loc:'NH-44, Hyderabad', cargo:'Electronics', fuel:82, eta:'15:40', status:'active' },
+  { id:'TF-V002', driver:'Priya Nair', loc:'Chennai Depot', cargo:'Idle', fuel:100, eta:'–', status:'idle' },
+  { id:'TF-V003', driver:'Suresh Patil', loc:'Pune Bypass', cargo:'Pharma', fuel:31, eta:'18:20', status:'active' },
+  { id:'TF-V004', driver:'Meena Krishnan', loc:'Maintenance Bay 3', cargo:'–', fuel:45, eta:'–', status:'maint' },
+  { id:'TF-V005', driver:'Arjun Reddy', loc:'NH-48, Bengaluru', cargo:'FMCG', fuel:67, eta:'16:55', status:'active' },
+  { id:'TF-V006', driver:'Deepa Menon', loc:'Delhi NCR Ring Rd', cargo:'Textiles', fuel:54, eta:'19:10', status:'active' },
+];
+
+const routes = [
+  { name:'Mumbai → Pune Express', stops:'4 stops', score:'96', dist:'148 km', time:'2h 10m', fuel:'18L', co2:'-12%', status:'good' },
+  { name:'Delhi → Agra Corridor', stops:'3 stops', score:'88', dist:'233 km', time:'3h 45m', fuel:'28L', co2:'-8%', status:'good' },
+  { name:'Chennai → Coimbatore', stops:'6 stops', score:'71', dist:'497 km', time:'6h 20m', fuel:'54L', co2:'+4%', status:'warn' },
+  { name:'Bengaluru Hub Loop', stops:'12 stops', score:'94', dist:'78 km', time:'1h 50m', fuel:'10L', co2:'-18%', status:'good' },
+];
+
+const alertsData = [
+  { type:'critical', icon:'<i class="fa-solid fa-siren-on" style="color:var(--red)"></i>', title:'Vehicle TF-V003 — Low Fuel', desc:'Below 30% near Pune Bypass. No fuel station within 20 km.', time:'2 min ago' },
+  { type:'warning',  icon:'<i class="fa-solid fa-triangle-exclamation" style="color:var(--amber)"></i>', title:'Shipment TF-228847Y — Delay Risk', desc:'Road closure on NH-48 may add 4–6 hours to delivery window.', time:'18 min ago' },
+  { type:'info',     icon:'<i class="fa-solid fa-circle-info" style="color:var(--cyan)"></i>', title:'New carrier rate available', desc:'BlueDart has updated express rates for Chennai corridor.', time:'1 hr ago' },
+  { type:'warning',  icon:'<i class="fa-solid fa-cloud-bolt" style="color:var(--amber)"></i>', title:'Weather Alert — Kochi Port', desc:'Cyclone advisory. Port operations suspended until Jun 13.', time:'2 hr ago' },
+  { type:'info',     icon:'<i class="fa-solid fa-circle-check" style="color:var(--green)"></i>', title:'SLA Met — 97 consecutive deliveries', desc:'Outstanding on-time performance this week. Keep it up.', time:'3 hr ago' },
+];
+
+const integrations = [
+  { icon:'<i class="fa-solid fa-ship"></i>',          name:'Maersk',            type:'Ocean Freight' },
+  { icon:'<i class="fa-solid fa-plane-departure"></i>',name:'FedEx API',         type:'Air Express' },
+  { icon:'<i class="fa-solid fa-box"></i>',            name:'DHL Connect',       type:'International' },
+  { icon:'<i class="fa-brands fa-shopify"></i>',       name:'Shopify',           type:'eCommerce' },
+  { icon:'<i class="fa-brands fa-amazon"></i>',        name:'Amazon MWS',        type:'Marketplace' },
+  { icon:'<i class="fa-solid fa-database"></i>',       name:'SAP TM',            type:'ERP' },
+  { icon:'<i class="fa-brands fa-whatsapp"></i>',      name:'WhatsApp Business', type:'Notifications' },
+  { icon:'<i class="fa-solid fa-users"></i>',          name:'Zoho CRM',          type:'CRM Sync' },
+];
+
+const tickerItems = [
+  'TF-884729K · IN TRANSIT · ETA 14:30',
+  'TF-334501X · DELIVERED · Chennai Hub',
+  'TF-991023Z · ON SCHEDULE · Delta +0m',
+  'Fleet Efficiency · 94.2% · This Week',
+  'TF-V001 · 15 STOPS COMPLETED · Today',
+  'Route Optimizer · Saved 2,840 km · Today',
+  'API Status · All Systems Operational',
+  'TF-V003 [!] LOW FUEL · Action Required',
+];
+
+const chartData = [68, 82, 74, 91, 88, 56, 77];
+const donutData = [
+  { label:'South India', pct:32, color:'#00e5ff' },
+  { label:'North India', pct:28, color:'#00e676' },
+  { label:'West India',  pct:22, color:'#ffab00' },
+  { label:'East India',  pct:11, color:'#ff5252' },
+  { label:'International', pct:7, color:'#e040fb' },
+];
+
+/* ── BUILD TICKER ─────────────────────────────────────────── */
+function buildTicker() {
+  const t = document.getElementById('ticker');
+  const all = [...tickerItems, ...tickerItems];
+  t.innerHTML = all.map(i =>
+    `<div class="ticker-item"><span class="ticker-dot"></span>${i}</div>`
+  ).join('');
+}
+
+/* ── BUILD SHIPMENTS ──────────────────────────────────────── */
+function buildShipments() {
+  const g = document.getElementById('shipmentsGrid');
+  g.innerHTML = shipments.map(s => `
+    <div class="shipment-card reveal">
+      <div class="card-id">${s.id}</div>
+      <div class="card-route">${s.route}</div>
+      <div class="card-progress"><div class="card-progress-fill" style="width:${s.pct}%"></div></div>
+      <div class="card-footer">
+        <div class="card-eta">${s.eta}</div>
+        <span class="badge badge-${s.status}">${s.status}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── BUILD CHART BARS ─────────────────────────────────────── */
+function buildChart() {
+  const c = document.getElementById('chartBars');
+  c.innerHTML = chartData.map((v,i) => `
+    <div class="chart-bar ${i===4?'active':''}" style="height:${v}%" title="${v*12} deliveries"></div>
+  `).join('');
+}
+
+/* ── BUILD FLEET TABLE ────────────────────────────────────── */
+function buildFleet() {
+  const tbody = document.getElementById('fleetBody');
+  tbody.innerHTML = fleet.map(v => {
+    const fuelClass = v.fuel > 60 ? 'high' : v.fuel > 30 ? 'mid' : 'low';
+    const dotClass = v.status === 'active' ? 'dot-active' : v.status === 'idle' ? 'dot-idle' : 'dot-maint';
+    const statusLabel = v.status === 'active' ? 'Active' : v.status === 'idle' ? 'Idle' : 'Maintenance';
+    return `<tr>
+      <td><span class="vehicle-id">${v.id}</span></td>
+      <td>${v.driver}</td>
+      <td style="color:var(--text-2);font-size:.83rem;">${v.loc}</td>
+      <td>${v.cargo}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="fuel-bar"><div class="fuel-fill fuel-${fuelClass}" style="width:${v.fuel}%"></div></div>
+          <span style="font-family:var(--mono);font-size:.72rem;color:var(--text-2);">${v.fuel}%</span>
+        </div>
+      </td>
+      <td style="font-family:var(--mono);font-size:.82rem;">${v.eta}</td>
+      <td><span class="status-dot ${dotClass}"></span>${statusLabel}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* ── BUILD ROUTES ─────────────────────────────────────────── */
+let selectedRoute = 0;
+function buildRoutes() {
+  const list = document.getElementById('routeList');
+  list.innerHTML = routes.map((r, i) => `
+    <div class="route-item ${i===0?'selected':''}" onclick="selectRoute(${i})" id="route-${i}">
+      <div>
+        <div class="route-name">${r.name}</div>
+        <div class="route-stops">${r.stops} · ${r.dist}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="route-score">${r.score}</div>
+        <div class="route-score-lbl">score</div>
+      </div>
+    </div>
+  `).join('');
+  renderRouteDetails(0);
+}
+function selectRoute(i) {
+  selectedRoute = i;
+  document.querySelectorAll('.route-item').forEach((el, idx) =>
+    el.classList.toggle('selected', idx===i));
+  renderRouteDetails(i);
+}
+function renderRouteDetails(i) {
+  const r = routes[i];
+  const d = document.getElementById('routeDetails');
+  d.innerHTML = `
+    <div class="analytics-card-title" style="margin-bottom:4px;">${r.name}</div>
+    <div style="font-size:.78rem;color:var(--text-2);margin-bottom:20px;">${r.stops}</div>
+    <div class="route-metric"><span class="metric-key">Distance</span><span class="metric-val">${r.dist}</span></div>
+    <div class="route-metric"><span class="metric-key">Est. Time</span><span class="metric-val">${r.time}</span></div>
+    <div class="route-metric"><span class="metric-key">Fuel Required</span><span class="metric-val">${r.fuel}</span></div>
+    <div class="route-metric"><span class="metric-key">CO₂ vs Baseline</span><span class="metric-val ${r.status==='good'?'good':'warn'}">${r.co2}</span></div>
+    <div class="route-metric"><span class="metric-key">Efficiency Score</span><span class="metric-val ${r.score>85?'good':'warn'}">${r.score}/100</span></div>
+  `;
+}
+
+/* ── BUILD ALERTS ─────────────────────────────────────────── */
+function buildAlerts() {
+  const feed = document.getElementById('alertFeed');
+  feed.innerHTML = alertsData.map(a => `
+    <div class="alert-item ${a.type} reveal">
+      <div class="alert-icon">${a.icon}</div>
+      <div class="alert-body">
+        <div class="alert-title">${a.title}</div>
+        <div class="alert-desc">${a.desc}</div>
+        <div class="alert-time">${a.time}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const breakdown = document.getElementById('alertBreakdown');
+  const types = [{l:'Critical',c:1,col:'var(--red)'},{l:'Warnings',c:2,col:'var(--amber)'},{l:'Info',c:2,col:'var(--cyan)'}];
+  breakdown.innerHTML = types.map(t => `
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div style="display:flex;align-items:center;gap:8px;font-size:.85rem;">
+        <div style="width:10px;height:10px;border-radius:50%;background:${t.col};"></div>
+        ${t.l}
+      </div>
+      <span style="font-family:var(--mono);font-size:.8rem;color:${t.col};">${t.c}</span>
+    </div>
+  `).join('');
+
+  const prefs = document.getElementById('notifPrefs');
+  const channels = ['Email Alerts','SMS Notifications','Webhook Push','In-app Alerts'];
+  prefs.innerHTML = channels.map((ch, i) => {
+    const on = i !== 2;
+    return `
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:.85rem;color:var(--text-2);">${ch}</span>
+      <div onclick="togglePref(this)" style="width:36px;height:20px;border-radius:10px;background:${on?'var(--cyan)':'var(--border)'};position:relative;cursor:pointer;transition:background .2s;">
+        <div style="width:14px;height:14px;border-radius:50%;background:#fff;position:absolute;top:3px;${on?'right:3px':'left:3px'};transition:all .2s;"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function togglePref(el) {
+  const isOn = el.style.background === 'var(--cyan)' || el.style.background.includes('rgb(0, 229, 255)');
+  el.style.background = isOn ? 'var(--border)' : 'var(--cyan)';
+  const knob = el.querySelector('div');
+  knob.style.left = isOn ? '3px' : 'auto';
+  knob.style.right = isOn ? 'auto' : '3px';
+}
+
+/* ── BUILD LINE CHART ─────────────────────────────────────── */
+function buildLineChart() {
+  const pts = [72,78,74,81,86,80,88,85,91,87,93,89,94,91,96,92,88,94,97,93,95,98,94,91,96,93,97,95,98,94];
+  const W = 500, H = 140, pad = 10;
+  const min = Math.min(...pts) - 5, max = Math.max(...pts) + 2;
+  const x = (i) => pad + (i / (pts.length-1)) * (W - 2*pad);
+  const y = (v) => H - pad - ((v - min) / (max - min)) * (H - 2*pad);
+  const path = pts.map((v,i) => `${i===0?'M':'L'} ${x(i)},${y(v)}`).join(' ');
+  const area = `${path} L ${x(pts.length-1)},${H} L ${x(0)},${H} Z`;
+  document.getElementById('lineSvg').innerHTML = `
+    <defs>
+      <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#00e5ff" stop-opacity=".3"/>
+        <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="${area}" fill="url(#lineGrad)"/>
+    <path d="${path}" fill="none" stroke="#00e5ff" stroke-width="2"/>
+  `;
+}
+
+/* ── BUILD DONUT CHART ────────────────────────────────────── */
+function buildDonut() {
+  const r = 45, cx = 60, cy = 60, stroke = 18;
+  const circ = 2 * Math.PI * r;
+  let offset = 0;
+  const svg = document.getElementById('donutSvg');
+  svg.innerHTML = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--border)" stroke-width="${stroke}"/>`;
+  donutData.forEach(d => {
+    const dash = (d.pct / 100) * circ;
+    const gap = circ - dash;
+    const el = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    el.setAttribute('cx', cx); el.setAttribute('cy', cy); el.setAttribute('r', r);
+    el.setAttribute('fill','none'); el.setAttribute('stroke', d.color);
+    el.setAttribute('stroke-width', stroke);
+    el.setAttribute('stroke-dasharray', `${dash} ${gap}`);
+    el.setAttribute('stroke-dashoffset', circ * 0.25 - offset);
+    svg.appendChild(el);
+    offset += dash;
+  });
+  document.getElementById('donutLegend').innerHTML = donutData.map(d =>
+    `<div class="legend-item">
+      <div class="legend-dot" style="background:${d.color}"></div>
+      <span style="color:var(--text-2);">${d.label}</span>
+      <span style="font-family:var(--mono);font-size:.75rem;margin-left:auto;">${d.pct}%</span>
+    </div>`
+  ).join('');
+}
+
+/* ── BUILD INTEGRATIONS ───────────────────────────────────── */
+function buildIntegrations() {
+  document.getElementById('integrationGrid').innerHTML = integrations.map((ig,i) => `
+    <div class="integration-card reveal reveal-delay-${(i%5)+1}">
+      <div class="integration-icon">${ig.icon}</div>
+      <div>
+        <div class="integration-name">${ig.name}</div>
+        <div class="integration-type">${ig.type}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── COUNTER ANIMATION ────────────────────────────────────── */
+function animateCounters(parent) {
+  parent.querySelectorAll('[data-count]').forEach(el => {
+    const target = parseFloat(el.dataset.count);
+    const dec = target % 1 !== 0 ? String(target).split('.')[1].length : 0;
+    const dur = 1200; const step = 16;
+    const steps = dur / step;
+    let current = 0;
+    const inc = target / steps;
+    const timer = setInterval(() => {
+      current += inc;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = dec > 0 ? current.toFixed(dec) : Math.floor(current).toLocaleString();
+    }, step);
+  });
+}
+
+/* ── SCROLL REVEAL ────────────────────────────────────────── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      animateCounters(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+function observeAll() {
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+/* ── TOAST ────────────────────────────────────────────────── */
+function showToast(title, msg) {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<div class="toast-title">${title}</div><div class="toast-msg">${msg}</div>`;
+  t.onclick = () => removeToast(t);
+  c.appendChild(t);
+  setTimeout(() => removeToast(t), 4000);
+}
+function removeToast(t) {
+  t.classList.add('removing');
+  setTimeout(() => t.remove(), 300);
+}
+
+/* ── TRACK SIMULATE ───────────────────────────────────────── */
+function simulateTrack() {
+  const id = document.getElementById('trackInput').value || 'TF-SAMPLE';
+  showToast('Tracking ' + id, 'Locating shipment on live network...');
+  setTimeout(() => showToast('Found', 'In transit — 62% complete · ETA tomorrow 14:30'), 1200);
+}
+
+/* ── CONTACT FORM ─────────────────────────────────────────── */
+function handleContactForm(e) {
+  e.preventDefault();
+  showToast('Message sent!', 'We\'ll respond within 4 hours.');
+}
+
+/* ── NAV MOBILE ───────────────────────────────────────────── */
+function toggleMobileNav() {
+  const n = document.getElementById('mobileNav');
+  n.style.display = n.style.display === 'none' ? 'block' : 'none';
+}
+function closeMobileNav() {
+  document.getElementById('mobileNav').style.display = 'none';
+}
+
+/* ── NAV SCROLL STYLE ─────────────────────────────────────── */
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('mainNav');
+  nav.style.background = window.scrollY > 60
+    ? 'rgba(8,13,20,0.97)' : 'rgba(8,13,20,0.85)';
+});
+
+/* ── INIT ─────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  buildTicker();
+  buildShipments();
+  buildChart();
+  buildFleet();
+  buildRoutes();
+  buildAlerts();
+  buildLineChart();
+  buildDonut();
+  buildIntegrations();
+  observeAll();
+
+  // Re-observe after dynamic content
+  setTimeout(observeAll, 200);
+});
+</script>
+</body>
+</html>
