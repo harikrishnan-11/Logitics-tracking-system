@@ -358,6 +358,7 @@
       </div>
       <p class="footer-desc">Real-time logistics intelligence for operations teams that refuse to be in the dark. Track, predict, optimise — all in one platform.</p>
       <div class="footer-socials">
+
         <div class="social-btn"><i class="fa-brands fa-x-twitter"></i></div>
         <div class="social-btn"><i class="fa-brands fa-linkedin-in"></i></div>
         <div class="social-btn"><i class="fa-brands fa-github"></i></div>
@@ -534,7 +535,20 @@ function buildTeam() {
       </div>
     </div>`).join('');
 }
+function buildTeamLink() {
+  document.getElementById('teamGrid').addEventListener('click', (e) => {
 
+    const link = e.target.closest('.team-link');
+
+    if (link) {
+      showToast('Opening Profile', 'Redirecting...');
+
+      setTimeout(() => {
+        window.location.href = '404.html';
+      }, 1500);
+    }
+  });
+}
 function buildPerks() {
   document.getElementById('perksGrid').innerHTML = perks.map(p => `
     <div class="perk-item">
@@ -649,12 +663,32 @@ document.addEventListener('DOMContentLoaded', () => {
   buildValues();
   buildTimeline();
   buildTeam();
+  buildTeamLink();
   buildPerks();
   buildInvestors();
   buildAwards();
   buildOffices();
+
+  socialMedia(); // Add this line
+
   setTimeout(observeAll, 100);
 });
+
+function socialMedia() {
+  document.querySelector('.footer-socials').addEventListener('click', (e) => {
+
+    const btn = e.target.closest('.social-btn');
+
+    if (btn) {
+      showToast('Opening Social Media', 'Redirecting...');
+
+      setTimeout(() => {
+        window.location.href = '404.html';
+      }, 1500);
+    }
+
+  });
+}
 </script>
 <script src="./nav.js"></script>
 </body>

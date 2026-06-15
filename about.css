@@ -2273,3 +2273,142 @@ footer {
     transition: none !important;
   }
 }
+
+/* =====================================
+   320px MOBILE FIX
+===================================== */
+@media (max-width: 320px) {
+
+  section{
+    padding: 50px 12px;
+  }
+
+  /* Hero */
+  #hero{
+    padding: 100px 12px 50px;
+    min-height: auto;
+  }
+
+  .about-main .hero-title{
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+
+  .about-main .hero-tagline{
+    font-size: .85rem;
+  }
+
+  .about-main .hero-ctas{
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-primary,
+  .btn-outline{
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Story */
+  .story-layout{
+    gap: 30px;
+  }
+
+  .story-floating-stat{
+    position: static;
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  /* Mission Stats */
+  .mission-stat-block{
+    grid-template-columns: 1fr;
+  }
+
+  /* Team */
+  .team-grid{
+    grid-template-columns: 1fr;
+  }
+
+  /* Investors */
+  .investor-card{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .investor-amount,
+  .investor-round{
+    text-align: left;
+  }
+
+  /* Funding */
+  .ft-amount{
+    font-size: 2rem;
+  }
+
+  /* Press */
+  .press-grid{
+    grid-template-columns: 1fr;
+  }
+
+  /* Office */
+  .office-grid{
+    grid-template-columns: 1fr;
+  }
+
+  /* Reach Stats */
+  .reach-stats{
+    grid-template-columns: 1fr;
+  }
+
+  /* Awards */
+  .awards-grid{
+    grid-template-columns: 1fr;
+  }
+
+  /* CTA */
+  .cta-box{
+    padding: 30px 15px;
+  }
+
+  .cta-btns{
+    flex-direction: column;
+  }
+
+  .cta-btns .btn-primary,
+  .cta-btns .btn-outline{
+    width: 100%;
+  }
+
+  /* Footer */
+  .footer-grid{
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .footer-bottom{
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer-legal{
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  /* Prevent overflow */
+  img,
+  svg,
+  iframe{
+    max-width: 100%;
+  }
+
+  *{
+    min-width: 0;
+  }
+
+  body{
+    overflow-x: hidden;
+  }
+}

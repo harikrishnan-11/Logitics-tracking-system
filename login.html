@@ -60,8 +60,8 @@
       </div>
 
       <div class="social-btns">
-        <button class="social-btn" onclick="socialLogin('Google')"><i class="fa-brands fa-google"></i> Google</button>
-        <button class="social-btn" onclick="socialLogin('Microsoft')"><i class="fa-brands fa-microsoft"></i> Microsoft</button>
+        <button class="social-btn" ><i class="fa-brands fa-google"></i> Google</button>
+        <button class="social-btn"><i class="fa-brands fa-microsoft"></i> Microsoft</button>
       </div>
 
       <div class="divider">
@@ -106,7 +106,7 @@
       </form>
 
       <div class="form-footer-note">
-        By signing in you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.<br>Protected by enterprise-grade security.
+        By signing in you agree to our <a href="./404.html">Terms</a> and <a href="./404.html">Privacy Policy</a>.<br>Protected by enterprise-grade security.
       </div>
     </div>
   </div>
@@ -120,8 +120,11 @@ function togglePassword(){
   if(i.type==='password'){i.type='text';ic.className='fa-regular fa-eye-slash toggle-pw';}
   else{i.type='password';ic.className='fa-regular fa-eye toggle-pw';}
 }
-function socialLogin(p){showToast('Redirecting…','Connecting to '+p+' authentication.');}
-
+document.querySelectorAll('.social-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    window.location.href = '404.html';
+  });
+});
 document.getElementById('loginForm').addEventListener('submit',function(e){
   e.preventDefault();
   const em=document.getElementById('email'),pw=document.getElementById('password');

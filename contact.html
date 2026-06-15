@@ -107,76 +107,156 @@
 <!-- ══════════════════════════════
      §3 CONTACT FORM
 ══════════════════════════════ -->
+```html
 <section id="contact-form-section">
   <div class="section-header">
     <div class="section-tag reveal">Send a Message</div>
-    <h2 class="section-title reveal reveal-delay-1">Tell us what you need.</h2>
-    <p class="section-sub reveal reveal-delay-2">Fill in the details and we'll route your message to the right team. Most requests are picked up within 2 hours during business hours.</p>
+    <h2 class="section-title reveal reveal-delay-1">
+      Tell us what you need.
+    </h2>
+    <p class="section-sub reveal reveal-delay-2">
+      Fill in the details and we'll route your message to the right team.
+      Most requests are picked up within 2 hours during business hours.
+    </p>
   </div>
+
   <div class="contact-layout">
     <div class="reveal">
-      <div class="form-row-2">
-        <div class="form-group">
-          <label class="form-label">First Name</label>
-          <input class="form-input" type="text" placeholder="Priya" />
+
+      <form id="contactForm" novalidate>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input
+              id="firstName"
+              class="form-input"
+              type="text"
+              placeholder="Priya"
+              onkeypress="return /[a-zA-Z ]/.test(event.key)"
+              required>
+            <small id="firstNameError" class="error-message"></small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input
+              id="lastName"
+              class="form-input"
+              type="text"
+              placeholder="Sharma"
+              onkeypress="return /[a-zA-Z ]/.test(event.key)"
+              required>
+            <small id="lastNameError" class="error-message"></small>
+          </div>
         </div>
-        <div class="form-group">
-          <label class="form-label">Last Name</label>
-          <input class="form-input" type="text" placeholder="Sharma" />
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Work Email</label>
+            <input
+              id="email"
+              class="form-input"
+              type="email"
+              placeholder="priya@yourcompany.com"
+              required>
+            <small id="emailError" class="error-message"></small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input
+              id="phone"
+              class="form-input"
+              type="tel"
+              maxlength="10"
+              placeholder="9876543210"
+              oninput="this.value=this.value.replace(/[^0-9]/g,'')"
+              required>
+            <small id="phoneError" class="error-message"></small>
+          </div>
         </div>
-      </div>
-      <div class="form-row-2">
-        <div class="form-group">
-          <label class="form-label">Work Email</label>
-          <input class="form-input" type="email" placeholder="priya@yourcompany.com" />
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label">Company</label>
+            <input
+              id="company"
+              class="form-input"
+              type="text"
+              placeholder="Your Company Pvt. Ltd."  onkeypress="return /[a-zA-Z ]/.test(event.key)"
+              required>
+            <small id="companyError" class="error-message"></small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Team Size</label>
+            <select id="teamSize" class="form-select" required>
+              <option value="">Select fleet size</option>
+              <option>1–10 vehicles</option>
+              <option>11–50 vehicles</option>
+              <option>51–200 vehicles</option>
+              <option>200+ vehicles</option>
+            </select>
+            <small id="teamSizeError" class="error-message"></small>
+          </div>
         </div>
+
         <div class="form-group">
-          <label class="form-label">Phone (optional)</label>
-          <input class="form-input" type="tel" placeholder="+91 98765 43210" />
-        </div>
-      </div>
-      <div class="form-row-2">
-        <div class="form-group">
-          <label class="form-label">Company</label>
-          <input class="form-input" type="text" placeholder="Your Company Pvt. Ltd." />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Team Size</label>
-          <select class="form-select">
-            <option value="">Select fleet size</option>
-            <option>1–10 vehicles</option>
-            <option>11–50 vehicles</option>
-            <option>51–200 vehicles</option>
-            <option>200+ vehicles</option>
+          <label class="form-label">Enquiry Type</label>
+          <select id="enquiryType" class="form-select" required>
+            <option value="">Select a topic</option>
+            <option>Sales & Pricing</option>
+            <option>Technical Support</option>
+            <option>Integration Help</option>
+            <option>Billing</option>
+            <option>Partnership</option>
+            <option>Press & Media</option>
+            <option>Other</option>
           </select>
+          <small id="enquiryError" class="error-message"></small>
         </div>
+
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea
+            id="msgArea"
+            class="form-textarea"
+            placeholder="Describe your question or challenge. The more detail you share, the faster we can help."
+            maxlength="600"
+            oninput="updateChar(this)"
+            required></textarea>
+
+          <small id="messageError" class="error-message"></small>
+
+          <div class="char-count">
+            <span id="charCount">0</span> / 600
+          </div>
+        </div>
+
+        <button
+          type="button"
+          class="form-submit"
+          onclick="handleForm()">
+          <i class="fa-solid fa-paper-plane"></i>
+          Send Message
+        </button>
+
+      </form>
+
+      <div class="form-note">
+        <i class="fa-solid fa-shield-halved"
+           style="color:var(--cyan);margin-right:6px;"></i>
+        Your data is encrypted and never sold. SOC 2 Type II certified.
       </div>
-      <div class="form-group">
-        <label class="form-label">Enquiry Type</label>
-        <select class="form-select">
-          <option value="">Select a topic</option>
-          <option>Sales & Pricing</option>
-          <option>Technical Support</option>
-          <option>Integration Help</option>
-          <option>Billing</option>
-          <option>Partnership</option>
-          <option>Press & Media</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Message</label>
-        <textarea class="form-textarea" id="msgArea" placeholder="Describe your question or challenge. The more detail you share, the faster we can help." maxlength="600" oninput="updateChar(this)"></textarea>
-        <div class="char-count"><span id="charCount">0</span> / 600</div>
-      </div>
-      <button class="form-submit" onclick="handleForm()">
-        <i class="fa-solid fa-paper-plane"></i> Send Message
-      </button>
-      <div class="form-note"><i class="fa-solid fa-shield-halved" style="color:var(--cyan);margin-right:6px;"></i>Your data is encrypted and never sold. SOC 2 Type II certified.</div>
+
     </div>
+
     <div class="contact-sidebar reveal reveal-delay-2" id="contactSidebar"></div>
   </div>
 </section>
+```
+
 
 <!-- ══════════════════════════════
      §4 OFFICES
@@ -624,7 +704,51 @@ function updateChar(el) {
 }
 
 function handleForm() {
-  showToast('Message sent!', 'Our team will respond within 2 hours. Check your inbox.');
+  const email = document.getElementById('email');
+  const phone = document.getElementById('phone');
+
+  const emailError = document.getElementById('emailError');
+  const phoneError = document.getElementById('phoneError');
+
+  let isValid = true;
+
+  // Reset
+  emailError.textContent = '';
+  phoneError.textContent = '';
+
+  email.classList.remove('input-error');
+  phone.classList.remove('input-error');
+
+  // Email Validation
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (email.value.trim() === '') {
+    emailError.textContent = 'Email is required';
+    email.classList.add('input-error');
+    isValid = false;
+  } else if (!emailPattern.test(email.value.trim())) {
+    emailError.textContent = 'Enter a valid email address';
+    email.classList.add('input-error');
+    isValid = false;
+  }
+
+  // Phone Validation (10 digits)
+  const phoneValue = phone.value.replace(/\D/g, '');
+
+  if (phone.value.trim() !== '') {
+    if (!/^\d{10}$/.test(phoneValue)) {
+      phoneError.textContent = 'Enter a valid 10-digit mobile number';
+      phone.classList.add('input-error');
+      isValid = false;
+    }
+  }
+
+  if (!isValid) return;
+
+  showToast(
+    'Message sent!',
+    'Our team will respond within 2 hours. Check your inbox.'
+  );
 }
 
 function showToast(title, msg) {
@@ -637,11 +761,18 @@ function showToast(title, msg) {
   setTimeout(() => { t.classList.add('removing'); setTimeout(() => t.remove(), 300); }, 4000);
 }
 
+
 function toggleMobileNav() {
-  const n = document.getElementById('mobileNav');
-  n.style.display = n.style.display === 'block' ? 'none' : 'block';
+  document.getElementById("mobileNav")
+    .classList.toggle("active");
 }
-function closeMobileNav() { document.getElementById('mobileNav').style.display = 'none'; }
+
+function closeMobileNav() {
+  document.getElementById("mobileNav")
+    .classList.remove("active");
+}
+
+
 
 window.addEventListener('scroll', () => {
   document.getElementById('mainNav').style.background =
@@ -665,8 +796,23 @@ document.addEventListener('DOMContentLoaded', () => {
   buildCommunity();
   buildSalesSlots();
   observeAll();
+  socialMedia(); 
   setTimeout(observeAll, 200);
 });
+
+function socialMedia() {
+  const socialMediaLinks = document.querySelectorAll('.social-btn');
+
+  socialMediaLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      showToast('Opening Social Media', 'Redirecting...');
+
+      setTimeout(() => {
+        window.location.href = '404.html';
+      }, 1500);
+    });
+  });
+}
 </script>
 </body>
 </html>

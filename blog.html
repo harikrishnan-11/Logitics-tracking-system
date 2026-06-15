@@ -508,8 +508,24 @@ document.addEventListener('DOMContentLoaded', () => {
   buildAuthors();
   buildCases();
   observeAll();
+  socialMedia(); 
   setTimeout(observeAll, 200);
 });
+
+
+function socialMedia() {
+  const socialMediaLinks = document.querySelectorAll('.social-btn');
+
+  socialMediaLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      showToast('Opening Social Media', 'Redirecting...');
+
+      setTimeout(() => {
+        window.location.href = '404.html';
+      }, 1500);
+    });
+  });
+}
 </script>
 </body>
 </html>

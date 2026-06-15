@@ -661,7 +661,7 @@ const testimonials = [
 
 const plans = [
   { name:'Starter', desc:'Up to 500 shipments/month', price:'₹3,499', period:'/mo · billed annually', featured: false },
-  { name:'Professional', desc:'Unlimited shipments · All 6 modules', price:'₹14,999', period:'/mo · billed annually', featured: true, badge:'Most Popular' },
+  { name:'Professional', desc:'Unlimited shipments · All 6 modules', price:'₹14,999', period:'/mo · billed annually', featured: true,},
   { name:'Enterprise', desc:'Unlimited · Dedicated SLA · White-label', price:'Custom', period:'Contact sales', featured: false },
 ];
 
@@ -830,8 +830,24 @@ document.addEventListener('DOMContentLoaded', () => {
   buildSLA();
   buildTestimonials();
   buildPlans();
+  socialMedia(); 
   setTimeout(observeAll, 100);
 });
+
+
+function socialMedia() {
+  const socialMediaLinks = document.querySelectorAll('.social-btn');
+
+  socialMediaLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      showToast('Opening Social Media', 'Redirecting...');
+
+      setTimeout(() => {
+        window.location.href = '404.html';
+      }, 1500);
+    });
+  });
+}
 </script>
 </body>
 </html>

@@ -83,12 +83,12 @@
       <div class="form-header">
         <div class="form-tag">New Account</div>
         <h1 class="form-title">Create your account</h1>
-        <p class="form-subtitle">Already have one? <a href="login.html">Sign in →</a></p>
+        <p class="form-subtitle">Already have one? <a href="login.html">Login →</a></p>
       </div>
 
       <div class="social-btns">
-        <button class="social-btn" onclick="socialSignup('Google')"><i class="fa-brands fa-google"></i> Google</button>
-        <button class="social-btn" onclick="socialSignup('Microsoft')"><i class="fa-brands fa-microsoft"></i> Microsoft</button>
+        <button class="social-btn"><i class="fa-brands fa-google"></i> Google</button>
+        <button class="social-btn" ><i class="fa-brands fa-microsoft"></i> Microsoft</button>
       </div>
 
       <div class="divider">
@@ -104,7 +104,7 @@
           <div class="field">
             <div class="field-label"><span>First Name</span></div>
             <div class="input-wrap">
-              <input class="field-input" type="text" id="firstName" placeholder="Priya" autocomplete="given-name"/>
+              <input class="field-input" type="text" id="firstName" placeholder="Priya" autocomplete="given-name"  onkeypress="return /[a-zA-Z ]/.test(event.key)"/>
               <i class="fa-regular fa-user input-icon" id="firstNameIcon"></i>
             </div>
             <div class="field-error" id="firstNameError">First name is required.</div>
@@ -112,7 +112,7 @@
           <div class="field">
             <div class="field-label"><span>Last Name</span></div>
             <div class="input-wrap">
-              <input class="field-input" type="text" id="lastName" placeholder="Sharma" autocomplete="family-name"/>
+              <input class="field-input" type="text" id="lastName" placeholder="Sharma" autocomplete="family-name"  onkeypress="return /[a-zA-Z ]/.test(event.key)"/>
               <i class="fa-regular fa-user input-icon"></i>
             </div>
             <div class="field-error" id="lastNameError">Last name is required.</div>
@@ -134,7 +134,7 @@
           <div class="field">
             <div class="field-label"><span>Company</span></div>
             <div class="input-wrap">
-              <input class="field-input" type="text" id="company" placeholder="Shadowfax Logistics" autocomplete="organization"/>
+              <input class="field-input" type="text" id="company" placeholder="Shadowfax Logistics" autocomplete="organization" onkeypress="return /[a-zA-Z ]/.test(event.key)"/>
               <i class="fa-regular fa-building input-icon"></i>
             </div>
             <div class="field-error" id="companyError">Company name is required.</div>
@@ -222,8 +222,11 @@ function togglePassword(inputId, iconId) {
 }
 
 /* ── Social signup ── */
-function socialSignup(p) { showToast('Redirecting…', 'Connecting to ' + p + ' authentication.'); }
-
+document.querySelectorAll('.social-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    window.location.href = '404.html';
+  });
+});
 /* ── Password strength ── */
 document.getElementById('password').addEventListener('input', function () {
   const val = this.value;

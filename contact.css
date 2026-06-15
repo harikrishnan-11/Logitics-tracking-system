@@ -245,7 +245,16 @@
             gap: 50px;
         }
     }
+.error-message{
+  display:block;
+  color:#ff5252;
+  font-size:12px;
+  margin-top:5px;
+}
 
+.input-error{
+  border:1px solid #ff5252 ;
+}
 
     /* ── REVEAL ── */
     .reveal {

@@ -444,6 +444,7 @@
       </div>
       <p class="footer-desc">Real-time logistics intelligence for operations teams that refuse to be in the dark. Track, predict, optimise — all in one platform.</p>
       <div class="footer-socials">
+
         <div class="social-btn"><i class="fa-brands fa-x-twitter"></i></div>
         <div class="social-btn"><i class="fa-brands fa-linkedin-in"></i></div>
         <div class="social-btn"><i class="fa-brands fa-github"></i></div>
@@ -850,6 +851,23 @@ window.addEventListener('scroll', () => {
     ? 'rgba(8,13,20,0.97)' : 'rgba(8,13,20,0.85)';
 });
 
+function socialMedia() {
+  const socialMediaLinks = document.querySelectorAll('.social-btn');
+
+  socialMediaLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      showToast('Opening Social Media', 'Redirecting...');
+
+      setTimeout(() => {
+        window.location.href = '404.html';
+      }, 1500);
+    });
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  socialMedia();
+});
 /* ── INIT ─────────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   buildTicker();
@@ -866,6 +884,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // Re-observe after dynamic content
   setTimeout(observeAll, 200);
 });
+
+function toggleMobileNav() {
+  const mobileNav = document.getElementById("mobileNav");
+
+  mobileNav.classList.toggle("active");
+
+  document.documentElement.classList.toggle("nav-open");
+  document.body.classList.toggle("nav-open");
+}
+
+function closeMobileNav() {
+  document.getElementById("mobileNav").classList.remove("active");
+
+  document.documentElement.classList.remove("nav-open");
+  document.body.classList.remove("nav-open");
+}
 </script>
 </body>
 </html>
