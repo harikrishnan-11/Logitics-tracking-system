@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Services — TrackFlow Logistics Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="service.css">
+</head>
+<body>
+
+<!-- ── NAV ────────────────────────────────────────────────── -->
+<nav class="nav" id="mainNav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    STACKLY
+  </div>
+  <div class="nav-links">
+    <a href="./index.html"><i class="fa-solid fa-location-dot"></i> Home</a>
+    <a href="./about.html"><i class="fa-solid fa-boxes-stacked"></i> ABOUT</a>
+    <a href="./service.html"><i class="fa-solid fa-truck"></i> SERVICE</a>
+    <a href="./blog.html"><i class="fa-solid fa-chart-line"></i>BLOG</a>
+    <a href="./contact.html"><i class="fa-solid fa-headset"></i> Contact</a>
+  </div>
+  <div class="login-btn desktop">
+    <a href="./login.html">
+      <button class="nav-cta">Login</button>
+    </a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div id="mobileNav" >
+  <div>
+    <a href="./index.html" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">Home</a>
+    <a href="./about.html" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">ABOUT</a>
+    <a href="./service.html" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">SERVICE</a>
+    <a href="./blog.html" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">BLOG</a>
+    <a href="./contact.html" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">Contact</a>
+  </div>
+  <div class="login-btn mobile-btn">
+    <a href="./login.html">
+      <button class="nav-cta">Login</button>
+    </a>
+  </div>
+</div>
+<!-- ════════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="hero-inner">
+    <div class="hero-breadcrumb reveal">
+      <a href="home.html">Home</a>
+      <i class="fa-solid fa-chevron-right"></i>
+      <span>Services</span>
+    </div>
+    <div class="hero-pill reveal d1"><div class="pill-dot"></div> 6 Core Services · 200+ Integrations</div>
+    <h1 class="hero-title reveal d2">
+      Every service your<br>
+      <span class="accent">logistics operation</span><br>
+      will ever <span class="serif">need.</span>
+    </h1>
+    <p class="hero-sub reveal d3">
+      From real-time GPS tracking to AI-powered route optimisation, fleet management to customs documentation — TrackFlow wraps every layer of your supply chain in a single, intelligent platform.
+    </p>
+    <div class="hero-actions reveal d4">
+      <a href="./404.html" >
+        <button class="btn-primary" onclick="document.getElementById('overview').scrollIntoView({behavior:'smooth'})">
+          <i class="fa-solid fa-layer-group"></i> Explore Services
+        </button>
+      </a>
+      <a href="./404.html" >
+        <button class="btn-outline" onclick="showToast('Demo Booked','Our team will contact you within 2 hours.')">
+          <i class="fa-regular fa-calendar"></i> Book a Demo
+        </button>
+      </a>
+    </div>
+    <div class="hero-service-chips reveal d5">
+      <div class="service-chip active" onclick="scrollToSvc('service-tracking')"><i class="fa-solid fa-location-dot"></i> Live Tracking</div>
+      <div class="service-chip" onclick="scrollToSvc('service-fleet')"><i class="fa-solid fa-truck"></i> Fleet Management</div>
+      <div class="service-chip" onclick="scrollToSvc('service-route')"><i class="fa-solid fa-route"></i> Route Optimizer</div>
+      <div class="service-chip" onclick="scrollToSvc('service-warehouse')"><i class="fa-solid fa-warehouse"></i> Warehouse Ops</div>
+      <div class="service-chip" onclick="scrollToSvc('service-analytics')"><i class="fa-solid fa-chart-line"></i> Analytics</div>
+      <div class="service-chip" onclick="scrollToSvc('service-api')"><i class="fa-solid fa-code"></i> API & Integrations</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     OVERVIEW CARDS
+════════════════════════════════════════════════ -->
+<section id="overview">
+  <div class="section-header center">
+    <div class="section-tag reveal">Our Services</div>
+    <h2 class="section-title reveal d1">Six pillars of logistics intelligence</h2>
+    <p class="section-sub reveal d2">Each service is a standalone module. Use one or all six — they're built to work independently and even better together.</p>
+  </div>
+  <div class="overview-grid" id="overviewGrid"></div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     SERVICE 1 — REAL-TIME TRACKING
+════════════════════════════════════════════════ -->
+<div class="section-divider"></div>
+<section id="service-tracking">
+  <div class="svc-layout">
+    <div class="svc-img-wrap reveal-left">
+      <img src="https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=900&auto=format&fit=crop&q=80" alt="Real-time shipment tracking dashboard" loading="lazy"/>
+      <div class="svc-img-glow"></div>
+      <div class="img-float-card">
+        <div class="img-float-icon"><i class="fa-solid fa-satellite-dish"></i></div>
+        <div>
+          <div class="img-float-val">8 sec</div>
+          <div class="img-float-lbl">Average GPS refresh rate</div>
+          <div class="img-float-delta"><i class="fa-solid fa-arrow-trend-up"></i> 180+ countries covered</div>
+        </div>
+      </div>
+    </div>
+    <div class="svc-content reveal-right d2">
+      <div class="section-tag">Service 01</div>
+      <h2 class="section-title">Real-Time<br>Shipment Tracking</h2>
+      <p class="section-sub">Millisecond-accurate GPS updates for every shipment across every carrier — in one unified live feed. No more "where is my package" calls, ever again.</p>
+      <div class="svc-features">
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-location-crosshairs"></i></div>
+          <div><div class="svc-feat-title">Multi-Carrier GPS Engine</div><div class="svc-feat-desc">Aggregates live location data from 200+ carriers, cell triangulation, and IoT sensors into one normalised feed.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-clock"></i></div>
+          <div><div class="svc-feat-title">Predictive ETA Engine</div><div class="svc-feat-desc">ML model trained on 500M+ shipments predicts delivery windows with 94% accuracy, accounting for traffic and weather.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-bell"></i></div>
+          <div><div class="svc-feat-title">Proactive Customer Notifications</div><div class="svc-feat-desc">Automated SMS, email, and WhatsApp updates at every milestone — branded with your company identity.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+          <div><div class="svc-feat-title">Branded Tracking Portal</div><div class="svc-feat-desc">White-label customer-facing tracking page that lives on your domain. Zero TrackFlow branding, 100% yours.</div></div>
+        </div>
+      </div>
+      <div class="svc-stat-row">
+        <div class="svc-stat"><div class="svc-stat-val" data-target="2400000">0</div><div class="svc-stat-lbl">Shipments tracked daily</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="%">94</div><div class="svc-stat-lbl">ETA accuracy</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="+">200</div><div class="svc-stat-lbl">Carrier integrations</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     SERVICE 2 — FLEET MANAGEMENT
+════════════════════════════════════════════════ -->
+<div class="section-divider"></div>
+<section id="service-fleet" style="background:var(--bg-2);">
+  <div class="svc-layout reverse">
+    <div class="svc-content reveal-left">
+      <div class="section-tag">Service 02</div>
+      <h2 class="section-title">Fleet Management<br>& Telematics</h2>
+      <p class="section-sub">Full visibility into every vehicle, driver, and delivery. Monitor fuel, speed, behaviour, and maintenance from a single command centre.</p>
+      <div class="svc-features">
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-truck-moving"></i></div>
+          <div><div class="svc-feat-title">Live Vehicle Telemetry</div><div class="svc-feat-desc">Real-time speed, fuel, engine diagnostics, and geofencing alerts for every vehicle in your fleet.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-user-tie"></i></div>
+          <div><div class="svc-feat-title">Driver Behaviour Scoring</div><div class="svc-feat-desc">AI scores every driver on safety, fuel efficiency, and customer satisfaction. Automated coaching nudges.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+          <div><div class="svc-feat-title">Predictive Maintenance</div><div class="svc-feat-desc">Engine diagnostics predict breakdowns 7–14 days before they happen, preventing costly roadside failures.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-gas-pump"></i></div>
+          <div><div class="svc-feat-title">Fuel Intelligence</div><div class="svc-feat-desc">Detects fuel theft, monitors consumption per km, and flags anomalies within seconds of occurrence.</div></div>
+        </div>
+      </div>
+      <div class="svc-stat-row">
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="%">18</div><div class="svc-stat-lbl">Avg fuel savings</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="%">34</div><div class="svc-stat-lbl">Fewer breakdowns</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="K">50</div><div class="svc-stat-lbl">Vehicles monitored</div></div>
+      </div>
+    </div>
+    <div class="svc-img-wrap reveal-right d2">
+      <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=900&auto=format&fit=crop&q=80" alt="Fleet management trucks" loading="lazy"/>
+      <div class="svc-img-glow"></div>
+      <div class="img-float-card">
+        <div class="img-float-icon"><i class="fa-solid fa-truck"></i></div>
+        <div>
+          <div class="img-float-val">50,000+</div>
+          <div class="img-float-lbl">Vehicles monitored live</div>
+          <div class="img-float-delta"><i class="fa-solid fa-leaf"></i> 18% average fuel saving</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FULL-WIDTH BANNER -->
+<div class="svc-banner">
+  <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=1800&auto=format&fit=crop&q=80" alt="Logistics warehouse operations" loading="lazy"/>
+  <div class="svc-banner-overlay">
+    <div class="svc-banner-content">
+      <div class="svc-banner-tag"><i class="fa-solid fa-brain"></i> AI-Powered Intelligence</div>
+      <div class="svc-banner-title">Our AI processes 2.4 million data points every second to keep your supply chain running without friction.</div>
+      <p class="svc-banner-sub">Machine learning models trained on five years of Indian and global logistics data — so every prediction gets sharper with every shipment you move.</p>
+     <a href="./404.html" >
+       <button class="btn-primary" onclick="showToast('AI Features','Explore our ML-powered prediction engine.')"><i class="fa-solid fa-microchip"></i> Explore AI Features</button>
+     </a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     SERVICE 3 — ROUTE OPTIMIZER
+════════════════════════════════════════════════ -->
+<section id="service-route">
+  <div class="svc-layout">
+    <div class="svc-img-wrap reveal-left">
+      <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=900&auto=format&fit=crop&q=80" alt="Route optimization map logistics" loading="lazy"/>
+      <div class="svc-img-glow"></div>
+      <div class="img-float-card">
+        <div class="img-float-icon"><i class="fa-solid fa-road"></i></div>
+        <div>
+          <div class="img-float-val">2,840 km</div>
+          <div class="img-float-lbl">Saved yesterday by optimizer</div>
+          <div class="img-float-delta"><i class="fa-solid fa-leaf"></i> 1.2T CO₂ reduction</div>
+        </div>
+      </div>
+    </div>
+    <div class="svc-content reveal-right d2">
+      <div class="section-tag">Service 03</div>
+      <h2 class="section-title">AI Route<br>Optimiser</h2>
+      <p class="section-sub">Routes that automatically recalculate every 90 seconds around live traffic, weather, vehicle load, and delivery time windows. Zero manual planning required.</p>
+      <div class="svc-features">
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-rotate"></i></div>
+          <div><div class="svc-feat-title">90-Second Recalculation</div><div class="svc-feat-desc">Routes update automatically with live feeds from Google Maps, weather APIs, and your own historical data.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-people-arrows"></i></div>
+          <div><div class="svc-feat-title">Multi-Stop Sequencing</div><div class="svc-feat-desc">Optimal stop order for up to 150 delivery stops per vehicle, considering time windows, load order, and access restrictions.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-leaf"></i></div>
+          <div><div class="svc-feat-title">Carbon-Optimised Routing</div><div class="svc-feat-desc">Choose between fastest, cheapest, or lowest-emission route profiles. ESG reporting built in.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+          <div><div class="svc-feat-title">Last-Mile Intelligence</div><div class="svc-feat-desc">Hyperlocal routing with building-level addresses, gated community handling, and rural area coverage.</div></div>
+        </div>
+      </div>
+      <div class="svc-stat-row">
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="%">22</div><div class="svc-stat-lbl">Avg distance saved</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="%">19</div><div class="svc-stat-lbl">Cost per delivery cut</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="s">90</div><div class="svc-stat-lbl">Route refresh rate</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     SERVICE 4 — WAREHOUSE OPS
+════════════════════════════════════════════════ -->
+<div class="section-divider"></div>
+<section id="service-warehouse" style="background:var(--bg-2);">
+  <div class="svc-layout reverse">
+    <div class="svc-content reveal-left">
+      <div class="section-tag">Service 04</div>
+      <h2 class="section-title">Warehouse<br>Operations Hub</h2>
+      <p class="section-sub">Connect your warehouses, automate inbound/outbound workflows, and give every picker, packer, and dock manager a live digital command centre.</p>
+      <div class="svc-features">
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+          <div><div class="svc-feat-title">Real-Time Inventory Sync</div><div class="svc-feat-desc">Bi-directional sync with your WMS keeps stock levels, locations, and movements accurate to the second.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-barcode"></i></div>
+          <div><div class="svc-feat-title">Inbound / Outbound Automation</div><div class="svc-feat-desc">Scan-to-verify receiving, automated put-away logic, and pick-list generation based on live carrier pickups.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-temperature-half"></i></div>
+          <div><div class="svc-feat-title">Cold Chain Monitoring</div><div class="svc-feat-desc">IoT sensor integration for pharmaceutical and perishable goods — temperature and humidity alerts in real time.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-network-wired"></i></div>
+          <div><div class="svc-feat-title">Multi-Warehouse Network View</div><div class="svc-feat-desc">Unified dashboard across all your DCs, 3PL partners, and dark stores on a single operations screen.</div></div>
+        </div>
+      </div>
+      <div class="svc-stat-row">
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="%">41</div><div class="svc-stat-lbl">Pick error reduction</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="%">28</div><div class="svc-stat-lbl">Labour efficiency gain</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="+">500</div><div class="svc-stat-lbl">Warehouses live</div></div>
+      </div>
+    </div>
+    <div class="svc-img-wrap reveal-right d2">
+      <img src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=900&auto=format&fit=crop&q=80" alt="Warehouse management system" loading="lazy"/>
+      <div class="svc-img-glow"></div>
+      <div class="img-float-card">
+        <div class="img-float-icon"><i class="fa-solid fa-warehouse"></i></div>
+        <div>
+          <div class="img-float-val">500+</div>
+          <div class="img-float-lbl">Active warehouse connections</div>
+          <div class="img-float-delta"><i class="fa-solid fa-arrow-trend-up"></i> 41% fewer pick errors</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MINI FEATURES GRID -->
+<section style="background:var(--bg-2);padding-top:0;">
+  <div class="mini-features-grid" id="miniFeatGrid"></div>
+</section>
+
+<!-- FULL-WIDTH BANNER 2 -->
+<div class="svc-banner">
+  <img src="https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?w=1800&auto=format&fit=crop&q=80" alt="Cargo containers port logistics" loading="lazy"/>
+  <div class="svc-banner-overlay">
+    <div class="svc-banner-content">
+      <div class="svc-banner-tag"><i class="fa-solid fa-ship"></i> Ocean & Air Freight</div>
+      <div class="svc-banner-title">International freight tracking across sea, air, and cross-border road corridors.</div>
+      <p class="svc-banner-sub">Real-time vessel position, port ETA, customs clearance status, and documentation alerts — all in one view alongside your domestic shipments.</p>
+      <a href="./404.html" >
+        <button class="btn-primary" onclick="showToast('International','See how global freight tracking works.')"><i class="fa-solid fa-earth-asia"></i> See International Tracking</button>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     SERVICE 5 — ANALYTICS
+════════════════════════════════════════════════ -->
+<section id="service-analytics">
+  <div class="svc-layout">
+    <div class="svc-img-wrap reveal-left">
+      <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&auto=format&fit=crop&q=80" alt="Logistics analytics dashboard" loading="lazy"/>
+      <div class="svc-img-glow"></div>
+      <div class="img-float-card">
+        <div class="img-float-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <div>
+          <div class="img-float-val">94.2%</div>
+          <div class="img-float-lbl">On-time delivery rate (this month)</div>
+          <div class="img-float-delta"><i class="fa-solid fa-arrow-trend-up"></i> +3.4pp vs last month</div>
+        </div>
+      </div>
+    </div>
+    <div class="svc-content reveal-right d2">
+      <div class="section-tag">Service 05</div>
+      <h2 class="section-title">Operations<br>Analytics Suite</h2>
+      <p class="section-sub">Turn raw logistics data into strategic insight. Understand performance trends, carrier SLAs, cost per shipment, and regional patterns — with one-click reporting.</p>
+      <div class="svc-features">
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+          <div><div class="svc-feat-title">Carrier Performance Benchmarking</div><div class="svc-feat-desc">Compare SLA compliance, damage rates, and cost efficiency across all your carriers in one view.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-file-chart-column"></i></div>
+          <div><div class="svc-feat-title">Executive Dashboards & Reports</div><div class="svc-feat-desc">Board-ready PDF/Excel exports in one click. Scheduled email reports to your leadership team.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-crystal-ball"></i></div>
+          <div><div class="svc-feat-title">Demand & Volume Forecasting</div><div class="svc-feat-desc">Predict shipment volumes 30/60/90 days out so you can negotiate better carrier rates and plan capacity.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+          <div><div class="svc-feat-title">Cost Attribution & Billing Audit</div><div class="svc-feat-desc">Automatically detect carrier overbilling, weight discrepancies, and fuel surcharge errors.</div></div>
+        </div>
+      </div>
+      <div class="svc-stat-row">
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="+">40</div><div class="svc-stat-lbl">Built-in report templates</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="%">12</div><div class="svc-stat-lbl">Avg billing error recovery</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="yr">2</div><div class="svc-stat-lbl">Historical data retention</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     SERVICE 6 — API & INTEGRATIONS
+════════════════════════════════════════════════ -->
+<div class="section-divider"></div>
+<section id="service-api" style="background:var(--bg-2);">
+  <div class="svc-layout reverse">
+    <div class="svc-content reveal-left">
+      <div class="section-tag">Service 06</div>
+      <h2 class="section-title">API Platform &<br>Integrations</h2>
+      <p class="section-sub">Connect TrackFlow to everything your stack already runs on — ERPs, eCommerce, CRMs, WMS, and 200+ carrier APIs — in under a day with zero code required.</p>
+      <div class="svc-features">
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-code"></i></div>
+          <div><div class="svc-feat-title">REST & GraphQL API</div><div class="svc-feat-desc">Fully documented, versioned APIs with OpenAPI spec, Postman collections, and SDK libraries for Python, Node.js, and Java.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-webhook"></i></div>
+          <div><div class="svc-feat-title">Real-Time Webhooks</div><div class="svc-feat-desc">Push events to your systems the moment something changes. Every shipment event, every status, zero polling required.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-plug-circle-check"></i></div>
+          <div><div class="svc-feat-title">200+ Pre-Built Connectors</div><div class="svc-feat-desc">One-click connect to Shopify, SAP, Salesforce, Amazon, Oracle, Zoho, WhatsApp Business, and more.</div></div>
+        </div>
+        <div class="svc-feat">
+          <div class="svc-feat-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div><div class="svc-feat-title">Enterprise Security</div><div class="svc-feat-desc">OAuth 2.0, API key rotation, IP allowlisting, and full audit logs. SOC 2 Type II and ISO 27001 certified.</div></div>
+        </div>
+      </div>
+      <div class="svc-stat-row">
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="+">200</div><div class="svc-stat-lbl">Pre-built connectors</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="ms">&lt;50</div><div class="svc-stat-lbl">API response time</div></div>
+        <div class="svc-stat"><div class="svc-stat-val" data-suffix="%">99.99</div><div class="svc-stat-lbl">API uptime</div></div>
+      </div>
+    </div>
+    <div class="svc-img-wrap reveal-right d2">
+      <img src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=900&auto=format&fit=crop&q=80" alt="API integration developer platform" loading="lazy"/>
+      <div class="svc-img-glow"></div>
+      <div class="img-float-card">
+        <div class="img-float-icon"><i class="fa-solid fa-plug"></i></div>
+        <div>
+          <div class="img-float-val">&lt;1 day</div>
+          <div class="img-float-lbl">Average integration time</div>
+          <div class="img-float-delta"><i class="fa-solid fa-shield-check"></i> SOC 2 Type II certified</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     PROCESS / HOW ONBOARDING WORKS
+════════════════════════════════════════════════ -->
+<section id="process">
+  <div class="section-header">
+    <div class="section-tag reveal">Onboarding Process</div>
+    <h2 class="section-title reveal d1">Live in under<br>24 hours.</h2>
+    <p class="section-sub reveal d2">Our customer success team handles the heavy lifting. Most customers go from sign-up to full live visibility in a single working day.</p>
+  </div>
+  <div class="process-layout">
+    <div class="process-img reveal-left">
+      <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=900&auto=format&fit=crop&q=80" alt="Customer success onboarding team" loading="lazy"/>
+      <div class="process-img-overlay"></div>
+      <div class="process-img-badge">
+        <div class="pib-val">&lt;24h</div>
+        <div class="pib-lbl">Time to live visibility</div>
+      </div>
+    </div>
+    <div class="process-steps reveal-right d2" id="processSteps"></div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     INDUSTRIES
+════════════════════════════════════════════════ -->
+<section id="industries" style="background:var(--bg-2);">
+  <div class="section-header center">
+    <div class="section-tag reveal">Industries Served</div>
+    <h2 class="section-title reveal d1">Built for every<br>vertical that moves.</h2>
+    <p class="section-sub reveal d2">TrackFlow adapts to the unique workflows, compliance needs, and SLA demands of your industry — not the other way around.</p>
+  </div>
+  <div class="industries-grid" id="industriesGrid"></div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     SLA GUARANTEE STRIP
+════════════════════════════════════════════════ -->
+<section id="sla">
+  <div class="section-header center">
+    <div class="section-tag reveal">Our Guarantees</div>
+    <h2 class="section-title reveal d1">We put our uptime<br>where our mouth is.</h2>
+  </div>
+  <div class="sla-grid" id="slaGrid"></div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     TESTIMONIALS
+════════════════════════════════════════════════ -->
+<section id="service-testi" style="background:var(--bg-2);">
+  <div class="section-header center">
+    <div class="section-tag reveal">Customer Stories</div>
+    <h2 class="section-title reveal d1">Real results from<br>real operations teams.</h2>
+  </div>
+  <div class="testi-row" id="testiRow"></div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     PRICING TEASER
+════════════════════════════════════════════════ -->
+<section id="pricing-teaser">
+  <div class="section-header">
+    <div class="section-tag reveal">Pricing</div>
+    <h2 class="section-title reveal d1">Transparent pricing.<br>No logistics fees.</h2>
+    <p class="section-sub reveal d2">Start with one module or all six. Scale up as you grow — pricing that makes sense at every volume.</p>
+  </div>
+  <div class="pricing-layout">
+    <div class="pricing-img reveal-left">
+      <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=900&auto=format&fit=crop&q=80" alt="Business meeting pricing discussion" loading="lazy"/>
+      <div class="pricing-img-overlay"></div>
+    </div>
+    <div class="reveal-right d2">
+      <div class="plan-cards" id="planCards"></div>
+      <div style="margin-top:20px;">
+        <a href="./404.html" >
+          <button class="btn-primary" style="width:100%;justify-content:center;" onclick="window.location='index.html#pricing'">
+            <i class="fa-solid fa-tag"></i> View Full Pricing Details
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+     CTA
+════════════════════════════════════════════════ -->
+<section id="cta-section">
+  <div class="cta-box">
+    <div class="cta-img">
+      <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?w=1800&auto=format&fit=crop&q=80" alt="Logistics operations background"/>
+    </div>
+    <div class="cta-gradient"></div>
+    <div class="cta-content reveal">
+      <div class="cta-tag"><i class="fa-solid fa-rocket"></i> Get Started Today</div>
+      <h2 class="cta-title">Ready to take <span>full control</span> of your supply chain?</h2>
+      <p class="cta-sub">Start your free 14-day trial. No credit card required. Full access to all six service modules from day one.</p>
+      <div class="cta-btns">
+        <a href="./404.html" >
+          <button class="btn-primary" onclick="showToast('Trial Started','Welcome! Full access activated for 14 days.')">
+            <i class="fa-solid fa-play"></i> Start Free Trial
+          </button>
+        </a>
+        <a href="./404.html" >
+          <button class="btn-outline" onclick="showToast('Demo Booked','Our solutions team will contact you shortly.')">
+            <i class="fa-regular fa-calendar-check"></i> Book a Live Demo
+          </button>
+        </a>
+      </div>
+      <div class="cta-note"><i class="fa-solid fa-shield-halved"></i> &nbsp;No credit card · Cancel anytime · SOC 2 Type II · ISO 27001</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-logo">
+        <div class="logo-icon"><i class="fa-solid fa-route"></i></div>
+        Stackly
+      </div>
+      <p class="footer-desc">Real-time logistics intelligence for operations teams that refuse to be in the dark. Track, predict, optimise — all in one platform.</p>
+      <div class="footer-socials">
+        <div class="social-btn"><i class="fa-brands fa-x-twitter"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-linkedin-in"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-github"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-youtube"></i></div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="index.html#tracking"><i class="fa-solid fa-chevron-right"></i>Live Tracking</a></li>
+        <li><a href="index.html#fleet"><i class="fa-solid fa-chevron-right"></i>Fleet Manager</a></li>
+        <li><a href="index.html#routes"><i class="fa-solid fa-chevron-right"></i>Route Optimizer</a></li>
+        <li><a href="index.html#analytics"><i class="fa-solid fa-chevron-right"></i>Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html"><i class="fa-solid fa-chevron-right"></i>About</a></li>
+        <li><a href="about.html#team"><i class="fa-solid fa-chevron-right"></i>Team</a></li>
+        <li><a href="about.html#culture"><i class="fa-solid fa-chevron-right"></i>Careers</a></li>
+        <li><a href="about.html#investors"><i class="fa-solid fa-chevron-right"></i>Investors</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Developers</h4>
+      <ul>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>API Reference</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Webhooks</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>SDKs</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Status Page</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Privacy Policy</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Terms of Service</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Security</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Stackly Logistics Pvt. Ltd. · Bengaluru, India</div>
+    <div class="status-pill"><i class="fa-solid fa-circle-check"></i> All systems operational</div>
+    <div class="footer-legal">
+      <a href="./404.html">Privacy</a>
+      <a href="./404.html">Terms</a>
+      <a href="./404.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ════════ JAVASCRIPT ════════ -->
+<script>
+/* ── DATA ─────────────────────────────────────────────── */
+const overviewCards = [
+  { img:'https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=600&auto=format&fit=crop&q=75', badge:'fa-satellite-dish · GPS', icon:'fa-location-crosshairs', title:'Real-Time Tracking', desc:'Millisecond-accurate shipment position across 200+ carriers in 180+ countries.', anchor:'service-tracking' },
+  { img:'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=600&auto=format&fit=crop&q=75', badge:'fa-truck · Telematics', icon:'fa-truck-moving', title:'Fleet Management', desc:'Live telemetry, driver scoring, predictive maintenance, and fuel intelligence.', anchor:'service-fleet' },
+  { img:'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=600&auto=format&fit=crop&q=75', badge:'fa-brain · AI Engine', icon:'fa-route', title:'Route Optimiser', desc:'AI-powered routes that recalculate every 90 seconds, saving 22% on distance.', anchor:'service-route' },
+  { img:'https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=600&auto=format&fit=crop&q=75', badge:'fa-warehouse · WMS', icon:'fa-boxes-stacked', title:'Warehouse Ops', desc:'Real-time inventory sync, inbound/outbound automation, and cold chain monitoring.', anchor:'service-warehouse' },
+  { img:'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&auto=format&fit=crop&q=75', badge:'fa-chart-line · Insights', icon:'fa-magnifying-glass-chart', title:'Analytics Suite', desc:'Carrier benchmarking, cost attribution, demand forecasting, and exec dashboards.', anchor:'service-analytics' },
+  { img:'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=600&auto=format&fit=crop&q=75', badge:'fa-code · REST + GraphQL', icon:'fa-plug-circle-check', title:'API Platform', desc:'200+ pre-built connectors, real-time webhooks, and enterprise-grade security.', anchor:'service-api' },
+];
+
+const miniFeats = [
+  { icon:'fa-bell-on',       title:'Smart Alerts',          desc:'Exception alerts delivered via SMS, email, and webhook before problems escalate.' },
+  { icon:'fa-file-invoice',  title:'Digital POD',           desc:'Photo, signature, and OTP-based proof of delivery captured and archived.' },
+  { icon:'fa-snowflake',     title:'Cold Chain',            desc:'Temperature-controlled logistics with real-time sensor monitoring and breach alerts.' },
+  { icon:'fa-plane-arrival', title:'Cross-Border Tracking', desc:'Customs clearance, duty status, and international carrier visibility in one feed.' },
+];
+
+const processSteps = [
+  { n:'01', icon:'fa-handshake',         title:'Discovery Call', desc:'A 30-minute call with our solutions team to map your current tech stack, carrier mix, and key pain points.' },
+  { n:'02', icon:'fa-plug-circle-plus',  title:'Connect Carriers', desc:'We configure your carrier integrations — most are one-click via our pre-built connectors. Average: 12 carriers in 2 hours.' },
+  { n:'03', icon:'fa-upload',            title:'Import Shipments', desc:'Bulk-import historical data via CSV or live-sync from your WMS/OMS. TrackFlow auto-enriches every record.' },
+  { n:'04', icon:'fa-users-gear',        title:'Team Training',   desc:'A 60-minute live walkthrough for your ops team. We also provide recorded training and a dedicated Slack channel.' },
+  { n:'05', icon:'fa-tower-broadcast',   title:'Go Live',         desc:'Your dashboard activates with real-time positions, ETAs, and alerts. Average time from sign-up to live: 18 hours.' },
+];
+
+const industries = [
+  { img:'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=600&auto=format&fit=crop&q=75', icon:'fa-cart-shopping', name:'eCommerce & D2C', sub:'Last-mile tracking, branded notifications, and returns management at any volume.', tag:'Most Popular' },
+  { img:'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&auto=format&fit=crop&q=75', icon:'fa-pills', name:'Pharma & Healthcare', sub:'Cold chain compliance, serialisation, and chain-of-custody for regulated goods.', tag:'Regulated' },
+  { img:'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&auto=format&fit=crop&q=75', icon:'fa-industry', name:'Manufacturing & Auto', sub:'JIT delivery tracking, supplier visibility, and plant-to-plant inbound monitoring.', tag:'Enterprise' },
+  { img:'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&auto=format&fit=crop&q=75', icon:'fa-shirt', name:'Fashion & Retail', sub:'Multi-warehouse allocation, seasonal surge handling, and retail store replenishment.', tag:'B2B & B2C' },
+  { img:'https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?w=600&auto=format&fit=crop&q=75', icon:'fa-ship', name:'3PL & Freight Brokers', sub:'Multi-client operations, carrier performance reports, and white-label customer portals.', tag:'3PL Focus' },
+  { img:'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=600&auto=format&fit=crop&q=75', icon:'fa-seedling', name:'Agriculture & FMCG', sub:'Perishable goods monitoring, shelf-life tracking, and rural last-mile visibility.', tag:'Perishables' },
+];
+
+const slaItems = [
+  { icon:'fa-shield-halved',     val:'99.97%', lbl:'Platform Uptime', desc:'Less than 2 hours downtime in 3 years. Backed by financial SLA credits.' },
+  { icon:'fa-clock',             val:'<50ms',  lbl:'API Response',    desc:'Sub-50ms median API response time across all endpoints globally.' },
+  { icon:'fa-headset',           val:'2h',     lbl:'Support Response', desc:'Enterprise SLA: 2-hour first response, 4-hour resolution for P1 issues.' },
+  { icon:'fa-lock',              val:'SOC 2',  lbl:'Security Cert.',  desc:'SOC 2 Type II, ISO 27001, and GDPR compliant. Annual third-party audit.' },
+];
+
+const testimonials = [
+  { q:'TrackFlow cut our customer escalation calls by 62%. The branded tracking portal alone is worth the subscription.', name:'Rajesh Kumar', role:'VP Operations · Delhivery', init:'RK' },
+  { q:'The route optimizer paid for itself in two weeks. 18% fuel savings across 200 vehicles. Extraordinary ROI.', name:'Priya Sharma', role:'Head of Fleet · Ekart', init:'PS' },
+  { q:'Implementation was shockingly easy. We went live in 14 hours. The API documentation is genuinely excellent.', name:'Arjun Nair', role:'CTO · Shadowfax', init:'AN' },
+];
+
+const plans = [
+  { name:'Starter', desc:'Up to 500 shipments/month', price:'₹3,499', period:'/mo · billed annually', featured: false },
+  { name:'Professional', desc:'Unlimited shipments · All 6 modules', price:'₹14,999', period:'/mo · billed annually', featured: true, badge:'Most Popular' },
+  { name:'Enterprise', desc:'Unlimited · Dedicated SLA · White-label', price:'Custom', period:'Contact sales', featured: false },
+];
+
+/* ── BUILDERS ─────────────────────────────────────────── */
+function buildOverview() {
+  document.getElementById('overviewGrid').innerHTML = overviewCards.map((c,i) => `
+    <div class="ov-card reveal d${(i%3)+1}" onclick="scrollToSvc('${c.anchor}')">
+      <div class="ov-img">
+        <img src="${c.img}" alt="${c.title}" loading="lazy"/>
+        <div class="ov-img-overlay"></div>
+        <div class="ov-img-badge"><i class="fa-solid ${c.badge.split('·')[0].trim()}"></i> ${c.badge.split('·')[1]?.trim()}</div>
+      </div>
+      <div class="ov-body">
+        <div class="ov-icon"><i class="fa-solid ${c.icon}"></i></div>
+        <div class="ov-title">${c.title}</div>
+        <div class="ov-desc">${c.desc}</div>
+        <div class="ov-link">Learn More <i class="fa-solid fa-arrow-right"></i></div>
+      </div>
+    </div>`).join('');
+}
+
+function buildMiniFeats() {
+  document.getElementById('miniFeatGrid').innerHTML = miniFeats.map((f,i) => `
+    <div class="mini-feat reveal d${i+1}">
+      <div class="mini-feat-icon"><i class="fa-solid ${f.icon}"></i></div>
+      <div class="mini-feat-title">${f.title}</div>
+      <div class="mini-feat-desc">${f.desc}</div>
+    </div>`).join('');
+}
+
+function buildProcess() {
+  document.getElementById('processSteps').innerHTML = processSteps.map((s,i) => `
+    <div class="process-step reveal d${i+1}">
+      <div class="ps-num">${s.n}</div>
+      <div class="ps-body">
+        <div class="ps-title"><i class="fa-solid ${s.icon}" style="color:var(--cyan);margin-right:7px;font-size:.85rem;"></i>${s.title}</div>
+        <div class="ps-desc">${s.desc}</div>
+      </div>
+    </div>`).join('');
+}
+
+function buildIndustries() {
+  document.getElementById('industriesGrid').innerHTML = industries.map((ind,i) => `
+    <div class="industry-cell">
+      <img src="${ind.img}" alt="${ind.name}" loading="lazy"/>
+      <div class="industry-overlay">
+        <div class="industry-icon"><i class="fa-solid ${ind.icon}"></i></div>
+        <div class="industry-name">${ind.name}</div>
+        <div class="industry-sub">${ind.sub}</div>
+      </div>
+      <div class="industry-tag">${ind.tag}</div>
+    </div>`).join('');
+}
+
+function buildSLA() {
+  document.getElementById('slaGrid').innerHTML = slaItems.map((s,i) => `
+    <div class="sla-cell reveal d${i+1}">
+      <div class="sla-icon"><i class="fa-solid ${s.icon}"></i></div>
+      <div class="sla-val">${s.val}</div>
+      <div class="sla-lbl">${s.lbl}</div>
+      <div class="sla-desc">${s.desc}</div>
+    </div>`).join('');
+}
+
+function buildTestimonials() {
+  document.getElementById('testiRow').innerHTML = testimonials.map((t,i) => `
+    <div class="tr-card reveal d${i+1}" style="position:relative;">
+      <div class="tr-stars">★★★★★</div>
+      <div class="tr-quote">"</div>
+      <div class="tr-text">${t.q}</div>
+      <div class="tr-author">
+        <div class="tr-avatar">${t.init}</div>
+        <div><div class="tr-name">${t.name.split('·')[0].trim()}</div><div class="tr-role">${t.role}</div></div>
+      </div>
+    </div>`).join('');
+}
+
+function buildPlans() {
+  document.getElementById('planCards').innerHTML = plans.map(p => `
+    <div class="plan-card ${p.featured?'featured':''}" style="position:relative;">
+      ${p.badge ? `<div class="plan-badge">${p.badge}</div>` : ''}
+      <div>
+        <div class="plan-name">${p.name}</div>
+        <div class="plan-desc">${p.desc}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="plan-price">${p.price}</div>
+        <div class="plan-period">${p.period}</div>
+      </div>
+    </div>`).join('');
+}
+
+/* ── COUNTER ANIMATION ────────────────────────────────── */
+function animateCounters(root) {
+  root.querySelectorAll('[data-target]').forEach(el => {
+    const raw = el.dataset.target;
+    if (raw.includes('<') || raw.includes('%') || isNaN(parseFloat(raw))) return;
+    const num = parseFloat(raw.replace(/[^0-9.]/g,''));
+    const suffix = raw.replace(/[0-9.]/g,'');
+    let cur = 0; const steps = 60; const inc = num / steps;
+    const t = setInterval(() => {
+      cur += inc;
+      if (cur >= num) { cur = num; clearInterval(t); }
+      el.textContent = (num >= 1000 ? Math.floor(cur).toLocaleString('en-IN') : Math.floor(cur)) + suffix;
+    }, 22);
+  });
+}
+
+/* ── SCROLL REVEAL ────────────────────────────────────── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('v');
+      animateCounters(e.target);
+    }
+  });
+}, { threshold: 0.07 });
+function observeAll() {
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+}
+
+/* ── SCROLL TO SVC ────────────────────────────────────── */
+function scrollToSvc(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ── SERVICE CHIPS ────────────────────────────────────── */
+document.querySelectorAll('.service-chip').forEach(chip => {
+  chip.addEventListener('click', function() {
+    document.querySelectorAll('.service-chip').forEach(c => c.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+/* ── TOAST ────────────────────────────────────────────── */
+function showToast(title, msg) {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<div class="toast-title">${title}</div><div class="toast-msg">${msg}</div>`;
+  t.onclick = () => { t.classList.add('out'); setTimeout(() => t.remove(), 300); };
+  c.appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 300); }, 4500);
+}
+
+/* ── NAV ──────────────────────────────────────────────── */
+
+
+function toggleMobileNav() {
+  document.getElementById("mobileNav")
+    .classList.toggle("active");
+}
+
+function closeMobileNav() {
+  document.getElementById("mobileNav")
+    .classList.remove("active");
+}
+
+/* ── INIT ─────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  buildOverview();
+  buildMiniFeats();
+  buildProcess();
+  buildIndustries();
+  buildSLA();
+  buildTestimonials();
+  buildPlans();
+  setTimeout(observeAll, 100);
+});
+</script>
+</body>
+</html>

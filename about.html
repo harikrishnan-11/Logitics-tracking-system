@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About — Stackly Logistics Intelligence</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <link rel="stylesheet" href="about.css">
+</head>
+<body>
+
+<!-- ── NAV ────────────────────────────────────────────────── -->
+<nav class="nav" id="mainNav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    STACKLY
+  </div>
+  <div class="nav-links">
+    <a href="./index.html"><i class="fa-solid fa-location-dot"></i> Home</a>
+    <a href="./about.html"><i class="fa-solid fa-boxes-stacked"></i> ABOUT</a>
+    <a href="./service.html"><i class="fa-solid fa-truck"></i> SERVICE</a>
+    <a href="./blog.html"><i class="fa-solid fa-chart-line"></i>BLOG</a>
+    <a href="./contact.html"><i class="fa-solid fa-headset"></i> Contact</a>
+  </div>
+  <div class="login-btn desktop">
+    <a href="./login.html">
+      <button class="nav-cta">Login</button>
+    </a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Nav -->
+<div id="mobileNav" >
+  <div>
+    <a href="./index.html" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">Home</a>
+    <a href="./about.html" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">ABOUT</a>
+    <a href="./service.html" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">SERVICE</a>
+    <a href="./blog.html" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">BLOG</a>
+    <a href="./contact.html" onclick="closeMobileNav()" style="color:var(--text-1);font-weight:600;">Contact</a>
+  </div>
+  <div class="login-btn mobile-btn">
+    <a href="./login.html">
+      <button class="nav-cta">Login</button>
+    </a>
+  </div>
+</div>
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<div class="about-main">
+  <section id="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  
+    <div class="hero-content">
+      <div class="hero-breadcrumb reveal">
+        <a href="home.html">Home</a>
+        <i class="fa-solid fa-chevron-right"></i>
+        <span>About</span>
+      </div>
+      <div class="hero-eyebrow reveal d1">
+        <div class="eyebrow-dot"></div>
+        Founded 2019 · Bengaluru, India
+      </div>
+      <h1 class="hero-title reveal d2">
+        We built Stackly<br>because <span class="serif-word">blind spots</span><br>cost lives & money.
+      </h1>
+      <p class="hero-tagline reveal d3">
+        Three ex-logistics engineers, one whiteboard, and a conviction that the industry deserved better than spreadsheets and phone calls. Today Stackly moves 2.4 million shipments a day — and we're just getting started.
+      </p>
+      <div class="hero-ctas reveal d4">
+        <a href="./404.html" >       
+          <button class="btn-primary" onclick="document.getElementById('story').scrollIntoView({behavior:'smooth'})">
+            <i class="fa-solid fa-book-open"></i> Our Story
+          </button>
+            </a>
+        <a href="./404.html" >       
+          <button class="btn-outline" onclick="document.getElementById('team').scrollIntoView({behavior:'smooth'})">
+            <i class="fa-solid fa-users"></i> Meet the Team
+          </button>
+            </a>
+      </div>
+      <div class="hero-scroll reveal d5">
+        <div class="scroll-line"></div>
+        Scroll to explore
+        <i class="fa-solid fa-arrow-down"></i>
+      </div>
+    </div>
+  
+    <!-- Floating stat cards -->
+    <div class="hero-floats">
+      <div class="float-card reveal-right d2">
+        <div class="float-card-icon"><i class="fa-solid fa-box-open"></i></div>
+        <div class="float-card-val">2.4M</div>
+        <div class="float-card-lbl">Shipments per day</div>
+        <div class="float-card-delta"><i class="fa-solid fa-arrow-trend-up"></i> +34% YoY</div>
+      </div>
+      <div class="float-card reveal-right d3">
+        <div class="float-card-icon"><i class="fa-solid fa-building-user"></i></div>
+        <div class="float-card-val">3,000+</div>
+        <div class="float-card-lbl">Enterprise clients</div>
+        <div class="float-card-delta"><i class="fa-solid fa-arrow-trend-up"></i> Net retention 138%</div>
+      </div>
+      <div class="float-card reveal-right d4">
+        <div class="float-card-icon"><i class="fa-solid fa-people-group"></i></div>
+        <div class="float-card-val">280</div>
+        <div class="float-card-lbl">Team members</div>
+        <div class="float-card-delta"><i class="fa-solid fa-location-dot"></i> 5 global offices</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     STORY
+═══════════════════════════════════════════ -->
+<section id="story">
+  <div class="story-layout">
+    <div class="story-visual reveal-left">
+      <div class="story-card-main">
+        <div class="story-year"><i class="fa-solid fa-clock-rotate-left"></i> &nbsp;2019 — The Beginning</div>
+        <div class="story-headline">One warehouse, three engineers, zero visibility.</div>
+        <div class="story-desc">
+          Co-founders Ravi, Meena, and Sanjay were ops engineers at India's largest third-party logistics provider. Every day they watched shipments vanish into black holes — missed handoffs, broken integrations, hours spent on the phone chasing drivers.
+          <br><br>
+          They quit on a Friday. By Monday they were building Stackly.
+        </div>
+        <div class="story-badge-row">
+          <span class="story-badge"><i class="fa-solid fa-indian-rupee-sign"></i> Bootstrapped</span>
+          <span class="story-badge"><i class="fa-solid fa-house"></i> 1 Garage</span>
+          <span class="story-badge"><i class="fa-solid fa-users"></i> 3 Founders</span>
+          <span class="story-badge"><i class="fa-solid fa-mug-hot"></i> ∞ Coffee</span>
+        </div>
+      </div>
+      <div class="story-floating-stat">
+        <div class="sfs-val">₹420Cr</div>
+        <div class="sfs-lbl">Total Funding Raised</div>
+      </div>
+    </div>
+
+    <div class="story-text reveal-right">
+      <div class="section-tag">Our Story</div>
+      <h2 class="section-title">From a garage in<br>Koramangala to<br>180+ countries.</h2>
+      <p>
+        <span>We started with one simple premise:</span> if airlines can track every bag in real time, why can't logistics companies track every package? The answer, we quickly discovered, wasn't technology — it was fragmentation.
+      </p>
+      <div class="story-pull">
+        "We didn't build a tracking tool. We built the connective tissue that the logistics industry was missing."
+        <br><span style="font-family:var(--mono);font-size:.75rem;font-style:normal;color:var(--text-3);display:block;margin-top:10px;">— Ravi Shankar, CEO & Co-founder</span>
+      </div>
+      <p>
+        In our first year, we integrated with 12 carriers and onboarded 50 paying customers — all through cold emails and product demos at logistics conferences. By 2021, we were processing 100,000 shipments a day and had closed our Series A.
+      </p>
+      <p>
+        Today, <span>Stackly is the intelligence layer</span> that connects warehouses, carriers, drivers, and customers in a single unified feed. We're not a tracking company. We're a data company that happens to move packages.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     MISSION & VALUES
+═══════════════════════════════════════════ -->
+<section id="mission">
+  <div class="mission-layout">
+    <div>
+      <div class="section-tag reveal">Mission</div>
+      <h2 class="section-title reveal d1">Make every delivery<br>predictable.</h2>
+      <p class="section-sub reveal d2" style="margin-bottom:0;">We exist to eliminate the anxiety, inefficiency, and waste that comes from not knowing where your goods are. Every feature we build serves this single mission.</p>
+      <div class="mission-stat-block">
+        <div class="mstat reveal d2"><div class="mstat-val" data-target="97">0%</div><div class="mstat-lbl">On-time delivery</div></div>
+        <div class="mstat reveal d3"><div class="mstat-val" data-target="180">0</div><div class="mstat-lbl">Countries served</div></div>
+        <div class="mstat reveal d4"><div class="mstat-val" data-target="99">0%</div><div class="mstat-lbl">API uptime</div></div>
+        <div class="mstat reveal d5"><div class="mstat-val" data-target="8">0s</div><div class="mstat-lbl">Data refresh rate</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="section-tag reveal">Vision</div>
+      <h2 class="section-title reveal d1">A world where nothing<br>gets lost.</h2>
+      <p class="section-sub reveal d2">Not a single package. Not a single shipment. Not a single kilogram of cargo. Every item that enters the Stackly network has a guaranteed, unbroken chain of custody from origin to destination.</p>
+    </div>
+  </div>
+
+  <div class="section-header center reveal">
+    <div class="section-tag" style="justify-content:center;">Core Values</div>
+    <h2 class="section-title">The principles we ship by</h2>
+  </div>
+  <div class="values-grid" id="valuesGrid"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     TIMELINE
+═══════════════════════════════════════════ -->
+<section id="timeline">
+  <div class="section-header center">
+    <div class="section-tag reveal">Company Timeline</div>
+    <h2 class="section-title reveal d1">Five years. Five chapters.</h2>
+    <p class="section-sub reveal d2">From a three-person garage team to a 280-person global company — every milestone that shaped Stackly.</p>
+  </div>
+  <div class="timeline-wrap">
+    <div class="timeline-line"></div>
+    <div class="tl-entries" id="tlEntries"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     TEAM
+═══════════════════════════════════════════ -->
+<section id="team">
+  <div class="section-header center">
+    <div class="section-tag reveal">Leadership Team</div>
+    <h2 class="section-title reveal d1">Built by operators,<br>for operators.</h2>
+    <p class="section-sub reveal d2">Every leader at Stackly has worked in the trenches of logistics. We don't theorise about the industry — we lived it.</p>
+  </div>
+  <div class="team-grid" id="teamGrid"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CULTURE & PERKS
+═══════════════════════════════════════════ -->
+<section id="culture">
+  <div class="culture-layout">
+    <div>
+      <div class="section-tag reveal">Culture & Perks</div>
+      <h2 class="section-title reveal d1">We move fast,<br>ship together.</h2>
+      <p class="section-sub reveal d2" style="margin-bottom:36px;">We hire curious, autonomous people and give them the context, tools, and trust to do their best work. No bureaucracy — just good problems and great people.</p>
+      <div class="perks-grid reveal d3" id="perksGrid"></div>
+    </div>
+    <div class="culture-visual reveal-right d2">
+      <div class="office-card">
+        <div class="office-header">
+          <div class="office-title"><i class="fa-solid fa-building" style="color:var(--cyan);margin-right:8px;"></i> HQ — Bengaluru</div>
+          <div class="office-loc"><i class="fa-solid fa-location-dot"></i> Koramangala, Karnataka</div>
+        </div>
+        <div class="office-grid">
+          <div class="office-cell"><div class="office-cell-val">280</div><div class="office-cell-lbl">Employees</div></div>
+          <div class="office-cell"><div class="office-cell-val">5</div><div class="office-cell-lbl">Offices</div></div>
+          <div class="office-cell"><div class="office-cell-val">28</div><div class="office-cell-lbl">Open Roles</div></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;">Open Positions</div>
+        <div class="open-roles">
+          <div class="role-row"><span>Senior Backend Engineer</span> <div style="display:flex;gap:8px;align-items:center;"><span class="role-loc"><i class="fa-solid fa-location-dot"></i> Bengaluru</span><span class="role-tag">Engineering</span></div></div>
+          <div class="role-row"><span>Product Designer (Logistics)</span> <div style="display:flex;gap:8px;align-items:center;"><span class="role-loc"><i class="fa-solid fa-globe"></i> Remote</span><span class="role-tag">Design</span></div></div>
+          <div class="role-row"><span>Enterprise Account Executive</span> <div style="display:flex;gap:8px;align-items:center;"><span class="role-loc"><i class="fa-solid fa-location-dot"></i> Mumbai</span><span class="role-tag">Sales</span></div></div>
+          <div class="role-row"><span>ML Engineer — Route Prediction</span> <div style="display:flex;gap:8px;align-items:center;"><span class="role-loc"><i class="fa-solid fa-location-dot"></i> Bengaluru</span><span class="role-tag">AI / ML</span></div></div>
+        </div>
+        <div style="margin-top:16px;">
+          <a href="./404.html">     
+            <button class="btn-primary" style="width:100%;justify-content:center;" onclick="showToast('Careers','View all 28 open roles at Stackly!')">
+              <i class="fa-solid fa-briefcase"></i> View All Open Roles
+            </button>
+            </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     INVESTORS
+═══════════════════════════════════════════ -->
+<section id="investors">
+  <div class="investors-layout">
+    <div>
+      <div class="section-tag reveal">Investors & Funding</div>
+      <h2 class="section-title reveal d1">Backed by operators<br>and believers.</h2>
+      <p class="section-sub reveal d2" style="margin-bottom:36px;">We've raised ₹420 Crore from investors who understand logistics — not just SaaS metrics. Every round has been oversubscribed.</p>
+      <div class="investor-cards reveal d3" id="investorCards"></div>
+    </div>
+    <div class="reveal-right d2">
+      <div class="funding-total">
+        <div class="ft-label"><i class="fa-solid fa-sack-dollar"></i> &nbsp;Total Capital Raised</div>
+        <div class="ft-amount">₹420Cr</div>
+        <div class="ft-sub">Series C · Closed December 2023</div>
+      </div>
+      <div style="font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;">Featured In Press</div>
+      <div class="press-grid" id="pressGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     AWARDS
+═══════════════════════════════════════════ -->
+<section id="awards">
+  <div class="section-header center">
+    <div class="section-tag reveal">Awards & Recognition</div>
+    <h2 class="section-title reveal d1">Industry has noticed.</h2>
+    <p class="section-sub reveal d2">Recognition from the organisations that set the standard for logistics, technology, and innovation in India and globally.</p>
+  </div>
+  <div class="awards-grid" id="awardsGrid"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     GLOBAL PRESENCE
+═══════════════════════════════════════════ -->
+<section id="global">
+  <div class="section-header">
+    <div class="section-tag reveal">Global Presence</div>
+    <h2 class="section-title reveal d1">Five offices.<br>One network.</h2>
+    <p class="section-sub reveal d2">Headquartered in Bengaluru, with offices across Asia, the Middle East, Europe, and North America.</p>
+  </div>
+  <div class="global-layout">
+    <div class="offices-list reveal" id="officesList"></div>
+    <div class="world-visual reveal-right d2">
+      <div class="world-title"><i class="fa-solid fa-earth-asia"></i> Stackly Global Network</div>
+      <div class="world-map-placeholder">
+        <div class="wmp-grid"></div>
+        <div class="wmp-pin hq"></div>  <div class="wmp-label hq">BENGALURU HQ</div>
+        <div class="wmp-pin sg"></div>  <div class="wmp-label sg">SINGAPORE</div>
+        <div class="wmp-pin us"></div>  <div class="wmp-label us">SAN FRANCISCO</div>
+        <div class="wmp-pin uk"></div>  <div class="wmp-label uk">LONDON</div>
+        <div class="wmp-pin ae"></div>  <div class="wmp-label ae">DUBAI</div>
+      </div>
+      <div class="reach-stats">
+        <div class="reach-stat"><div class="reach-val">180+</div><div class="reach-lbl">Countries</div></div>
+        <div class="reach-stat"><div class="reach-val">42</div><div class="reach-lbl">Languages</div></div>
+        <div class="reach-stat"><div class="reach-val">200+</div><div class="reach-lbl">Carriers</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CTA
+═══════════════════════════════════════════ -->
+<section id="join-cta">
+  <div class="cta-box reveal">
+    <h2 class="cta-title">Join the team<br>or <span>join the platform.</span></h2>
+    <p class="cta-sub">Whether you want to build the future of logistics with us, or use our platform to run your operations better — we'd love to hear from you.</p>
+    <div class="cta-btns">
+      <a href="./404.html" >           
+        <button class="btn-primary" onclick="showToast('Careers','Explore 28 open roles at Stackly.')">
+          <i class="fa-solid fa-briefcase"></i> View Open Roles
+        </button>
+            </a>
+      <a href="./404.html" >             
+        <button class="btn-outline" onclick="window.location='index.html'">
+          <i class="fa-solid fa-gauge-high"></i> Explore Platform
+        </button>
+            </a>
+    </div>
+    <div class="cta-note"><i class="fa-solid fa-shield-halved"></i> &nbsp;SOC 2 Type II · ISO 27001 · GDPR Compliant</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-logo">
+        <div class="logo-icon"><i class="fa-solid fa-route"></i></div>
+        Stackly
+      </div>
+      <p class="footer-desc">Real-time logistics intelligence for operations teams that refuse to be in the dark. Track, predict, optimise — all in one platform.</p>
+      <div class="footer-socials">
+        <div class="social-btn"><i class="fa-brands fa-x-twitter"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-linkedin-in"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-github"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-youtube"></i></div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="index.html#tracking"><i class="fa-solid fa-chevron-right"></i>Live Tracking</a></li>
+        <li><a href="index.html#fleet"><i class="fa-solid fa-chevron-right"></i>Fleet Manager</a></li>
+        <li><a href="index.html#routes"><i class="fa-solid fa-chevron-right"></i>Route Optimizer</a></li>
+        <li><a href="index.html#analytics"><i class="fa-solid fa-chevron-right"></i>Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="about.html"><i class="fa-solid fa-chevron-right"></i>About</a></li>
+        <li><a href="about.html#team"><i class="fa-solid fa-chevron-right"></i>Team</a></li>
+        <li><a href="about.html#culture"><i class="fa-solid fa-chevron-right"></i>Careers</a></li>
+        <li><a href="about.html#investors"><i class="fa-solid fa-chevron-right"></i>Investors</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Developers</h4>
+      <ul>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>API Reference</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Webhooks</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>SDKs</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Status Page</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Privacy Policy</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Terms of Service</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Security</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Stackly Logistics Pvt. Ltd. · Bengaluru, India</div>
+    <div class="status-pill"><i class="fa-solid fa-circle-check"></i> All systems operational</div>
+    <div class="footer-legal">
+      <a href="./404.html">Privacy</a>
+      <a href="./404.html">Terms</a>
+      <a href="./404.html">Security</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ═══════════ JS ═══════════ -->
+<script>
+/* ─── DATA ──────────────────────────────────────────── */
+const values = [
+  { icon:'fa-eye',              title:'Radical Transparency',   desc:'Every decision, metric, and mistake is visible to the whole team. We ship weekly updates internally and externally, without spin.' },
+  { icon:'fa-bolt',             title:'Velocity Over Perfection',desc:'We ship fast, learn faster. A working product in customers hands beats a perfect spec in a deck. Always.' },
+  { icon:'fa-shield-halved',    title:'Reliability First',      desc:'Logistics doesn\'t sleep. Neither does our platform. We hold ourselves to higher uptime standards than any SLA we sign.' },
+  { icon:'fa-handshake',        title:'Customer Obsession',     desc:'Every team member does at least one customer support shift per quarter. The customer\'s reality is always our north star.' },
+  { icon:'fa-seedling',         title:'Long-Term Thinking',     desc:'We optimise for 10-year outcomes, not next quarter\'s MRR. That\'s why we invest heavily in infrastructure, data, and talent.' },
+  { icon:'fa-globe',            title:'Inclusive by Design',    desc:'Logistics is a global industry with local nuances. We build for Bharat, build for Brazil, and build for Birmingham.' },
+];
+
+const timeline = [
+  { year:'Q1 2019', title:'Founded in a Koramangala Garage', desc:'Ravi, Meena, and Sanjay quit their jobs at Mahindra Logistics and started building. First commit: April 14, 2019 at 11:47pm.', metric:'3 Founders, 1 Laptop', side:'left' },
+  { year:'Q4 2019', title:'First 50 Paying Customers', desc:'Launched the MVP with 12 carrier integrations. Acquired first 50 customers entirely through LinkedIn cold outreach and logistics trade shows.', metric:'₹18L ARR', side:'right' },
+  { year:'Q2 2020', title:'Seed Round — ₹12 Crore', desc:'Raised our Seed from Blume Ventures and 3one4 Capital. Used the capital to build our real-time GPS engine and hire our first 10 engineers.', metric:'₹12Cr Seed', side:'left' },
+  { year:'Q1 2021', title:'100K Shipments/Day Milestone', desc:'Crossed 100,000 daily shipments and onboarded our first enterprise client — a top-3 Indian eCommerce company. Route Optimizer v1 shipped.', metric:'100K shipments/day', side:'right' },
+  { year:'Q3 2022', title:'Series A — ₹85 Crore', desc:'Led by Sequoia India. Opened Singapore office to serve Southeast Asian markets. Headcount grew from 40 to 120 in 12 months.', metric:'₹85Cr Series A', side:'left' },
+  { year:'Q4 2023', title:'Series C & Global Expansion', desc:'Closed ₹420Cr Series C led by Tiger Global. Launched in Middle East, Europe, and North America. Crossed 2 million daily shipments.', metric:'₹420Cr raised, 180+ countries', side:'right' },
+];
+
+const team = [
+  { initials:'RS', name:'Ravi Shankar', role:'CEO & Co-founder', bio:'Ex-Mahindra Logistics. IIT Bombay. Runs company strategy, investor relations, and somehow still reviews PRs on weekends.', tag:'Founder' },
+  { initials:'MN', name:'Meena Nair',   role:'CTO & Co-founder', bio:'Ex-Amazon India. IIT Delhi. Built Stackly\'s real-time GPS engine from scratch. Loves distributed systems and filter coffee.', tag:'Founder' },
+  { initials:'SP', name:'Sanjay Patil', role:'COO & Co-founder', bio:'Ex-Flipkart Supply Chain. ISB Hyderabad. Obsessively optimises every internal process before breakfast.', tag:'Founder' },
+  { initials:'AK', name:'Arjun Kumar',  role:'VP Engineering',   bio:'Ex-Uber Eats. Leads a 90-person engineering team across Bengaluru and Singapore. Advocate for boring, reliable technology.', tag:'Leadership' },
+  { initials:'PS', name:'Priya Sharma', role:'VP Product',        bio:'Ex-Swiggy. Turns customer pain into product reality. Her team shipped Route Optimizer v3 in 6 weeks flat.', tag:'Leadership' },
+  { initials:'DJ', name:'Deepa Joshi',  role:'VP Sales',          bio:'Ex-Oracle. Built our enterprise sales motion from 0 to ₹200Cr ARR. Closes deals by understanding logistics better than her clients.', tag:'Leadership' },
+  { initials:'RV', name:'Rahul Verma',  role:'Head of Data & AI', bio:'Ex-Google Brain. PhD IISc Bengaluru. Leads the ML team building predictive ETAs and anomaly detection at scale.', tag:'Leadership' },
+  { initials:'KM', name:'Kavya Menon',  role:'Head of Design',    bio:'Ex-Dunzo. Believes the best UI is one that ops teams forget they\'re using. Sweats every pixel, every interaction.', tag:'Leadership' },
+];
+
+const perks = [
+  { icon:'fa-indian-rupee-sign', title:'Competitive ESOPs',     desc:'Meaningful equity. We want you to own what you build.' },
+  { icon:'fa-plane',             title:'Work from Anywhere',    desc:'30 days remote per year. Our async culture lets you work globally.' },
+  { icon:'fa-graduation-cap',   title:'Learning Budget',       desc:'₹1L/year for courses, books, conferences — no questions asked.' },
+  { icon:'fa-heart-pulse',       title:'Health & Wellness',     desc:'Premium health insurance for you and your family, plus wellness stipend.' },
+  { icon:'fa-laptop',            title:'Top-Tier Hardware',     desc:'M3 MacBook Pro + monitor + accessories from day one.' },
+  { icon:'fa-utensils',          title:'Catered Meals',         desc:'Breakfast, lunch, and dinner at all offices. Good fuel = good code.' },
+  { icon:'fa-baby',              title:'Parental Leave',        desc:'6 months fully paid for all parents — primary and secondary.' },
+  { icon:'fa-shield-check',      title:'Mental Health Support', desc:'Unlimited therapy sessions via our EAP partner, 100% confidential.' },
+];
+
+const investors = [
+  { name:'Tiger Global',    type:'Lead Investor — Series C', amount:'₹280Cr', round:'2023' },
+  { name:'Sequoia India',   type:'Lead Investor — Series A', amount:'₹60Cr',  round:'2022' },
+  { name:'Blume Ventures',  type:'Lead Investor — Seed',     amount:'₹8Cr',   round:'2020' },
+  { name:'3one4 Capital',   type:'Co-investor — Seed',       amount:'₹4Cr',   round:'2020' },
+  { name:'Nexus VP',        type:'Series B',                 amount:'₹35Cr',  round:'2021' },
+];
+
+const press = ['Economic Times','YourStory','Inc42','TechCrunch','Financial Express','The Hindu Business'];
+
+const awards = [
+  { icon:'fa-trophy',    name:'Best Logistics SaaS 2023',  org:'NASSCOM',          year:'2023' },
+  { icon:'fa-medal',     name:'Most Innovative Startup',    org:'CII Awards',       year:'2023' },
+  { icon:'fa-star',      name:'Top 50 SaaS Companies India',org:'SaaSBoomi',        year:'2022' },
+  { icon:'fa-award',     name:'Best B2B Product of the Year',org:'Inc42',           year:'2022' },
+  { icon:'fa-crown',     name:'Fastest Growing Tech Company',org:'Deloitte Fast 50',year:'2023' },
+  { icon:'fa-gem',       name:'Supply Chain Innovation Award',org:'FICCI',          year:'2023' },
+  { icon:'fa-circle-star',name:'Best Place to Work — Tech', org:'Great Place to Work',year:'2026' },
+  { icon:'fa-rocket',    name:'Startup of the Year — South',org:'YourStory',        year:'2021' },
+];
+
+const offices = [
+  { flag:'🇮🇳', city:'Bengaluru', country:'India — Headquarters', team:'180 team members' },
+  { flag:'🇸🇬', city:'Singapore', country:'Singapore — APAC HQ',  team:'32 team members' },
+  { flag:'🇦🇪', city:'Dubai',     country:'UAE — Middle East',    team:'18 team members' },
+  { flag:'🇬🇧', city:'London',    country:'United Kingdom',       team:'28 team members' },
+  { flag:'🇺🇸', city:'San Francisco', country:'USA — Americas',   team:'22 team members' },
+];
+
+/* ─── BUILDERS ──────────────────────────────────────── */
+function buildValues() {
+  document.getElementById('valuesGrid').innerHTML = values.map((v,i) => `
+    <div class="value-card reveal d${(i%3)+1}">
+      <div class="value-icon"><i class="fa-solid ${v.icon}"></i></div>
+      <div class="value-title">${v.title}</div>
+      <div class="value-desc">${v.desc}</div>
+    </div>`).join('');
+}
+
+function buildTimeline() {
+  document.getElementById('tlEntries').innerHTML = timeline.map((t, i) => {
+    const isEven = i % 2 !== 0;
+    return `
+    <div class="tl-entry">
+      ${!isEven ? `<div class="tl-content reveal-left d${(i%3)+1}">
+        <div class="tl-year"><i class="fa-solid fa-calendar-days"></i> ${t.year}</div>
+        <div class="tl-event-title">${t.title}</div>
+        <div class="tl-event-desc">${t.desc}</div>
+        <div class="tl-metric"><i class="fa-solid fa-chart-line"></i> ${t.metric}</div>
+      </div>` : `<div class="tl-empty"></div>`}
+      <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+      ${isEven ? `<div class="tl-content reveal-right d${(i%3)+1}">
+        <div class="tl-year"><i class="fa-solid fa-calendar-days"></i> ${t.year}</div>
+        <div class="tl-event-title">${t.title}</div>
+        <div class="tl-event-desc">${t.desc}</div>
+        <div class="tl-metric"><i class="fa-solid fa-chart-line"></i> ${t.metric}</div>
+      </div>` : `<div class="tl-empty"></div>`}
+    </div>`;
+  }).join('');
+}
+
+function buildTeam() {
+  document.getElementById('teamGrid').innerHTML = team.map((m,i) => `
+    <div class="team-card reveal d${(i%4)+1}">
+      ${m.tag ? `<div class="team-tag">${m.tag}</div>` : ''}
+      <div class="team-avatar">${m.initials}</div>
+      <div class="team-name">${m.name}</div>
+      <div class="team-role">${m.role}</div>
+      <div class="team-bio">${m.bio}</div>
+      <div class="team-links">
+        <div class="team-link" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></div>
+        <div class="team-link" title="X / Twitter"><i class="fa-brands fa-x-twitter"></i></div>
+        <div class="team-link" title="Email"><i class="fa-solid fa-envelope"></i></div>
+      </div>
+    </div>`).join('');
+}
+
+function buildPerks() {
+  document.getElementById('perksGrid').innerHTML = perks.map(p => `
+    <div class="perk-item">
+      <div class="perk-icon"><i class="fa-solid ${p.icon}"></i></div>
+      <div>
+        <div class="perk-title">${p.title}</div>
+        <div class="perk-desc">${p.desc}</div>
+      </div>
+    </div>`).join('');
+}
+
+function buildInvestors() {
+  document.getElementById('investorCards').innerHTML = investors.map((inv,i) => `
+    <div class="investor-card reveal d${i+1}">
+      <div>
+        <div class="investor-name">${inv.name}</div>
+        <div class="investor-type">${inv.type}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="investor-amount">${inv.amount}</div>
+        <div class="investor-round">${inv.round}</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('pressGrid').innerHTML = press.map(p => `
+    <div class="press-item">${p}</div>`).join('');
+}
+
+function buildAwards() {
+  document.getElementById('awardsGrid').innerHTML = awards.map((a,i) => `
+    <div class="award-card reveal d${(i%4)+1}">
+      <i class="fa-solid ${a.icon} award-icon"></i>
+      <div class="award-name">${a.name}</div>
+      <div class="award-org">${a.org}</div>
+      <div class="award-year">${a.year}</div>
+    </div>`).join('');
+}
+
+function buildOffices() {
+  document.getElementById('officesList').innerHTML = offices.map((o,i) => `
+    <div class="office-item reveal d${i+1}">
+      <div class="office-flag">${o.flag}</div>
+      <div>
+        <div class="office-city">${o.city}</div>
+        <div class="office-country">${o.country}</div>
+      </div>
+      <div class="office-team"><i class="fa-solid fa-users"></i> ${o.team}</div>
+    </div>`).join('');
+}
+
+/* ─── COUNTER ANIMATION ─────────────────────────────── */
+function animateCounters(root) {
+  root.querySelectorAll('[data-target]').forEach(el => {
+    const raw = el.dataset.target;
+    const suffix = raw.replace(/[\d.]/g, '');
+    const num = parseFloat(raw);
+    if (isNaN(num)) return;
+    let cur = 0; const steps = 60; const inc = num / steps;
+    const t = setInterval(() => {
+      cur += inc;
+      if (cur >= num) { cur = num; clearInterval(t); }
+      el.textContent = Math.floor(cur) + suffix;
+    }, 20);
+  });
+}
+
+/* ─── SCROLL REVEAL ─────────────────────────────────── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      animateCounters(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+function observeAll() {
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+}
+
+/* ─── TOAST ─────────────────────────────────────────── */
+function showToast(title, msg) {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<div class="toast-title">${title}</div><div class="toast-msg">${msg}</div>`;
+  t.onclick = () => { t.classList.add('out'); setTimeout(() => t.remove(), 300); };
+  c.appendChild(t);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 300); }, 4500);
+}
+
+
+
+/* ── NAV SCROLL STYLE ─────────────────────────────────────── */
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('mainNav');
+  nav.style.background = window.scrollY > 60
+    ? 'rgba(8,13,20,0.97)' : 'rgba(8,13,20,0.85)';
+});
+
+
+
+function toggleMobileNav() {
+  document.getElementById("mobileNav")
+    .classList.toggle("active");
+}
+
+function closeMobileNav() {
+  document.getElementById("mobileNav")
+    .classList.remove("active");
+}
+/* ─── INIT ───────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  buildValues();
+  buildTimeline();
+  buildTeam();
+  buildPerks();
+  buildInvestors();
+  buildAwards();
+  buildOffices();
+  setTimeout(observeAll, 100);
+});
+</script>
+<script src="./nav.js"></script>
+</body>
+</html>

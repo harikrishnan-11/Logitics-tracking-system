@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STACKLY — Contact Us</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --bg:         #080d14;
+      --bg-2:       #0d1520;
+      --bg-3:       #111c2b;
+      --surface:    #0f1e30;
+      --border:     #1a3050;
+      --cyan:       #00e5ff;
+      --cyan-dim:   #00b8cc;
+      --cyan-glow:  rgba(0,229,255,0.12);
+      --amber:      #ffab00;
+      --green:      #00e676;
+      --red:        #ff5252;
+      --purple:     #e040fb;
+      --text-1:     #e8f4fb;
+      --text-2:     #7a9bb5;
+      --text-3:     #3d607a;
+      --mono:       'Space Mono', monospace;
+      --sans:       'Space Grotesk', sans-serif;
+      --ease:       cubic-bezier(.25,.46,.45,.94);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; width: 100%; overflow-x: hidden; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text-1);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--cyan-dim); border-radius: 2px; }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 64px;
+      background: rgba(8,13,20,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s var(--ease);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+      color: var(--cyan); letter-spacing: .04em;
+    }
+    .nav-logo-dot {
+      width: 8px; height: 8px; background: var(--cyan);
+      border-radius: 50%; animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,229,255,.5); }
+      50%      { box-shadow: 0 0 0 6px rgba(0,229,255,0); }
+    }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      font-size: .82rem; font-weight: 500; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--text-2);
+      transition: color .2s; display: flex; align-items: center; gap: 6px;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
+    .nav-cta {
+      background: transparent; border: 1px solid var(--cyan); color: var(--cyan);
+      font-family: var(--mono); font-size: .78rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 8px 20px; border-radius: 2px; cursor: pointer;
+      transition: all .25s var(--ease);
+    }
+    .nav-cta:hover { background: var(--cyan); color: var(--bg); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text-1); border-radius: 2px; }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+
+    /* ── SECTION SHARED ── */
+    section { position: relative; z-index: 1; padding: 100px 5%; }
+    .section-tag {
+      font-family: var(--mono); font-size: .7rem;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700; letter-spacing: -.02em; line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-sub { max-width: 520px; color: var(--text-2); font-size: .95rem; }
+    .section-header { margin-bottom: 60px; }
+
+    /* ══════════════════════════════
+       §1 HERO
+    ══════════════════════════════ */
+    #contact-hero {
+      min-height: 58vh;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 140px 5% 80px;
+      position: relative; overflow: hidden;
+      background: var(--bg);
+    }
+    .hero-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 55% 50% at 80% 30%, rgba(0,229,255,.07), transparent),
+        radial-gradient(ellipse 35% 40% at 15% 65%, rgba(0,230,118,.05), transparent);
+    }
+    .contact-hero-tag {
+      font-family: var(--mono); font-size: .72rem;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .contact-hero-tag::before {
+      content: ''; display: block; width: 36px; height: 1px; background: var(--cyan);
+    }
+    .contact-hero-title {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 700; line-height: 1.05;
+      letter-spacing: -.03em; max-width: 800px;
+      margin-bottom: 28px;
+    }
+    .contact-hero-title span { color: var(--cyan); }
+    .contact-hero-sub {
+      max-width: 500px; color: var(--text-2); font-size: 1rem;
+      margin-bottom: 48px;
+    }
+    .hero-response-strip {
+      display: flex; gap: 48px; flex-wrap: wrap;
+      padding-top: 36px; border-top: 1px solid var(--border);
+    }
+    .hrs-item { display: flex; align-items: center; gap: 12px; }
+    .hrs-icon {
+      width: 40px; height: 40px;
+      background: var(--cyan-glow); border: 1px solid rgba(0,229,255,.2);
+      border-radius: 4px; display: flex; align-items: center; justify-content: center;
+      color: var(--cyan); font-size: .95rem; flex-shrink: 0;
+    }
+    .hrs-val { font-family: var(--mono); font-size: .88rem; font-weight: 700; color: var(--text-1); }
+    .hrs-lbl { font-size: .72rem; color: var(--text-2); }
+
+    /* ══════════════════════════════
+       §2 CONTACT CHANNEL CARDS
+    ══════════════════════════════ */
+    #channels { background: var(--bg-2); }
+    .channels-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .channel-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 32px 24px;
+      transition: border-color .25s, transform .25s; cursor: pointer;
+      position: relative; overflow: hidden;
+    }
+    .channel-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .3s var(--ease);
+    }
+    .channel-card:hover { border-color: var(--cyan-dim); transform: translateY(-4px); }
+    .channel-card:hover::before { transform: scaleX(1); }
+    .channel-icon {
+      width: 52px; height: 52px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem; margin-bottom: 18px;
+    }
+    .channel-name { font-weight: 700; font-size: .95rem; margin-bottom: 6px; }
+    .channel-desc { font-size: .8rem; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; }
+    .channel-cta {
+      font-family: var(--mono); font-size: .7rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 6px;
+      transition: gap .2s;
+    }
+    .channel-card:hover .channel-cta { gap: 10px; }
+    .channel-badge {
+      display: inline-block; font-family: var(--mono); font-size: .6rem;
+      font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      padding: 2px 7px; border-radius: 2px; margin-left: auto;
+    }
+
+    /* ══════════════════════════════
+       §3 MAIN CONTACT FORM
+    ══════════════════════════════ */
+    #contact-form-section { background: var(--bg); }
+    .contact-layout {
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 72px; align-items: start;
+    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-label {
+      font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--text-2);
+    }
+    .form-input, .form-select, .form-textarea {
+      background: var(--surface); border: 1px solid var(--border);
+      color: var(--text-1); font-family: var(--sans); font-size: .88rem;
+      padding: 13px 14px; outline: none; border-radius: 2px;
+      transition: border-color .2s; width: 100%;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--cyan); }
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--text-3); }
+    .form-select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237a9bb5' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+    .form-select option { background: var(--surface); color: var(--text-1); }
+    .form-textarea { resize: vertical; min-height: 120px; }
+    .char-count {
+      font-family: var(--mono); font-size: .65rem; color: var(--text-3);
+      text-align: right; margin-top: 4px;
+    }
+    .form-submit {
+      width: 100%; padding: 15px;
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .82rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      border: none; border-radius: 2px; cursor: pointer;
+      transition: all .25s; display: flex; align-items: center; justify-content: center; gap: 10px;
+      margin-top: 8px;
+    }
+    .form-submit:hover { background: var(--cyan-dim); box-shadow: 0 0 28px rgba(0,229,255,.3); }
+    .form-note {
+      font-family: var(--mono); font-size: .68rem; color: var(--text-3);
+      text-align: center; margin-top: 14px;
+    }
+
+    /* Sidebar info */
+    .contact-sidebar { display: flex; flex-direction: column; gap: 0; }
+    .contact-info-item {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 24px 0; border-bottom: 1px solid var(--border);
+    }
+    .contact-info-item:first-child { padding-top: 0; }
+    .contact-info-item:last-child { border-bottom: none; }
+    .ci-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      background: var(--cyan-glow); border: 1px solid rgba(0,229,255,.2);
+      border-radius: 4px; display: flex; align-items: center; justify-content: center;
+      color: var(--cyan); font-size: 1rem;
+    }
+    .ci-label {
+      font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--text-3); margin-bottom: 4px;
+    }
+    .ci-val { font-size: .9rem; font-weight: 600; margin-bottom: 2px; }
+    .ci-sub { font-size: .78rem; color: var(--text-2); }
+
+    /* ══════════════════════════════
+       §4 OFFICES
+    ══════════════════════════════ */
+    #offices { background: var(--bg-2); }
+    .offices-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .office-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; overflow: hidden;
+      transition: border-color .25s, transform .25s;
+    }
+    .office-card:hover { border-color: var(--cyan-dim); transform: translateY(-4px); }
+    .office-map {
+      height: 140px; background: var(--bg-3);
+      position: relative; overflow: hidden;
+    }
+    .office-map-inner {
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 19px, var(--border) 20px),
+        repeating-linear-gradient(90deg, transparent, transparent 19px, var(--border) 20px);
+      opacity: .4;
+    }
+    .office-map-dot {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 14px; height: 14px; background: var(--cyan);
+      border-radius: 50%; box-shadow: 0 0 20px var(--cyan);
+      animation: map-pulse 2s ease-in-out infinite;
+    }
+    @keyframes map-pulse {
+      0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+      50% { transform: translate(-50%,-50%) scale(1.3); opacity: .7; }
+    }
+    .office-city-tag {
+      position: absolute; bottom: 12px; left: 12px;
+      font-family: var(--mono); font-size: .64rem; color: var(--text-2);
+      background: rgba(8,13,20,.8); padding: 3px 8px; border-radius: 2px;
+    }
+    .office-body { padding: 24px; }
+    .office-city { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+    .office-type {
+      font-family: var(--mono); font-size: .68rem; color: var(--cyan);
+      letter-spacing: .1em; text-transform: uppercase; margin-bottom: 16px;
+    }
+    .office-address { font-size: .82rem; color: var(--text-2); line-height: 1.7; margin-bottom: 16px; }
+    .office-link {
+      font-family: var(--mono); font-size: .7rem; color: var(--cyan);
+      letter-spacing: .08em; text-transform: uppercase;
+      display: flex; align-items: center; gap: 6px; cursor: pointer;
+      transition: gap .2s;
+    }
+    .office-card:hover .office-link { gap: 10px; }
+
+    /* ══════════════════════════════
+       §5 FAQ
+    ══════════════════════════════ */
+    #faq { background: var(--bg); }
+    .faq-layout { display: grid; grid-template-columns: 1fr 1.8fr; gap: 80px; align-items: start; }
+    .faq-list { display: flex; flex-direction: column; gap: 2px; }
+    .faq-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 2px; overflow: hidden;
+      transition: border-color .2s;
+    }
+    .faq-item.open { border-color: rgba(0,229,255,.3); }
+    .faq-q {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 18px 20px; cursor: pointer;
+      font-weight: 600; font-size: .9rem;
+      user-select: none;
+    }
+    .faq-q i { color: var(--text-3); transition: transform .3s, color .2s; flex-shrink: 0; margin-left: 12px; }
+    .faq-item.open .faq-q i { transform: rotate(45deg); color: var(--cyan); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height .35s var(--ease), padding .3s;
+      font-size: .85rem; color: var(--text-2); line-height: 1.7;
+      padding: 0 20px;
+    }
+    .faq-item.open .faq-a { max-height: 200px; padding: 0 20px 18px; }
+
+    /* ══════════════════════════════
+       §6 SUPPORT STATUS
+    ══════════════════════════════ */
+    #support-status { background: var(--bg-2); }
+    .status-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+    .status-panel {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 32px;
+    }
+    .status-panel-title {
+      font-family: var(--mono); font-size: .72rem; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--text-2); margin-bottom: 24px;
+    }
+    .status-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0; border-bottom: 1px solid var(--border);
+    }
+    .status-row:last-child { border-bottom: none; }
+    .status-service { font-size: .88rem; display: flex; align-items: center; gap: 10px; }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .s-operational { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .s-degraded    { background: var(--amber); }
+    .s-down        { background: var(--red); }
+    .status-label {
+      font-family: var(--mono); font-size: .72rem;
+    }
+    .uptime-bar-row { margin-top: 8px; }
+    .uptime-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: .78rem; color: var(--text-2); }
+    .uptime-bar-wrap {
+      display: flex; gap: 2px;
+    }
+    .uptime-bar-segment {
+      flex: 1; height: 28px; border-radius: 2px;
+      background: var(--green); opacity: .7;
+    }
+    .uptime-bar-segment.down { background: var(--red); opacity: .9; }
+
+    /* Queue / Hours panel */
+    .hours-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .hours-card {
+      background: var(--bg-3); border: 1px solid var(--border);
+      border-radius: 2px; padding: 16px;
+    }
+    .hours-channel { font-size: .78rem; color: var(--text-2); margin-bottom: 4px; }
+    .hours-time {
+      font-family: var(--mono); font-size: .88rem; font-weight: 700;
+      color: var(--text-1);
+    }
+    .queue-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: var(--mono); font-size: .7rem; font-weight: 700;
+      padding: 4px 10px; border-radius: 2px; margin-top: 8px;
+    }
+
+    /* ══════════════════════════════
+       §7 SOCIAL / COMMUNITY
+    ══════════════════════════════ */
+    #community { background: var(--bg); }
+    .community-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .community-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 28px 22px; text-align: center;
+      transition: border-color .25s, transform .25s; cursor: pointer;
+    }
+    .community-card:hover { border-color: var(--cyan-dim); transform: translateY(-4px); }
+    .community-icon { font-size: 2rem; margin-bottom: 14px; }
+    .community-name { font-weight: 700; font-size: .95rem; margin-bottom: 6px; }
+    .community-desc { font-size: .78rem; color: var(--text-2); line-height: 1.6; margin-bottom: 14px; }
+    .community-count {
+      font-family: var(--mono); font-size: .72rem; color: var(--cyan);
+    }
+
+    /* ══════════════════════════════
+       §8 SALES CTA
+    ══════════════════════════════ */
+    #sales-cta { background: var(--bg-2); padding: 100px 5%; }
+    .sales-cta-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 64px 60px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .sales-cta-box::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 70% at 90% 50%, rgba(0,229,255,.06), transparent);
+      pointer-events: none;
+    }
+    .sales-cta-box::after {
+      content: ''; position: absolute; top: -1px; left: 15%; right: 15%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    }
+    .sales-cta-title {
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem); font-weight: 700;
+      letter-spacing: -.02em; line-height: 1.2; margin-bottom: 14px;
+      position: relative; z-index: 1;
+    }
+    .sales-cta-title span { color: var(--cyan); }
+    .sales-cta-sub {
+      color: var(--text-2); font-size: .9rem; line-height: 1.75;
+      position: relative; z-index: 1; margin-bottom: 32px;
+    }
+    .sales-features { display: flex; flex-direction: column; gap: 12px; }
+    .sales-feature {
+      display: flex; align-items: center; gap: 12px;
+      font-size: .88rem; color: var(--text-2);
+    }
+    .sales-feature i { color: var(--cyan); width: 16px; }
+    .sales-cta-actions { display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 1; }
+    .btn-primary {
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .82rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 15px 32px; border: none; border-radius: 2px;
+      cursor: pointer; transition: all .25s var(--ease);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-primary:hover { box-shadow: 0 0 28px rgba(0,229,255,.35); background: var(--cyan-dim); }
+    .btn-outline {
+      background: transparent; color: var(--text-1);
+      font-family: var(--mono); font-size: .82rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 15px 32px; border: 1px solid var(--border);
+      border-radius: 2px; cursor: pointer; transition: all .25s var(--ease);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+    .sales-slots {
+      display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;
+    }
+    .slot-btn {
+      font-family: var(--mono); font-size: .7rem; font-weight: 700;
+      letter-spacing: .06em; padding: 8px 14px;
+      background: var(--bg-3); border: 1px solid var(--border);
+      color: var(--text-2); border-radius: 2px; cursor: pointer;
+      transition: all .2s;
+    }
+    .slot-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+    .sales-note {
+      font-family: var(--mono); font-size: .68rem; color: var(--text-3); margin-top: 10px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      background: var(--bg-2); border-top: 1px solid var(--border);
+      padding: 60px 5% 28px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .footer-brand-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 1.05rem; font-weight: 700;
+      color: var(--cyan); margin-bottom: 14px;
+    }
+    .footer-desc { font-size: .82rem; color: var(--text-2); line-height: 1.7; margin-bottom: 20px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .social-btn {
+      width: 34px; height: 34px; border-radius: 6px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-2); font-size: .82rem; transition: all .2s; cursor: pointer;
+    }
+    .social-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+    .footer-col h4 {
+      font-family: var(--mono); font-size: .66rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--text-3); margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .footer-col a { font-size: .83rem; color: var(--text-2); transition: color .2s; display: flex; align-items: center; gap: 6px; }
+    .footer-col a:hover { color: var(--cyan); }
+    .footer-col a i { font-size: .7rem; opacity: .5; }
+    .footer-bottom {
+      border-top: 1px solid var(--border); padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-family: var(--mono); font-size: .72rem; color: var(--text-3); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-family: var(--mono); font-size: .7rem; color: var(--text-3); transition: color .2s; }
+    .footer-legal a:hover { color: var(--cyan); }
+    .status-pill { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: .68rem; color: var(--green); }
+
+    /* ── TOAST ── */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+    .toast {
+      background: var(--surface); border: 1px solid var(--cyan); border-left: 3px solid var(--cyan);
+      padding: 14px 18px; border-radius: 2px; font-size: .85rem; max-width: 320px;
+      cursor: pointer; box-shadow: 0 8px 32px rgba(0,0,0,.4);
+      animation: tin .3s var(--ease) forwards;
+    }
+    .toast.removing { animation: tout .3s var(--ease) forwards; }
+    @keyframes tin  { from { opacity:0; transform:translateX(24px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes tout { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(24px); } }
+    .toast-title { font-weight: 600; margin-bottom: 3px; }
+    .toast-msg { font-size: .78rem; color: var(--text-2); }
+
+    /* ── Mobile Nav ── */
+    #mobileNav {
+      display: none; position: fixed; top: 64px; inset-x: 0;
+      background: rgba(8,13,20,.97); z-index: 99;
+      padding: 28px 5%; border-bottom: 1px solid var(--border);
+    }
+    #mobileNav a {
+      display: block; color: var(--text-1); font-weight: 600;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      font-size: .95rem;
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 1000px) {
+      .channels-grid { grid-template-columns: repeat(2, 1fr); }
+      .offices-grid { grid-template-columns: repeat(2, 1fr); }
+      .community-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .contact-layout { grid-template-columns: 1fr; }
+      .faq-layout { grid-template-columns: 1fr; gap: 40px; }
+      .status-layout { grid-template-columns: 1fr; }
+      .sales-cta-box { grid-template-columns: 1fr; padding: 40px 28px; gap: 40px; }
+    }
+    @media (max-width: 640px) {
+      section { padding: 72px 5%; }
+      #contact-hero { padding: 120px 5% 60px; }
+      .channels-grid { grid-template-columns: 1fr; }
+      .offices-grid { grid-template-columns: 1fr; }
+      .community-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .form-row-2 { grid-template-columns: 1fr; }
+      .hero-response-strip { gap: 24px; }
+      .hours-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav" id="mainNav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    STACKLY
+  </div>
+  <div class="nav-links">
+    <a href="index.html"><i class="fa-solid fa-location-dot"></i> Home</a>
+    <a href="index.html#shipments"><i class="fa-solid fa-boxes-stacked"></i> About</a>
+    <a href="index.html#fleet"><i class="fa-solid fa-truck"></i> Service</a>
+    <a href="blog.html"><i class="fa-solid fa-chart-line"></i> Blog</a>
+    <a href="contact.html" class="active"><i class="fa-solid fa-headset"></i> Contact</a>
+  </div>
+  <button class="nav-cta">Login</button>
+  <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div id="mobileNav">
+  <a href="index.html" onclick="closeMobileNav()">Home</a>
+  <a href="index.html#shipments" onclick="closeMobileNav()">About</a>
+  <a href="index.html#fleet" onclick="closeMobileNav()">Service</a>
+  <a href="blog.html" onclick="closeMobileNav()">Blog</a>
+  <a href="contact.html" onclick="closeMobileNav()">Contact</a>
+</div>
+
+<!-- ══════════════════════════════
+     §1 HERO
+══════════════════════════════ -->
+<section id="contact-hero">
+  <div class="hero-glow"></div>
+  <div class="contact-hero-tag reveal">Get in Touch · STACKLY Support</div>
+  <h1 class="contact-hero-title reveal reveal-delay-1">
+    We respond fast.<br><span>Every message counts.</span>
+  </h1>
+  <p class="contact-hero-sub reveal reveal-delay-2">
+    Whether it's a sales question, a technical issue, or a feature idea — our team is online and ready. Average first response: under 2 hours.
+  </p>
+  <div class="hero-response-strip reveal reveal-delay-3">
+    <div class="hrs-item">
+      <div class="hrs-icon"><i class="fa-solid fa-bolt"></i></div>
+      <div>
+        <div class="hrs-val">~1h 48m</div>
+        <div class="hrs-lbl">Avg. first response</div>
+      </div>
+    </div>
+    <div class="hrs-item">
+      <div class="hrs-icon"><i class="fa-solid fa-clock"></i></div>
+      <div>
+        <div class="hrs-val">Mon – Sat</div>
+        <div class="hrs-lbl">9 AM – 9 PM IST</div>
+      </div>
+    </div>
+    <div class="hrs-item">
+      <div class="hrs-icon"><i class="fa-solid fa-headset"></i></div>
+      <div>
+        <div class="hrs-val">24/7</div>
+        <div class="hrs-lbl">Enterprise SLA</div>
+      </div>
+    </div>
+    <div class="hrs-item">
+      <div class="hrs-icon"><i class="fa-solid fa-star"></i></div>
+      <div>
+        <div class="hrs-val">4.8 / 5</div>
+        <div class="hrs-lbl">Support satisfaction</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     §2 CHANNEL CARDS
+══════════════════════════════ -->
+<section id="channels">
+  <div class="section-header">
+    <div class="section-tag reveal">Reach Us</div>
+    <h2 class="section-title reveal reveal-delay-1">Choose how you want<br>to connect.</h2>
+  </div>
+  <div class="channels-grid" id="channelsGrid"></div>
+</section>
+
+<!-- ══════════════════════════════
+     §3 CONTACT FORM
+══════════════════════════════ -->
+<section id="contact-form-section">
+  <div class="section-header">
+    <div class="section-tag reveal">Send a Message</div>
+    <h2 class="section-title reveal reveal-delay-1">Tell us what you need.</h2>
+    <p class="section-sub reveal reveal-delay-2">Fill in the details and we'll route your message to the right team. Most requests are picked up within 2 hours during business hours.</p>
+  </div>
+  <div class="contact-layout">
+    <div class="reveal">
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input class="form-input" type="text" placeholder="Priya" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" type="text" placeholder="Sharma" />
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label">Work Email</label>
+          <input class="form-input" type="email" placeholder="priya@yourcompany.com" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone (optional)</label>
+          <input class="form-input" type="tel" placeholder="+91 98765 43210" />
+        </div>
+      </div>
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label">Company</label>
+          <input class="form-input" type="text" placeholder="Your Company Pvt. Ltd." />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Team Size</label>
+          <select class="form-select">
+            <option value="">Select fleet size</option>
+            <option>1–10 vehicles</option>
+            <option>11–50 vehicles</option>
+            <option>51–200 vehicles</option>
+            <option>200+ vehicles</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Enquiry Type</label>
+        <select class="form-select">
+          <option value="">Select a topic</option>
+          <option>Sales & Pricing</option>
+          <option>Technical Support</option>
+          <option>Integration Help</option>
+          <option>Billing</option>
+          <option>Partnership</option>
+          <option>Press & Media</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" id="msgArea" placeholder="Describe your question or challenge. The more detail you share, the faster we can help." maxlength="600" oninput="updateChar(this)"></textarea>
+        <div class="char-count"><span id="charCount">0</span> / 600</div>
+      </div>
+      <button class="form-submit" onclick="handleForm()">
+        <i class="fa-solid fa-paper-plane"></i> Send Message
+      </button>
+      <div class="form-note"><i class="fa-solid fa-shield-halved" style="color:var(--cyan);margin-right:6px;"></i>Your data is encrypted and never sold. SOC 2 Type II certified.</div>
+    </div>
+    <div class="contact-sidebar reveal reveal-delay-2" id="contactSidebar"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     §4 OFFICES
+══════════════════════════════ -->
+<section id="offices">
+  <div class="section-header">
+    <div class="section-tag reveal">Locations</div>
+    <h2 class="section-title reveal reveal-delay-1">Our offices.</h2>
+    <p class="section-sub reveal reveal-delay-2">Three cities. One mission. All teams work across time zones to support clients across India and beyond.</p>
+  </div>
+  <div class="offices-grid" id="officesGrid"></div>
+</section>
+
+<!-- ══════════════════════════════
+     §5 FAQ
+══════════════════════════════ -->
+<section id="faq">
+  <div class="faq-layout">
+    <div class="reveal">
+      <div class="section-tag">FAQ</div>
+      <h2 class="section-title" style="margin-top:12px;">Common questions,<br>direct answers.</h2>
+      <p class="section-sub" style="margin-top:14px;">Can't find what you're looking for? Use the form above or reach us on live chat.</p>
+      <div style="margin-top:32px;">
+        <div style="font-family:var(--mono);font-size:.72rem;color:var(--text-3);margin-bottom:8px;">RESPONSE TIME</div>
+        <div style="font-family:var(--mono);font-size:1.4rem;font-weight:700;color:var(--cyan);">< 2h</div>
+        <div style="font-size:.8rem;color:var(--text-2);margin-top:4px;">during business hours</div>
+      </div>
+    </div>
+    <div class="faq-list reveal reveal-delay-2" id="faqList"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     §6 SUPPORT STATUS
+══════════════════════════════ -->
+<section id="support-status">
+  <div class="section-header">
+    <div class="section-tag reveal">System Status</div>
+    <h2 class="section-title reveal reveal-delay-1">Platform health &<br>support availability.</h2>
+  </div>
+  <div class="status-layout">
+    <div class="status-panel reveal">
+      <div class="status-panel-title">Platform Services</div>
+      <div id="statusList"></div>
+      <div class="uptime-bar-row" style="margin-top:24px;">
+        <div class="uptime-label"><span>90-day uptime</span><span style="color:var(--green);font-family:var(--mono);font-weight:700;">99.97%</span></div>
+        <div class="uptime-bar-wrap" id="uptimeBar"></div>
+      </div>
+    </div>
+    <div class="status-panel reveal reveal-delay-2">
+      <div class="status-panel-title">Support Availability</div>
+      <div class="hours-grid">
+        <div class="hours-card">
+          <div class="hours-channel"><i class="fa-solid fa-comments" style="color:var(--cyan);margin-right:6px;"></i>Live Chat</div>
+          <div class="hours-time">Mon–Sat · 9AM–9PM</div>
+          <div class="queue-badge" style="background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.25);">
+            <span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block;"></span> Online now
+          </div>
+        </div>
+        <div class="hours-card">
+          <div class="hours-channel"><i class="fa-solid fa-envelope" style="color:var(--cyan);margin-right:6px;"></i>Email</div>
+          <div class="hours-time">24/7 · &lt;2h reply</div>
+          <div class="queue-badge" style="background:rgba(0,229,255,.12);color:var(--cyan);border:1px solid rgba(0,229,255,.25);">
+            <span style="width:6px;height:6px;background:var(--cyan);border-radius:50%;display:inline-block;"></span> 4 in queue
+          </div>
+        </div>
+        <div class="hours-card">
+          <div class="hours-channel"><i class="fa-solid fa-phone" style="color:var(--cyan);margin-right:6px;"></i>Phone (Pro+)</div>
+          <div class="hours-time">Mon–Fri · 10AM–6PM</div>
+          <div class="queue-badge" style="background:rgba(255,171,0,.12);color:var(--amber);border:1px solid rgba(255,171,0,.25);">
+            <span style="width:6px;height:6px;background:var(--amber);border-radius:50%;display:inline-block;"></span> Avg wait 4m
+          </div>
+        </div>
+        <div class="hours-card">
+          <div class="hours-channel"><i class="fa-brands fa-whatsapp" style="color:var(--cyan);margin-right:6px;"></i>WhatsApp</div>
+          <div class="hours-time">Mon–Sat · 9AM–6PM</div>
+          <div class="queue-badge" style="background:rgba(0,230,118,.12);color:var(--green);border:1px solid rgba(0,230,118,.25);">
+            <span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block;"></span> Available
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     §7 COMMUNITY
+══════════════════════════════ -->
+<section id="community">
+  <div class="section-header">
+    <div class="section-tag reveal">Community</div>
+    <h2 class="section-title reveal reveal-delay-1">Learn from 3,000+<br>logistics operators.</h2>
+    <p class="section-sub reveal reveal-delay-2">Join the STACKLY community to swap playbooks, ask peers, and get beta access to new features before anyone else.</p>
+  </div>
+  <div class="community-grid" id="communityGrid"></div>
+</section>
+
+<!-- ══════════════════════════════
+     §8 SALES CTA
+══════════════════════════════ -->
+<section id="sales-cta">
+  <div class="sales-cta-box reveal">
+    <div>
+      <div class="section-tag" style="margin-bottom:14px;">Enterprise Sales</div>
+      <h2 class="sales-cta-title">Ready for a <span>live demo</span> with our solutions team?</h2>
+      <p class="sales-cta-sub">Book a 30-minute call. We'll walk through your specific routes, carriers, and team structure — and show you exactly what STACKLY can do for your operation.</p>
+      <div class="sales-features">
+        <div class="sales-feature"><i class="fa-solid fa-check"></i> Custom demo using your own shipment data</div>
+        <div class="sales-feature"><i class="fa-solid fa-check"></i> Pricing tailored to your volume</div>
+        <div class="sales-feature"><i class="fa-solid fa-check"></i> Integration feasibility review</div>
+        <div class="sales-feature"><i class="fa-solid fa-check"></i> No obligation. No sales pressure.</div>
+      </div>
+    </div>
+    <div>
+      <div style="font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:14px;">Available slots this week</div>
+      <div class="sales-slots" id="salesSlots"></div>
+      <div style="height:20px;"></div>
+      <button class="btn-primary" onclick="showToast('Demo booked!','Our solutions team will confirm via email within 30 minutes.')">
+        <i class="fa-solid fa-calendar-check"></i> Book a 30-Min Demo
+      </button>
+      <div style="height:12px;"></div>
+      <button class="btn-outline" onclick="showToast('Connecting...','Opening live chat with sales team.')">
+        <i class="fa-solid fa-comments"></i> Chat with Sales Now
+      </button>
+      <div class="sales-note" style="margin-top:16px;"><i class="fa-solid fa-shield-halved" style="color:var(--cyan);margin-right:6px;"></i>No credit card · Cancel anytime · SOC 2 Type II</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-logo"><i class="fa-solid fa-route"></i> STACKLY</div>
+      <p class="footer-desc">Real-time logistics intelligence for operations teams that refuse to be in the dark.</p>
+      <div class="footer-socials">
+        <div class="social-btn"><i class="fa-brands fa-x-twitter"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-linkedin-in"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-github"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-youtube"></i></div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="index.html#tracking"><i class="fa-solid fa-chevron-right"></i>Live Tracking</a></li>
+        <li><a href="index.html#fleet"><i class="fa-solid fa-chevron-right"></i>Fleet Manager</a></li>
+        <li><a href="index.html#routes"><i class="fa-solid fa-chevron-right"></i>Route Optimizer</a></li>
+        <li><a href="index.html#analytics"><i class="fa-solid fa-chevron-right"></i>Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>About</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Team</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Careers</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="blog.html"><i class="fa-solid fa-chevron-right"></i>Blog</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Case Studies</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>API Docs</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Status</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Privacy</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Terms</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Security</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Cookies</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 STACKLY Technologies Pvt. Ltd. · Bengaluru, India</div>
+    <div class="status-pill"><i class="fa-solid fa-circle-check"></i> All systems operational</div>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Security</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ── DATA ── */
+const channels = [
+  {
+    icon: '<i class="fa-solid fa-comments"></i>', iconBg: 'rgba(0,229,255,.12)', iconColor: '#00e5ff',
+    topColor: '#00e5ff', badgeBg: 'rgba(0,230,118,.12)', badgeColor: '#00e676',
+    name: 'Live Chat', desc: 'Talk to a real person. No bots. Instant connection during business hours.',
+    cta: 'Start Chat', cta_color: '#00e5ff', badge: 'Online · 3 agents',
+    action: "showToast('Opening chat','Connecting you to a support agent...')"
+  },
+  {
+    icon: '<i class="fa-solid fa-envelope"></i>', iconBg: 'rgba(0,229,255,.12)', iconColor: '#00e5ff',
+    topColor: '#00e676', badgeBg: 'rgba(0,229,255,.12)', badgeColor: '#00e5ff',
+    name: 'Email Support', desc: 'Send a detailed query and get a thorough response from our ops experts.',
+    cta: 'Send Email', cta_color: '#00e676', badge: '< 2h response',
+    action: "showToast('Email opened','Opening your email client...')"
+  },
+  {
+    icon: '<i class="fa-brands fa-whatsapp"></i>', iconBg: 'rgba(0,230,118,.12)', iconColor: '#00e676',
+    topColor: '#00e676', badgeBg: 'rgba(0,230,118,.12)', badgeColor: '#00e676',
+    name: 'WhatsApp', desc: 'Quick questions, shipment updates, and escalations — all on WhatsApp Business.',
+    cta: 'Message Us', cta_color: '#00e676', badge: 'Available now',
+    action: "showToast('Opening WhatsApp','Redirecting to WhatsApp Business...')"
+  },
+  {
+    icon: '<i class="fa-solid fa-phone"></i>', iconBg: 'rgba(255,171,0,.12)', iconColor: '#ffab00',
+    topColor: '#ffab00', badgeBg: 'rgba(255,171,0,.12)', badgeColor: '#ffab00',
+    name: 'Phone (Pro+)', desc: 'Enterprise and Pro customers get direct access to our support line.',
+    cta: 'See Number', cta_color: '#ffab00', badge: 'Pro & Enterprise',
+    action: "showToast('Support line','Available for Pro & Enterprise plans. +91 80 4567 8900')"
+  },
+];
+
+const sidebarItems = [
+  { icon: 'fa-envelope', label: 'Email', val: 'support@stackly.in', sub: 'Response within 2 hours' },
+  { icon: 'fa-phone', label: 'Phone', val: '+91 80 4567 8900', sub: 'Mon–Fri · 10AM – 6PM IST' },
+  { icon: 'fa-location-dot', label: 'Headquarters', val: 'Bengaluru, Karnataka', sub: 'STACKLY Technologies Pvt. Ltd.' },
+  { icon: 'fa-brands fa-linkedin-in', label: 'LinkedIn', val: 'linkedin.com/company/stackly', sub: 'Follow for product updates' },
+  { icon: 'fa-shield-halved', label: 'Security', val: 'security@stackly.in', sub: 'For responsible disclosures' },
+];
+
+const offices = [
+  {
+    city: 'Bengaluru', type: 'Headquarters', dotColor: '#00e5ff',
+    address: '4th Floor, Tower B, RMZ Infinity\nOld Madras Road\nBengaluru – 560 016',
+    lat: '12.9716', lng: '77.5946'
+  },
+  {
+    city: 'Mumbai', type: 'Sales & Operations', dotColor: '#00e676',
+    address: 'WeWork BKC, G Block\nBandra Kurla Complex\nMumbai – 400 051',
+    lat: '19.0596', lng: '72.8295'
+  },
+  {
+    city: 'Delhi NCR', type: 'Enterprise Sales', dotColor: '#ffab00',
+    address: 'Level 8, Worldmark 2\nAerocity\nNew Delhi – 110 037',
+    lat: '28.5562', lng: '77.0999'
+  },
+];
+
+const faqs = [
+  { q: 'How quickly can we go live with STACKLY?', a: 'Most teams are tracking live within 48 hours. Enterprise deployments with custom integrations typically take 5–14 days depending on your ERP and carrier setup.' },
+  { q: 'Do you offer a free trial?', a: 'Yes — 14 days, no credit card required. You get full access to the Professional plan including route optimizer, fleet view, and analytics.' },
+  { q: 'Which carriers are supported in India?', a: 'We support 40+ Indian carriers including Delhivery, BlueDart, DTDC, Shadowfax, Ekart, XpressBees, and all major surface freight operators. International carriers available too.' },
+  { q: 'Is there an API for custom integrations?', a: 'Yes. REST and GraphQL APIs are available on all plans. Webhook support and event streaming are included on Professional and Enterprise plans.' },
+  { q: 'What happens to my data if I cancel?', a: 'You retain full export rights for 30 days after cancellation. We purge all data securely within 60 days in line with our data retention policy.' },
+  { q: 'Is STACKLY SOC 2 certified?', a: 'Yes. STACKLY is SOC 2 Type II certified. We also maintain ISO 27001 alignment and conduct annual third-party penetration tests.' },
+];
+
+const statusServices = [
+  { name: 'Live Tracking API', status: 'operational' },
+  { name: 'Fleet Telemetry', status: 'operational' },
+  { name: 'Route Optimizer', status: 'operational' },
+  { name: 'Notification Engine', status: 'degraded' },
+  { name: 'Analytics Platform', status: 'operational' },
+  { name: 'Webhook Delivery', status: 'operational' },
+];
+
+const communityItems = [
+  { icon: '<i class="fa-brands fa-slack" style="color:#4a154b;font-size:2rem"></i>', name: 'Slack Community', desc: 'Join 2,400+ logistics operators sharing playbooks, solving problems, and connecting.', count: '2,400+ members', action: "showToast('Opening Slack','Redirecting to STACKLY Community Slack...')" },
+  { icon: '<i class="fa-brands fa-linkedin-in" style="color:#0077b5;font-size:1.8rem"></i>', name: 'LinkedIn Group', desc: 'Industry discussions, case study drops, and job opportunities for ops leaders.', count: '6,100 followers', action: "showToast('Opening LinkedIn','Redirecting to STACKLY LinkedIn...')" },
+  { icon: '<i class="fa-brands fa-youtube" style="color:#ff0000;font-size:2rem"></i>', name: 'YouTube Channel', desc: 'Tutorials, product walkthroughs, and recorded webinars from our team.', count: '48 videos', action: "showToast('Opening YouTube','Redirecting to STACKLY YouTube...')" },
+  { icon: '<i class="fa-solid fa-graduation-cap" style="color:#00e5ff;font-size:1.8rem"></i>', name: 'Help Center', desc: 'Searchable docs, how-to guides, and API reference. Built for self-service.', count: '380+ articles', action: "showToast('Opening Help Center','Redirecting to docs.stackly.in...')" },
+];
+
+const salesSlotDates = ['Mon 10 Jun · 10:00', 'Mon 10 Jun · 14:00', 'Tue 11 Jun · 11:30', 'Wed 12 Jun · 09:00', 'Thu 13 Jun · 15:00'];
+
+/* ── BUILDERS ── */
+function buildChannels() {
+  document.getElementById('channelsGrid').innerHTML = channels.map((c, i) => `
+    <div class="channel-card reveal reveal-delay-${i + 1}" onclick="${c.action}" style="--cc:${c.topColor}">
+      <style>.channel-card:nth-child(${i+1})::before { background: ${c.topColor}; }</style>
+      <div class="channel-icon" style="background:${c.iconBg};border:1px solid ${c.iconBg};">
+        <span style="color:${c.iconColor};font-size:1.3rem;">${c.icon}</span>
+      </div>
+      <div class="channel-name">${c.name}</div>
+      <div class="channel-desc">${c.desc}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div class="channel-cta" style="color:${c.cta_color}">
+          ${c.cta} <i class="fa-solid fa-arrow-right"></i>
+        </div>
+        <span class="channel-badge" style="background:${c.badgeBg};color:${c.badgeColor};border:1px solid ${c.badgeBg};">${c.badge}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+function buildSidebar() {
+  document.getElementById('contactSidebar').innerHTML = sidebarItems.map(s => `
+    <div class="contact-info-item">
+      <div class="ci-icon"><i class="fa-${s.icon.startsWith('fa-brands') ? 'brands' : 'solid'} ${s.icon.replace('fa-brands ','').replace('fa-solid ','')}"></i></div>
+      <div>
+        <div class="ci-label">${s.label}</div>
+        <div class="ci-val">${s.val}</div>
+        <div class="ci-sub">${s.sub}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function buildOffices() {
+  document.getElementById('officesGrid').innerHTML = offices.map((o, i) => `
+    <div class="office-card reveal reveal-delay-${i + 1}">
+      <div class="office-map">
+        <div class="office-map-inner"></div>
+        <div class="office-map-dot" style="box-shadow:0 0 20px ${o.dotColor};background:${o.dotColor};"></div>
+        <div class="office-city-tag">${o.lat}° N · ${o.lng}° E</div>
+      </div>
+      <div class="office-body">
+        <div class="office-city">${o.city}</div>
+        <div class="office-type">${o.type}</div>
+        <div class="office-address">${o.address.replace(/\n/g, '<br>')}</div>
+        <div class="office-link" onclick="showToast('Maps','Opening directions to ${o.city} office...')">
+          Get Directions <i class="fa-solid fa-arrow-right"></i>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function buildFAQ() {
+  document.getElementById('faqList').innerHTML = faqs.map((f, i) => `
+    <div class="faq-item" id="faq-${i}">
+      <div class="faq-q" onclick="toggleFAQ(${i})">
+        ${f.q}
+        <i class="fa-solid fa-plus"></i>
+      </div>
+      <div class="faq-a">${f.a}</div>
+    </div>
+  `).join('');
+}
+
+function toggleFAQ(i) {
+  const item = document.getElementById('faq-' + i);
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(el => el.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+
+function buildStatus() {
+  const labelMap = { operational: ['var(--green)', 's-operational', 'Operational'], degraded: ['var(--amber)', 's-degraded', 'Degraded'], down: ['var(--red)', 's-down', 'Down'] };
+  document.getElementById('statusList').innerHTML = statusServices.map(s => {
+    const [col, cls, lbl] = labelMap[s.status];
+    return `
+      <div class="status-row">
+        <div class="status-service">
+          <div class="status-dot ${cls}"></div>
+          ${s.name}
+        </div>
+        <div class="status-label" style="color:${col};">${lbl}</div>
+      </div>
+    `;
+  }).join('');
+
+  // Build uptime bar (90 segments)
+  const bar = document.getElementById('uptimeBar');
+  for (let i = 0; i < 90; i++) {
+    const seg = document.createElement('div');
+    seg.className = 'uptime-bar-segment' + ([14, 31, 47].includes(i) ? ' down' : '');
+    bar.appendChild(seg);
+  }
+}
+
+function buildCommunity() {
+  document.getElementById('communityGrid').innerHTML = communityItems.map((c, i) => `
+    <div class="community-card reveal reveal-delay-${i + 1}" onclick="${c.action}">
+      <div class="community-icon">${c.icon}</div>
+      <div class="community-name">${c.name}</div>
+      <div class="community-desc">${c.desc}</div>
+      <div class="community-count">${c.count}</div>
+    </div>
+  `).join('');
+}
+
+function buildSalesSlots() {
+  document.getElementById('salesSlots').innerHTML = salesSlotDates.map(s => `
+    <button class="slot-btn" onclick="showToast('Slot selected','${s} — completing booking...')">${s}</button>
+  `).join('');
+}
+
+/* ── UTILS ── */
+function updateChar(el) {
+  document.getElementById('charCount').textContent = el.value.length;
+}
+
+function handleForm() {
+  showToast('Message sent!', 'Our team will respond within 2 hours. Check your inbox.');
+}
+
+function showToast(title, msg) {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<div class="toast-title">${title}</div><div class="toast-msg">${msg}</div>`;
+  t.onclick = () => { t.classList.add('removing'); setTimeout(() => t.remove(), 300); };
+  c.appendChild(t);
+  setTimeout(() => { t.classList.add('removing'); setTimeout(() => t.remove(), 300); }, 4000);
+}
+
+function toggleMobileNav() {
+  const n = document.getElementById('mobileNav');
+  n.style.display = n.style.display === 'block' ? 'none' : 'block';
+}
+function closeMobileNav() { document.getElementById('mobileNav').style.display = 'none'; }
+
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').style.background =
+    window.scrollY > 60 ? 'rgba(8,13,20,0.97)' : 'rgba(8,13,20,0.85)';
+});
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+
+function observeAll() {
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildChannels();
+  buildSidebar();
+  buildOffices();
+  buildFAQ();
+  buildStatus();
+  buildCommunity();
+  buildSalesSlots();
+  observeAll();
+  setTimeout(observeAll, 200);
+});
+</script>
+</body>
+</html>

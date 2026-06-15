@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrackFlow — Logistics Intelligence Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    /* ═══════════════════════════════════
+       DESIGN TOKENS
+    ═══════════════════════════════════ */
+    :root {
+      --bg:           #060b11;
+      --bg-2:         #0a1420;
+      --bg-3:         #0e1a2e;
+      --surface:      #0c1928;
+      --surface-2:    #112236;
+      --border:       #172f4a;
+      --border-2:     #1e3d5c;
+      --cyan:         #00e5ff;
+      --cyan-dim:     #00b8cc;
+      --cyan-pale:    rgba(0,229,255,0.08);
+      --cyan-glow:    rgba(0,229,255,0.18);
+      --green:        #00e676;
+      --amber:        #ffab00;
+      --red:          #ff5252;
+      --purple:       #b388ff;
+      --text-1:       #eaf4fc;
+      --text-2:       #7a9bb5;
+      --text-3:       #3a5870;
+      --mono:         'Space Mono', monospace;
+      --sans:         'Space Grotesk', sans-serif;
+      --ease:         cubic-bezier(.25,.46,.45,.94);
+      --ease-bounce:  cubic-bezier(.34,1.56,.64,1);
+    }
+
+    /* ═══════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text-1);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--cyan-dim); border-radius: 2px; }
+
+    /* ═══════════════════════════════════
+       GRID BG
+    ═══════════════════════════════════ */
+    .grid-bg {
+      position: fixed; inset: 0; pointer-events: none; z-index: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.14;
+    }
+
+    /* ═══════════════════════════════════
+       NAV
+    ═══════════════════════════════════ */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 68px;
+      background: rgba(6,11,17,0.82);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid var(--border);
+      transition: all .3s var(--ease);
+    }
+    .nav.scrolled {
+      background: rgba(6,11,17,0.97);
+      height: 60px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 1.08rem; font-weight: 700;
+      color: var(--cyan); letter-spacing: .05em;
+    }
+    .logo-icon {
+      width: 32px; height: 32px; border-radius: 6px;
+      background: var(--cyan-pale); border: 1px solid rgba(0,229,255,.3);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cyan); font-size: .9rem;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 36px;
+    }
+    .nav-links a {
+      font-size: .8rem; font-weight: 500;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--text-2); transition: color .2s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .nav-links a:hover { color: var(--cyan); }
+    .nav-links a.active { color: var(--text-1); }
+    .nav-right { display: flex; align-items: center; gap: 12px; }
+    .btn-ghost {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-2); font-family: var(--mono);
+      font-size: .76rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; padding: 9px 18px; border-radius: 3px;
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
+    .btn-nav-cta {
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .76rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 9px 20px; border: none; border-radius: 3px;
+      cursor: pointer; transition: all .25s var(--ease);
+      display: flex; align-items: center; gap: 7px;
+    }
+    .btn-nav-cta:hover { background: var(--cyan-dim); box-shadow: 0 0 22px rgba(0,229,255,.3); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--text-1); border-radius: 2px; display: block; transition: .3s; }
+
+    /* ═══════════════════════════════════
+       LIVE TICKER
+    ═══════════════════════════════════ */
+    .ticker-bar {
+      position: fixed; top: 68px; left: 0; right: 0; z-index: 190;
+      background: var(--bg-3); border-bottom: 1px solid var(--border);
+      overflow: hidden; height: 34px;
+      display: flex; align-items: center;
+    }
+    .ticker-label {
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .62rem; font-weight: 700;
+      letter-spacing: .12em; text-transform: uppercase;
+      padding: 0 16px; height: 100%;
+      display: flex; align-items: center; flex-shrink: 0; gap: 6px;
+      white-space: nowrap;
+    }
+    .ticker-label i { font-size: .65rem; }
+    .ticker-scroll { overflow: hidden; flex: 1; }
+    .ticker-inner {
+      display: flex; width: max-content;
+      animation: ticker-anim 30s linear infinite;
+    }
+    @keyframes ticker-anim { to { transform: translateX(-50%); } }
+    .tick-item {
+      display: flex; align-items: center; gap: 7px;
+      padding: 0 36px;
+      font-family: var(--mono); font-size: .68rem; color: var(--text-2);
+      white-space: nowrap;
+    }
+    .tick-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--cyan); }
+    .tick-dot.green { background: var(--green); }
+    .tick-dot.amber { background: var(--amber); }
+
+    /* ═══════════════════════════════════
+       HERO
+    ═══════════════════════════════════ */
+    #hero {
+      position: relative; min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 140px 5% 80px;
+      overflow: hidden;
+    }
+
+    /* Animated background orbs */
+    .orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(80px); pointer-events: none;
+      animation: orb-float 8s ease-in-out infinite alternate;
+    }
+    .orb-1 { width: 500px; height: 500px; background: rgba(0,229,255,.07); top: -100px; right: -100px; animation-delay: 0s; }
+    .orb-2 { width: 350px; height: 350px; background: rgba(179,136,255,.05); bottom: -50px; left: 5%; animation-delay: 2s; }
+    .orb-3 { width: 250px; height: 250px; background: rgba(0,230,118,.04); top: 40%; right: 30%; animation-delay: 4s; }
+    @keyframes orb-float {
+      from { transform: translateY(0) scale(1); }
+      to   { transform: translateY(-40px) scale(1.08); }
+    }
+
+    .hero-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: center;
+      position: relative; z-index: 2; width: 100%;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--cyan-pale); border: 1px solid rgba(0,229,255,.22);
+      border-radius: 100px; padding: 6px 14px 6px 8px;
+      font-family: var(--mono); font-size: .68rem;
+      color: var(--cyan); letter-spacing: .1em; text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .badge-dot {
+      width: 6px; height: 6px; background: var(--green);
+      border-radius: 50%; animation: pulse-green 2s infinite;
+    }
+    @keyframes pulse-green {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,230,118,.5); }
+      50%      { box-shadow: 0 0 0 5px rgba(0,230,118,0); }
+    }
+    .hero-title {
+      font-size: clamp(2.6rem, 5vw, 4.4rem);
+      font-weight: 800; line-height: 1.06;
+      letter-spacing: -.03em; margin-bottom: 22px;
+    }
+    .hero-title .line-2 { color: var(--cyan); display: block; }
+    .hero-title .line-3 { color: var(--text-2); font-weight: 400; display: block; }
+    .hero-sub {
+      font-size: 1rem; color: var(--text-2); max-width: 480px;
+      margin-bottom: 40px; line-height: 1.75;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 52px; }
+    .btn-primary {
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .8rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 15px 30px; border: none; border-radius: 3px;
+      cursor: pointer; transition: all .25s var(--ease);
+      display: flex; align-items: center; gap: 9px;
+      position: relative; overflow: hidden;
+    }
+    .btn-primary::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.15), transparent);
+      transform: translateX(-100%); transition: transform .5s var(--ease);
+    }
+    .btn-primary:hover::before { transform: translateX(100%); }
+    .btn-primary:hover { box-shadow: 0 0 36px rgba(0,229,255,.35); transform: translateY(-1px); }
+    .btn-secondary {
+      background: transparent; color: var(--text-1);
+      font-family: var(--mono); font-size: .8rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 15px 30px; border: 1px solid var(--border-2);
+      border-radius: 3px; cursor: pointer; transition: all .25s;
+      display: flex; align-items: center; gap: 9px;
+    }
+    .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); transform: translateY(-1px); }
+    .hero-trust {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .trust-text { font-size: .78rem; color: var(--text-3); font-family: var(--mono); }
+    .trust-avatars { display: flex; }
+    .trust-avatar {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--surface-2); border: 2px solid var(--bg);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; font-weight: 700; color: var(--cyan);
+      margin-left: -8px;
+    }
+    .trust-avatar:first-child { margin-left: 0; }
+    .trust-rating { display: flex; align-items: center; gap: 5px; }
+    .trust-stars { color: var(--amber); font-size: .72rem; }
+
+    /* ── Hero Dashboard Mockup ── */
+    .hero-visual { position: relative; }
+    .dash-mockup {
+      background: var(--surface);
+      border: 1px solid var(--border-2);
+      border-radius: 10px; overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(0,229,255,.06);
+      animation: mockup-float 6s ease-in-out infinite;
+    }
+    @keyframes mockup-float {
+      0%,100% { transform: translateY(0) rotateX(2deg); }
+      50%      { transform: translateY(-12px) rotateX(0deg); }
+    }
+    .mockup-bar {
+      background: var(--bg-3); padding: 10px 16px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mock-dot:nth-child(1) { background: #ff5f57; }
+    .mock-dot:nth-child(2) { background: #febc2e; }
+    .mock-dot:nth-child(3) { background: #28c840; }
+    .mockup-title {
+      margin-left: 8px; font-family: var(--mono); font-size: .68rem;
+      color: var(--text-3); letter-spacing: .1em;
+    }
+    .mockup-body { padding: 20px; }
+    .mock-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 16px; }
+    .mock-stat {
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 12px 10px;
+    }
+    .mock-stat-val {
+      font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--cyan);
+    }
+    .mock-stat-lbl { font-size: .62rem; color: var(--text-3); margin-top: 2px; }
+    .mock-map {
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: 6px; height: 130px; position: relative; overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .mock-map-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 24px 24px;
+      opacity: .4;
+    }
+    .mock-route {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    }
+    .mock-pin {
+      position: absolute; width: 10px; height: 10px;
+      border-radius: 50%; animation: map-pulse 2s ease-in-out infinite;
+    }
+    .mock-pin.green { background: var(--green); box-shadow: 0 0 10px var(--green); top: 70%; left: 12%; }
+    .mock-pin.cyan  { background: var(--cyan);  box-shadow: 0 0 10px var(--cyan);  top: 42%; left: 50%; animation-delay: .7s; }
+    .mock-pin.amber { background: var(--amber); box-shadow: 0 0 10px var(--amber); top: 22%; left: 82%; animation-delay: 1.4s; }
+    @keyframes map-pulse {
+      0%,100% { transform: scale(1); opacity: 1; }
+      50%      { transform: scale(1.5); opacity: .6; }
+    }
+    .mock-rows { display: flex; flex-direction: column; gap: 6px; }
+    .mock-row {
+      background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: 4px; padding: 8px 12px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .mock-row-id { font-family: var(--mono); font-size: .62rem; color: var(--cyan); }
+    .mock-row-route { font-size: .68rem; color: var(--text-2); }
+    .mock-row-prog { width: 60px; height: 4px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .mock-prog-fill { height: 100%; border-radius: 2px; background: var(--cyan); }
+    .mock-badge {
+      font-family: var(--mono); font-size: .56rem; font-weight: 700;
+      padding: 2px 6px; border-radius: 2px;
+    }
+    .mock-badge.transit { background: rgba(0,229,255,.12); color: var(--cyan); }
+    .mock-badge.done    { background: rgba(0,230,118,.12); color: var(--green); }
+    /* floating notification */
+    .mock-notif {
+      position: absolute; right: -20px; top: 30%;
+      background: var(--surface-2); border: 1px solid var(--cyan);
+      border-radius: 8px; padding: 10px 14px; min-width: 180px;
+      box-shadow: 0 8px 28px rgba(0,0,0,.4);
+      animation: notif-float 4s ease-in-out infinite;
+    }
+    @keyframes notif-float {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+    .notif-top { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; }
+    .notif-icon { color: var(--green); font-size: .9rem; }
+    .notif-title { font-size: .72rem; font-weight: 700; }
+    .notif-msg { font-size: .65rem; color: var(--text-2); line-height: 1.4; }
+    .notif-time { font-family: var(--mono); font-size: .58rem; color: var(--text-3); margin-top: 4px; }
+
+    /* ═══════════════════════════════════
+       LOGO STRIP
+    ═══════════════════════════════════ */
+    .logo-strip {
+      position: relative; z-index: 1;
+      padding: 48px 5%;
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .logo-strip-label {
+      text-align: center; font-family: var(--mono); font-size: .68rem;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 32px;
+    }
+    .logo-strip-row {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      align-items: center; gap: 40px;
+    }
+    .brand-logo {
+      font-family: var(--mono); font-size: .82rem; font-weight: 700;
+      color: var(--text-3); letter-spacing: .08em;
+      display: flex; align-items: center; gap: 7px;
+      transition: color .2s;
+    }
+    .brand-logo:hover { color: var(--text-2); }
+    .brand-logo i { font-size: 1rem; }
+
+    /* ═══════════════════════════════════
+       SECTION SHARED
+    ═══════════════════════════════════ */
+    section { position: relative; z-index: 1; padding: 100px 5%; }
+    .section-tag {
+      font-family: var(--mono); font-size: .68rem;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-tag::before {
+      content: ''; display: block; width: 16px; height: 1px;
+      background: var(--cyan);
+    }
+    .section-title {
+      font-size: clamp(1.9rem, 3.2vw, 3rem);
+      font-weight: 800; letter-spacing: -.025em; line-height: 1.12;
+      margin-bottom: 14px;
+    }
+    .section-sub {
+      color: var(--text-2); font-size: .95rem;
+      max-width: 520px; line-height: 1.75;
+    }
+    .section-header { margin-bottom: 60px; }
+    .center { text-align: center; }
+    .center .section-tag { justify-content: center; }
+    .center .section-tag::before { display: none; }
+    .center .section-sub { margin: 0 auto; }
+
+    /* ═══════════════════════════════════
+       REVEAL
+    ═══════════════════════════════════ */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .65s var(--ease), transform .65s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-left  { opacity: 0; transform: translateX(-32px); transition: opacity .65s var(--ease), transform .65s var(--ease); }
+    .reveal-right { opacity: 0; transform: translateX(32px);  transition: opacity .65s var(--ease), transform .65s var(--ease); }
+    .reveal-left.visible, .reveal-right.visible { opacity: 1; transform: none; }
+    [class*="delay-1"] { transition-delay: .1s; }
+    [class*="delay-2"] { transition-delay: .2s; }
+    [class*="delay-3"] { transition-delay: .3s; }
+    [class*="delay-4"] { transition-delay: .4s; }
+    [class*="delay-5"] { transition-delay: .5s; }
+    [class*="delay-6"] { transition-delay: .6s; }
+
+    /* ═══════════════════════════════════
+       FEATURES SECTION
+    ═══════════════════════════════════ */
+    #features { background: var(--bg); }
+    .features-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .features-visual { position: relative; }
+    .feat-cards { display: flex; flex-direction: column; gap: 14px; }
+    .feat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 20px 22px;
+      display: flex; gap: 16px; align-items: flex-start;
+      cursor: pointer; transition: all .3s var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .feat-card::before {
+      content: ''; position: absolute;
+      left: 0; top: 0; bottom: 0; width: 3px;
+      background: var(--cyan); transform: scaleY(0);
+      transform-origin: bottom; transition: transform .3s var(--ease);
+    }
+    .feat-card:hover, .feat-card.active {
+      border-color: var(--border-2); transform: translateX(6px);
+      background: var(--surface-2);
+    }
+    .feat-card.active::before { transform: scaleY(1); }
+    .feat-card:hover::before  { transform: scaleY(1); }
+    .feat-card-icon {
+      width: 40px; height: 40px; border-radius: 8px;
+      background: var(--cyan-pale); border: 1px solid rgba(0,229,255,.2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cyan); font-size: 1rem; flex-shrink: 0;
+      transition: background .3s;
+    }
+    .feat-card.active .feat-card-icon,
+    .feat-card:hover  .feat-card-icon {
+      background: var(--cyan); color: var(--bg);
+    }
+    .feat-card-title { font-weight: 700; font-size: .92rem; margin-bottom: 4px; }
+    .feat-card-desc  { font-size: .8rem; color: var(--text-2); line-height: 1.6; }
+
+    .feat-display {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 12px; padding: 28px; min-height: 340px;
+      position: relative; overflow: hidden;
+    }
+    .feat-display-tag {
+      font-family: var(--mono); font-size: .62rem; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--cyan); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .feat-display-tag i { font-size: .65rem; }
+    .feat-display h3 { font-weight: 700; font-size: 1.1rem; margin-bottom: 20px; }
+
+    /* ═══════════════════════════════════
+       HOW IT WORKS
+    ═══════════════════════════════════ */
+    #howitworks { background: var(--bg-2); }
+    .steps-layout {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 0;
+      position: relative;
+    }
+    .steps-layout::before {
+      content: ''; position: absolute;
+      top: 44px; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), var(--cyan), var(--border), transparent);
+      z-index: 0;
+    }
+    .step {
+      text-align: center; padding: 0 20px;
+      position: relative; z-index: 1;
+    }
+    .step-num {
+      width: 88px; height: 88px;
+      border-radius: 50%; margin: 0 auto 24px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; color: var(--cyan);
+      position: relative; transition: all .3s var(--ease);
+    }
+    .step-num::after {
+      content: attr(data-n);
+      position: absolute; top: -4px; right: -4px;
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .62rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step:hover .step-num {
+      background: var(--cyan-pale);
+      border-color: var(--cyan);
+      box-shadow: 0 0 32px var(--cyan-glow);
+    }
+    .step-title { font-weight: 700; font-size: .95rem; margin-bottom: 8px; }
+    .step-desc { font-size: .8rem; color: var(--text-2); line-height: 1.65; }
+
+    /* ═══════════════════════════════════
+       METRICS
+    ═══════════════════════════════════ */
+    #metrics { background: var(--bg); overflow: hidden; }
+    .metrics-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(0,229,255,.04), transparent);
+      pointer-events: none;
+    }
+    .metrics-grid {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+    }
+    .metric-cell {
+      background: var(--surface); padding: 44px 32px;
+      text-align: center; transition: background .3s;
+    }
+    .metric-cell:hover { background: var(--surface-2); }
+    .metric-icon {
+      width: 52px; height: 52px; border-radius: 12px;
+      background: var(--cyan-pale); border: 1px solid rgba(0,229,255,.2);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; color: var(--cyan); font-size: 1.3rem;
+    }
+    .metric-val {
+      font-family: var(--mono); font-size: 2.6rem; font-weight: 700;
+      color: var(--cyan); line-height: 1; margin-bottom: 6px;
+    }
+    .metric-lbl { font-size: .8rem; color: var(--text-2); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+    .metric-sub { font-size: .72rem; color: var(--text-3); font-family: var(--mono); }
+
+    /* ═══════════════════════════════════
+       TESTIMONIALS
+    ═══════════════════════════════════ */
+    #testimonials { background: var(--bg-2); }
+    .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+    .testi-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 28px;
+      transition: border-color .3s, transform .3s var(--ease);
+      position: relative;
+    }
+    .testi-card:hover { border-color: var(--border-2); transform: translateY(-6px); }
+    .testi-card.featured { border-color: var(--cyan); }
+    .testi-quote { font-size: 2rem; color: var(--cyan); opacity: .3; line-height: 1; margin-bottom: 14px; font-family: Georgia, serif; }
+    .testi-text { font-size: .88rem; color: var(--text-2); line-height: 1.75; margin-bottom: 22px; }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--surface-2); border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .82rem; color: var(--cyan);
+      flex-shrink: 0;
+    }
+    .testi-name { font-weight: 700; font-size: .88rem; }
+    .testi-role { font-size: .74rem; color: var(--text-2); }
+    .testi-company {
+      position: absolute; top: 22px; right: 22px;
+      font-family: var(--mono); font-size: .62rem; color: var(--text-3);
+      letter-spacing: .1em;
+    }
+    .stars { color: var(--amber); font-size: .75rem; margin-bottom: 14px; }
+
+    /* ═══════════════════════════════════
+       LIVE FEED
+    ═══════════════════════════════════ */
+    #livefeed { background: var(--bg); }
+    .feed-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: 48px; align-items: start; }
+    .feed-list { display: flex; flex-direction: column; gap: 10px; }
+    .feed-item {
+      background: var(--surface); border: 1px solid var(--border);
+      border-left: 3px solid transparent;
+      border-radius: 0 6px 6px 0; padding: 14px 18px;
+      display: flex; gap: 14px; align-items: flex-start;
+      animation: feed-in .4s var(--ease) forwards;
+      opacity: 0;
+    }
+    @keyframes feed-in {
+      from { opacity: 0; transform: translateX(-12px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .feed-item.type-delivered { border-left-color: var(--green); }
+    .feed-item.type-transit   { border-left-color: var(--cyan); }
+    .feed-item.type-alert     { border-left-color: var(--amber); }
+    .feed-icon { font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+    .feed-icon.green { color: var(--green); }
+    .feed-icon.cyan  { color: var(--cyan); }
+    .feed-icon.amber { color: var(--amber); }
+    .feed-body-title { font-weight: 600; font-size: .84rem; margin-bottom: 2px; }
+    .feed-body-sub   { font-size: .74rem; color: var(--text-2); }
+    .feed-time { font-family: var(--mono); font-size: .62rem; color: var(--text-3); margin-left: auto; flex-shrink: 0; }
+
+    .feed-map {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; overflow: hidden; position: relative;
+    }
+    .feed-map-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .feed-map-title { font-weight: 700; font-size: .88rem; display: flex; align-items: center; gap: 8px; }
+    .live-badge {
+      display: flex; align-items: center; gap: 5px;
+      font-family: var(--mono); font-size: .62rem; color: var(--green);
+      background: rgba(0,230,118,.1); border: 1px solid rgba(0,230,118,.2);
+      padding: 3px 8px; border-radius: 100px;
+    }
+    .live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pulse-green 1.5s infinite; }
+    .feed-map-body {
+      height: 320px; position: relative; overflow: hidden;
+      background:
+        radial-gradient(circle at 40% 55%, rgba(0,229,255,.05) 0%, transparent 60%),
+        repeating-linear-gradient(0deg, transparent, transparent 31px, var(--border) 32px),
+        repeating-linear-gradient(90deg, transparent, transparent 31px, var(--border) 32px);
+    }
+    .map-vehicle {
+      position: absolute; display: flex; align-items: center; gap: 5px;
+      font-family: var(--mono); font-size: .6rem; color: var(--cyan);
+    }
+    .map-vehicle-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--cyan); box-shadow: 0 0 10px var(--cyan);
+      animation: map-pulse 2s ease-in-out infinite;
+    }
+    .map-vehicle.green .map-vehicle-dot { background: var(--green); box-shadow: 0 0 10px var(--green); }
+    .map-vehicle.amber .map-vehicle-dot { background: var(--amber); box-shadow: 0 0 10px var(--amber); }
+    .map-vehicle-dot:hover { transform: scale(1.5); }
+    #mapSvg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+    /* ═══════════════════════════════════
+       INTEGRATIONS SECTION
+    ═══════════════════════════════════ */
+    #integrations { background: var(--bg-2); }
+    .int-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+    .int-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 22px 18px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 10px; text-align: center;
+      transition: all .3s var(--ease); cursor: default;
+    }
+    .int-card:hover { border-color: var(--cyan); transform: translateY(-5px); background: var(--surface-2); }
+    .int-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--cyan-pale); border: 1px solid rgba(0,229,255,.2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--cyan); font-size: 1.2rem;
+      transition: all .3s;
+    }
+    .int-card:hover .int-icon { background: var(--cyan); color: var(--bg); }
+    .int-name { font-weight: 700; font-size: .85rem; }
+    .int-type { font-size: .72rem; color: var(--text-2); }
+    .int-status {
+      font-family: var(--mono); font-size: .6rem; letter-spacing: .08em;
+      padding: 3px 8px; border-radius: 100px;
+      background: rgba(0,230,118,.1); color: var(--green);
+      border: 1px solid rgba(0,230,118,.2);
+    }
+
+    /* ═══════════════════════════════════
+       CTA SECTION
+    ═══════════════════════════════════ */
+    #cta { background: var(--bg); padding: 100px 5%; }
+    .cta-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px; padding: 72px 60px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .cta-box::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,229,255,.08), transparent);
+      pointer-events: none;
+    }
+    .cta-box::after {
+      content: ''; position: absolute;
+      top: -1px; left: 20%; right: 20%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    }
+    .cta-title {
+      font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800;
+      letter-spacing: -.03em; line-height: 1.1; margin-bottom: 16px;
+      position: relative; z-index: 1;
+    }
+    .cta-title span { color: var(--cyan); }
+    .cta-sub {
+      color: var(--text-2); max-width: 480px; margin: 0 auto 40px;
+      font-size: .95rem; line-height: 1.75;
+      position: relative; z-index: 1;
+    }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+    .cta-note {
+      margin-top: 20px; font-size: .76rem; color: var(--text-3);
+      font-family: var(--mono); position: relative; z-index: 1;
+    }
+
+    /* ═══════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════ */
+    footer {
+      position: relative; z-index: 1;
+      background: var(--bg-2); border-top: 1px solid var(--border);
+      padding: 60px 5% 28px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .footer-brand-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 1.05rem; font-weight: 700;
+      color: var(--cyan); margin-bottom: 14px;
+    }
+    .footer-brand-logo .logo-icon { width: 28px; height: 28px; font-size: .8rem; }
+    .footer-desc { font-size: .82rem; color: var(--text-2); line-height: 1.7; margin-bottom: 20px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .social-btn {
+      width: 34px; height: 34px; border-radius: 6px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-2); font-size: .82rem;
+      transition: all .2s; cursor: pointer;
+    }
+    .social-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+    .footer-col h4 {
+      font-family: var(--mono); font-size: .66rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--text-3); margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .footer-col a { font-size: .83rem; color: var(--text-2); transition: color .2s; display: flex; align-items: center; gap: 6px; }
+    .footer-col a:hover { color: var(--cyan); }
+    .footer-col a i { font-size: .7rem; opacity: .5; }
+    .footer-bottom {
+      border-top: 1px solid var(--border); padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-family: var(--mono); font-size: .72rem; color: var(--text-3); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-family: var(--mono); font-size: .7rem; color: var(--text-3); transition: color .2s; }
+    .footer-legal a:hover { color: var(--cyan); }
+    .status-pill {
+      display: flex; align-items: center; gap: 6px;
+      font-family: var(--mono); font-size: .68rem; color: var(--green);
+    }
+    .status-pill i { font-size: .6rem; }
+
+    /* ═══════════════════════════════════
+       TOAST
+    ═══════════════════════════════════ */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+    .toast {
+      background: var(--surface-2); border: 1px solid var(--cyan);
+      border-left: 3px solid var(--cyan); padding: 14px 18px; border-radius: 4px;
+      font-size: .84rem; max-width: 300px; cursor: pointer;
+      box-shadow: 0 10px 36px rgba(0,0,0,.4);
+      animation: toast-in .3s var(--ease);
+    }
+    .toast.out { animation: toast-out .3s var(--ease) forwards; }
+    @keyframes toast-in  { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:none; } }
+    @keyframes toast-out { to { opacity:0; transform:translateX(20px); } }
+    .toast-title { font-weight: 700; margin-bottom: 3px; }
+    .toast-msg   { font-size: .76rem; color: var(--text-2); }
+
+    /* ═══════════════════════════════════
+       MOBILE NAV
+    ═══════════════════════════════════ */
+    #mobileMenu {
+      display: none; position: fixed;
+      top: 68px; inset-x: 0;
+      background: rgba(6,11,17,.97); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border); z-index: 195;
+      padding: 28px 5%;
+    }
+    #mobileMenu.open { display: block; }
+    #mobileMenu a {
+      display: flex; align-items: center; gap: 10px;
+      padding: 13px 0; border-bottom: 1px solid var(--border);
+      font-weight: 600; color: var(--text-1);
+      font-size: .95rem;
+    }
+    #mobileMenu a i { color: var(--cyan); width: 16px; text-align: center; }
+    #mobileMenu a:last-child { border-bottom: none; }
+
+    /* ═══════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════ */
+    @media (max-width: 1100px) {
+      .hero-layout   { grid-template-columns: 1fr; gap: 48px; }
+      .hero-visual   { display: none; }
+      .features-layout { grid-template-columns: 1fr; }
+      .metrics-grid  { grid-template-columns: repeat(2,1fr); }
+      .testi-grid    { grid-template-columns: 1fr 1fr; }
+      .footer-grid   { grid-template-columns: 1fr 1fr; }
+      .int-grid      { grid-template-columns: repeat(3,1fr); }
+      .steps-layout  { grid-template-columns: repeat(2,1fr); gap: 32px; }
+      .steps-layout::before { display: none; }
+    }
+    @media (max-width: 768px) {
+      .nav-links, .nav-right .btn-ghost { display: none; }
+      .hamburger { display: flex; }
+      .testi-grid    { grid-template-columns: 1fr; }
+      .metrics-grid  { grid-template-columns: 1fr 1fr; }
+      .int-grid      { grid-template-columns: repeat(2,1fr); }
+      .feed-layout   { grid-template-columns: 1fr; }
+      .footer-grid   { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .cta-box       { padding: 44px 24px; }
+      section        { padding: 72px 5%; }
+    }
+    @media (max-width: 480px) {
+      .metrics-grid  { grid-template-columns: 1fr; }
+      .footer-grid   { grid-template-columns: 1fr; }
+      .steps-layout  { grid-template-columns: 1fr; }
+      .int-grid      { grid-template-columns: 1fr 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="nav" id="mainNav">
+  <div class="nav-logo">
+    <div class="logo-icon"><i class="fa-solid fa-route"></i></div>
+    TRACKFLOW
+  </div>
+  <div class="nav-links">
+    <a href="#features"><i class="fa-solid fa-bolt"></i> Features</a>
+    <a href="#howitworks"><i class="fa-solid fa-circle-nodes"></i> How It Works</a>
+    <a href="#livefeed"><i class="fa-solid fa-tower-broadcast"></i> Live Feed</a>
+    <a href="#integrations"><i class="fa-solid fa-plug"></i> Integrations</a>
+    <a href="index.html"><i class="fa-solid fa-gauge-high"></i> Dashboard</a>
+  </div>
+  <div class="nav-right">
+    <button class="btn-ghost" onclick="toast('Sign In','Redirecting to login portal...')"><i class="fa-regular fa-user"></i> Sign In</button>
+    <button class="btn-nav-cta" onclick="toast('Free Trial','Welcome! Setting up your 14-day trial...')"><i class="fa-solid fa-rocket"></i> Start Free Trial</button>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMobile()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div id="mobileMenu">
+  <a href="#features" onclick="toggleMobile()"><i class="fa-solid fa-bolt"></i> Features</a>
+  <a href="#howitworks" onclick="toggleMobile()"><i class="fa-solid fa-circle-nodes"></i> How It Works</a>
+  <a href="#livefeed" onclick="toggleMobile()"><i class="fa-solid fa-tower-broadcast"></i> Live Feed</a>
+  <a href="#integrations" onclick="toggleMobile()"><i class="fa-solid fa-plug"></i> Integrations</a>
+  <a href="index.html" onclick="toggleMobile()"><i class="fa-solid fa-gauge-high"></i> Full Dashboard</a>
+  <a href="#cta" onclick="toggleMobile()"><i class="fa-solid fa-rocket"></i> Start Free Trial</a>
+</div>
+
+<!-- ═══════════ TICKER ═══════════ -->
+<div class="ticker-bar" style="top:68px;">
+  <div class="ticker-label"><i class="fa-solid fa-signal"></i> LIVE</div>
+  <div class="ticker-scroll">
+    <div class="ticker-inner" id="ticker"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section id="hero" style="padding-top:160px;">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="hero-layout">
+    <!-- LEFT COPY -->
+    <div>
+      <div class="hero-badge reveal">
+        <div class="badge-dot"></div>
+        Now live in 180+ countries · v4.2 released
+      </div>
+      <h1 class="hero-title reveal delay-1">
+        Shipments Move.<br>
+        <span class="line-2">You Stay Ahead.</span>
+        <span class="line-3">Always.</span>
+      </h1>
+      <p class="hero-sub reveal delay-2">
+        TrackFlow is the real-time logistics intelligence platform trusted by 3,000+ operations teams. Track every package, optimise every route, and get ahead of every disruption — in one unified control centre.
+      </p>
+      <div class="hero-actions reveal delay-3">
+        <button class="btn-primary" onclick="window.location='index.html'">
+          <i class="fa-solid fa-gauge-high"></i> View Dashboard
+        </button>
+        <button class="btn-secondary" onclick="toast('Demo booked','Our team will reach you within 2 hours.')">
+          <i class="fa-regular fa-calendar"></i> Book a Demo
+        </button>
+      </div>
+      <div class="hero-trust reveal delay-4">
+        <div class="trust-avatars">
+          <div class="trust-avatar">RK</div>
+          <div class="trust-avatar">PM</div>
+          <div class="trust-avatar">AS</div>
+          <div class="trust-avatar">DJ</div>
+          <div class="trust-avatar">+</div>
+        </div>
+        <div>
+          <div class="trust-rating">
+            <span class="trust-stars">★★★★★</span>
+            <span style="font-size:.78rem;font-weight:700;">4.9</span>
+          </div>
+          <div class="trust-text">Trusted by 3,000+ logistics teams</div>
+        </div>
+      </div>
+    </div>
+    <!-- RIGHT MOCKUP -->
+    <div class="hero-visual reveal-right delay-2">
+      <div class="dash-mockup">
+        <div class="mockup-bar">
+          <div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div>
+          <span class="mockup-title">TRACKFLOW DASHBOARD · LIVE</span>
+        </div>
+        <div class="mockup-body">
+          <div class="mock-stats">
+            <div class="mock-stat">
+              <div class="mock-stat-val" id="m1">14,827</div>
+              <div class="mock-stat-lbl">Shipments</div>
+            </div>
+            <div class="mock-stat">
+              <div class="mock-stat-val" id="m2">342</div>
+              <div class="mock-stat-lbl">Vehicles</div>
+            </div>
+            <div class="mock-stat">
+              <div class="mock-stat-val" id="m3">97%</div>
+              <div class="mock-stat-lbl">On-Time</div>
+            </div>
+            <div class="mock-stat">
+              <div class="mock-stat-val" id="m4">23</div>
+              <div class="mock-stat-lbl">Alerts</div>
+            </div>
+          </div>
+          <div class="mock-map">
+            <div class="mock-map-grid"></div>
+            <svg id="mockRouteSvg" style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 400 130" fill="none">
+              <path d="M 50 90 Q 130 110 200 54 Q 270 10 350 28" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="5 4" opacity=".55"/>
+              <path d="M 50 90 Q 100 50 150 70 Q 200 90 350 40" stroke="#00e676" stroke-width="1" stroke-dasharray="3 5" opacity=".35"/>
+            </svg>
+            <div class="mock-pin green" style="top:67%;left:11%;"></div>
+            <div class="mock-pin cyan"  style="top:40%;left:49%;"></div>
+            <div class="mock-pin amber" style="top:22%;left:84%;"></div>
+          </div>
+          <div class="mock-rows">
+            <div class="mock-row">
+              <span class="mock-row-id">TF-884729K</span>
+              <span class="mock-row-route">Mumbai → Chennai</span>
+              <div class="mock-row-prog"><div class="mock-prog-fill" style="width:62%"></div></div>
+              <span class="mock-badge transit">Transit</span>
+            </div>
+            <div class="mock-row">
+              <span class="mock-row-id">TF-334501X</span>
+              <span class="mock-row-route">Delhi → Pune</span>
+              <div class="mock-row-prog"><div class="mock-prog-fill" style="width:100%;background:var(--green)"></div></div>
+              <span class="mock-badge done">Delivered</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Floating notification -->
+      <div class="mock-notif">
+        <div class="notif-top">
+          <i class="fa-solid fa-circle-check notif-icon"></i>
+          <span class="notif-title">Delivered on time</span>
+        </div>
+        <div class="notif-msg">TF-334501X arrived at Delhi Hub. Signature confirmed.</div>
+        <div class="notif-time">Just now · Auto-notified customer</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ LOGO STRIP ═══════════ -->
+<div class="logo-strip">
+  <div class="logo-strip-label">Trusted by teams at leading logistics companies</div>
+  <div class="logo-strip-row">
+    <div class="brand-logo"><i class="fa-solid fa-ship"></i> MAERSK INDIA</div>
+    <div class="brand-logo"><i class="fa-solid fa-plane"></i> BLUEDART</div>
+    <div class="brand-logo"><i class="fa-solid fa-box"></i> DELHIVERY</div>
+    <div class="brand-logo"><i class="fa-solid fa-truck"></i> DTDC EXPRESS</div>
+    <div class="brand-logo"><i class="fa-solid fa-warehouse"></i> EKART</div>
+    <div class="brand-logo"><i class="fa-solid fa-boxes-stacked"></i> SHADOWFAX</div>
+    <div class="brand-logo"><i class="fa-solid fa-truck-fast"></i> XPRESSBEES</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FEATURES
+═══════════════════════════════════════════ -->
+<section id="features">
+  <div class="features-layout">
+    <!-- Left: visual display -->
+    <div class="features-visual reveal-left">
+      <div class="feat-display" id="featDisplay">
+        <!-- filled by JS -->
+      </div>
+    </div>
+    <!-- Right: cards -->
+    <div>
+      <div class="section-tag reveal">Platform Features</div>
+      <h2 class="section-title reveal delay-1">Everything your ops team needs in one place</h2>
+      <p class="section-sub reveal delay-2" style="margin-bottom:36px;">Built for logistics professionals who need precision, not noise. Every feature is designed to cut response time and increase delivery confidence.</p>
+      <div class="feat-cards" id="featCards">
+        <!-- filled by JS -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     HOW IT WORKS
+═══════════════════════════════════════════ -->
+<section id="howitworks">
+  <div class="section-header center">
+    <div class="section-tag reveal">How It Works</div>
+    <h2 class="section-title reveal delay-1">Up and running<br>in under a day</h2>
+    <p class="section-sub reveal delay-2">No complex setup. Connect your carriers, import your shipments, and get live visibility across your entire operation.</p>
+  </div>
+  <div class="steps-layout" id="stepsLayout">
+    <!-- filled by JS -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     METRICS
+═══════════════════════════════════════════ -->
+<section id="metrics">
+  <div class="metrics-bg"></div>
+  <div class="section-header center">
+    <div class="section-tag reveal">By The Numbers</div>
+    <h2 class="section-title reveal delay-1">The infrastructure behind<br>every delivery</h2>
+  </div>
+  <div class="metrics-grid" id="metricsGrid">
+    <!-- filled by JS -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     TESTIMONIALS
+═══════════════════════════════════════════ -->
+<section id="testimonials">
+  <div class="section-header center">
+    <div class="section-tag reveal">Customer Stories</div>
+    <h2 class="section-title reveal delay-1">Ops teams love TrackFlow</h2>
+    <p class="section-sub reveal delay-2">From single-warehouse startups to pan-India enterprises — here's what they say.</p>
+  </div>
+  <div class="testi-grid" id="testiGrid">
+    <!-- filled by JS -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     LIVE FEED
+═══════════════════════════════════════════ -->
+<section id="livefeed">
+  <div class="section-header">
+    <div class="section-tag reveal">Live Activity</div>
+    <h2 class="section-title reveal delay-1">The network,<br>right now.</h2>
+    <p class="section-sub reveal delay-2">Real events from the TrackFlow network, updated every few seconds. Every dot is a real delivery in motion.</p>
+  </div>
+  <div class="feed-layout">
+    <div class="feed-list reveal" id="feedList"></div>
+    <div class="reveal-right delay-2">
+      <div class="feed-map">
+        <div class="feed-map-header">
+          <div class="feed-map-title"><i class="fa-solid fa-earth-asia" style="color:var(--cyan)"></i> India Delivery Network</div>
+          <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+        </div>
+        <div class="feed-map-body">
+          <svg id="mapSvg" viewBox="0 0 700 320" fill="none">
+            <!-- Route lines -->
+            <path d="M 80 240 Q 200 260 350 160 Q 450 90 580 100" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="6 4" opacity=".4"/>
+            <path d="M 80 240 Q 150 180 250 200 Q 340 220 420 160 Q 500 110 580 100" stroke="#00e676" stroke-width="1" stroke-dasharray="4 5" opacity=".3"/>
+            <path d="M 200 80 Q 280 120 350 160 Q 430 200 500 180" stroke="#b388ff" stroke-width="1" stroke-dasharray="3 6" opacity=".25"/>
+          </svg>
+          <div class="map-vehicle" id="v1" style="top:72%;left:10%;">
+            <div class="map-vehicle-dot green"></div> V001
+          </div>
+          <div class="map-vehicle" id="v2" style="top:48%;left:48%;">
+            <div class="map-vehicle-dot"></div> V003
+          </div>
+          <div class="map-vehicle" id="v3" style="top:30%;left:80%;">
+            <div class="map-vehicle-dot amber"></div> V005
+          </div>
+          <div class="map-vehicle" id="v4" style="top:25%;left:28%;">
+            <div class="map-vehicle-dot"></div> V007
+          </div>
+          <div class="map-vehicle" id="v5" style="top:60%;left:63%;">
+            <div class="map-vehicle-dot green"></div> V009
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     INTEGRATIONS
+═══════════════════════════════════════════ -->
+<section id="integrations">
+  <div class="section-header center">
+    <div class="section-tag reveal">Integrations</div>
+    <h2 class="section-title reveal delay-1">200+ integrations.<br>Zero friction.</h2>
+    <p class="section-sub reveal delay-2">Connect your carriers, ERPs, eCommerce platforms, and notification channels — all from a single dashboard.</p>
+  </div>
+  <div class="int-grid" id="intGrid">
+    <!-- filled by JS -->
+  </div>
+  <div style="text-align:center;margin-top:36px;" class="reveal">
+    <button class="btn-secondary" onclick="toast('Integrations','View all 200+ integrations in the full dashboard.')">
+      <i class="fa-solid fa-grid-2"></i> View All Integrations
+    </button>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     CTA
+═══════════════════════════════════════════ -->
+
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-logo">
+        <div class="logo-icon"><i class="fa-solid fa-route"></i></div>
+        TRACKFLOW
+      </div>
+      <p class="footer-desc">Real-time logistics intelligence for operations teams that refuse to be in the dark. Track, predict, optimise — all in one platform.</p>
+      <div class="footer-socials">
+        <div class="social-btn"><i class="fa-brands fa-x-twitter"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-linkedin-in"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-github"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-youtube"></i></div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="index.html#tracking"><i class="fa-solid fa-chevron-right"></i>Live Tracking</a></li>
+        <li><a href="index.html#fleet"><i class="fa-solid fa-chevron-right"></i>Fleet Manager</a></li>
+        <li><a href="index.html#routes"><i class="fa-solid fa-chevron-right"></i>Route Optimizer</a></li>
+        <li><a href="index.html#analytics"><i class="fa-solid fa-chevron-right"></i>Analytics</a></li>
+        <li><a href="index.html#alerts"><i class="fa-solid fa-chevron-right"></i>Alerts</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Developers</h4>
+      <ul>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>API Reference</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Webhooks</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>SDKs</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Changelog</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Status Page</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>About Us</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Careers</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Blog</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Press</a></li>
+        <li><a href="index.html#contact"><i class="fa-solid fa-chevron-right"></i>Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Privacy Policy</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Terms of Service</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Security</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>GDPR</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Cookie Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 TrackFlow Technologies Pvt. Ltd. · Bengaluru, India</div>
+    <div class="status-pill"><i class="fa-solid fa-circle-check"></i> All systems operational</div>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Security</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+/* ── DATA ─────────────────────────────────────────── */
+const features = [
+  {
+    icon: 'fa-location-crosshairs',
+    title: 'Real-Time GPS Tracking',
+    desc: 'Millisecond-accurate location updates for every shipment and vehicle, powered by multi-carrier GPS and cell triangulation.',
+    display: {
+      tag: 'fa-satellite-dish · GPS Module',
+      title: 'Live Location Engine',
+      content: `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+          <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:6px;padding:14px;">
+            <div style="font-family:var(--mono);color:var(--cyan);font-size:1.3rem;font-weight:700;margin-bottom:4px;">8s</div>
+            <div style="font-size:.72rem;color:var(--text-2);">Avg. Refresh Rate</div>
+          </div>
+          <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:6px;padding:14px;">
+            <div style="font-family:var(--mono);color:var(--green);font-size:1.3rem;font-weight:700;margin-bottom:4px;">180+</div>
+            <div style="font-size:.72rem;color:var(--text-2);">Countries</div>
+          </div>
+        </div>
+        <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:6px;height:120px;position:relative;overflow:hidden;margin-bottom:14px;">
+          <div style="position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:24px 24px;opacity:.4;"></div>
+          <div style="position:absolute;top:55%;left:18%;width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:map-pulse 2s ease-in-out infinite;"></div>
+          <div style="position:absolute;top:38%;left:50%;width:10px;height:10px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:map-pulse 2s ease-in-out infinite;animation-delay:.6s;"></div>
+          <div style="position:absolute;top:25%;left:78%;width:10px;height:10px;border-radius:50%;background:var(--amber);box-shadow:0 0 10px var(--amber);animation:map-pulse 2s ease-in-out infinite;animation-delay:1.2s;"></div>
+          <svg style="position:absolute;inset:0;width:100%;height:100%;" viewBox="0 0 400 120" fill="none"><path d="M 70 66 Q 160 80 200 46 Q 260 14 310 30" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="5 4" opacity=".5"/></svg>
+        </div>
+        <div style="font-size:.78rem;color:var(--text-2);line-height:1.65;">Multi-carrier GPS + cell triangulation provides unbroken coverage even in remote areas with no cell signal.</div>
+      `
+    }
+  },
+  {
+    icon: 'fa-brain',
+    title: 'AI Route Optimiser',
+    desc: 'Recalculates the optimal route every 90 seconds using live traffic, weather, load weight, and delivery windows.',
+    display: {
+      tag: 'fa-microchip-ai · AI Engine',
+      title: 'Smart Route Calculation',
+      content: `
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+          ${[['Mumbai → Pune','96','2h 10m'],['Delhi → Agra','88','3h 45m'],['BLR Hub Loop','94','1h 50m']].map(([r,s,t])=>`
+          <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:6px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:.8rem;font-weight:600;">${r}</div>
+            <div style="display:flex;align-items:center;gap:12px;">
+              <span style="font-family:var(--mono);font-size:.72rem;color:var(--text-2);">${t}</span>
+              <span style="font-family:var(--mono);font-size:1rem;font-weight:700;color:var(--cyan);">${s}</span>
+            </div>
+          </div>`).join('')}
+        </div>
+        <div style="font-size:.78rem;color:var(--text-2);line-height:1.65;">Routes update every 90 seconds. Average fuel saving: <span style="color:var(--green);font-family:var(--mono);">18%</span> vs manual planning.</div>
+      `
+    }
+  },
+  {
+    icon: 'fa-bell-on',
+    title: 'Proactive Alerts',
+    desc: 'Catch delays, fuel issues, and weather disruptions before they become problems. Alerts reach you via SMS, email, or webhook.',
+    display: {
+      tag: 'fa-rss · Alert System',
+      title: 'Proactive Exception Engine',
+      content: `
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">
+          <div style="background:rgba(255,82,82,.06);border:1px solid rgba(255,82,82,.2);border-left:3px solid var(--red);border-radius:0 6px 6px 0;padding:12px 14px;">
+            <div style="display:flex;align-items:center;gap:7px;font-size:.78rem;font-weight:700;margin-bottom:3px;"><i class="fa-solid fa-triangle-exclamation" style="color:var(--red)"></i> TF-V003 — Low Fuel</div>
+            <div style="font-size:.72rem;color:var(--text-2);">Below 30% near Pune Bypass. Nearest station 22 km.</div>
+          </div>
+          <div style="background:rgba(255,171,0,.06);border:1px solid rgba(255,171,0,.2);border-left:3px solid var(--amber);border-radius:0 6px 6px 0;padding:12px 14px;">
+            <div style="display:flex;align-items:center;gap:7px;font-size:.78rem;font-weight:700;margin-bottom:3px;"><i class="fa-solid fa-cloud-bolt" style="color:var(--amber)"></i> Weather — Kochi Port</div>
+            <div style="font-size:.72rem;color:var(--text-2);">Cyclone advisory, operations paused until Jun 13.</div>
+          </div>
+          <div style="background:rgba(0,229,255,.05);border:1px solid rgba(0,229,255,.18);border-left:3px solid var(--cyan);border-radius:0 6px 6px 0;padding:12px 14px;">
+            <div style="display:flex;align-items:center;gap:7px;font-size:.78rem;font-weight:700;margin-bottom:3px;"><i class="fa-solid fa-circle-check" style="color:var(--green)"></i> SLA Met — 97 deliveries</div>
+            <div style="font-size:.72rem;color:var(--text-2);">Outstanding on-time performance this week.</div>
+          </div>
+        </div>
+      `
+    }
+  },
+  {
+    icon: 'fa-chart-line-up',
+    title: 'Operations Analytics',
+    desc: 'Understand your network at depth — delivery performance, carrier SLA, regional trends, cost per shipment, and more.',
+    display: {
+      tag: 'fa-chart-mixed · Analytics',
+      title: '30-Day Performance Trend',
+      content: `
+        <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:6px;padding:16px;margin-bottom:14px;">
+          <svg viewBox="0 0 400 100" width="100%" style="display:block;" fill="none">
+            <defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#00e5ff" stop-opacity=".25"/><stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/></linearGradient></defs>
+            <path d="M 0,70 L 26,64 L 52,68 L 78,55 L 104,44 L 130,50 L 156,36 L 182,40 L 208,28 L 234,32 L 260,18 L 286,24 L 312,12 L 338,18 L 364,8 L 390,12 L 390,100 L 0,100 Z" fill="url(#ag)"/>
+            <path d="M 0,70 L 26,64 L 52,68 L 78,55 L 104,44 L 130,50 L 156,36 L 182,40 L 208,28 L 234,32 L 260,18 L 286,24 L 312,12 L 338,18 L 364,8 L 390,12" stroke="#00e5ff" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+          ${[['94.2%','On-time Rate','cyan'],['1.8d','Avg Transit','green'],['0.4%','Loss Rate','amber']].map(([v,l,c])=>`
+          <div style="background:var(--bg-2);border:1px solid var(--border);border-radius:6px;padding:10px;text-align:center;">
+            <div style="font-family:var(--mono);font-size:.95rem;font-weight:700;color:var(--${c});">${v}</div>
+            <div style="font-size:.65rem;color:var(--text-2);margin-top:2px;">${l}</div>
+          </div>`).join('')}
+        </div>
+      `
+    }
+  }
+];
+
+const steps = [
+  { icon:'fa-plug-circle-plus', n:'01', title:'Connect Carriers', desc:'Plug in your carriers, warehouses, and eCommerce platforms via our pre-built connectors or REST API. Takes under 15 minutes.' },
+  { icon:'fa-upload',           n:'02', title:'Import Shipments', desc:'Bulk-import from CSV or sync live with your WMS/OMS. TrackFlow auto-enriches every shipment with carrier data.' },
+  { icon:'fa-eye',              n:'03', title:'Go Live',          desc:'Your dashboard activates instantly with real-time positions, ETAs, and alerts across your entire shipment network.' },
+  { icon:'fa-chart-simple',     n:'04', title:'Optimise & Scale', desc:'Let AI surface bottlenecks, reroute around disruptions, and continuously improve your logistics performance score.' },
+];
+
+const metricsData = [
+  { icon:'fa-box-open',         val:'2.4M',  lbl:'Shipments/Day',    sub:'Peak: 4.1M on Diwali sale' },
+  { icon:'fa-clock-rotate-left',val:'8s',    lbl:'Avg Data Refresh', sub:'vs. 15 min industry avg.' },
+  { icon:'fa-shield-check',     val:'99.97%',lbl:'Uptime SLA',       sub:'< 2h downtime in 3 years' },
+  { icon:'fa-truck-fast',       val:'180+',  lbl:'Countries',        sub:'All major trade corridors' },
+];
+
+const testimonials = [
+  {
+    text: 'TrackFlow cut our customer escalation calls by 62% in the first month. Our ops team now spends time fixing problems rather than answering "where is my order" calls.',
+    name: 'Rajesh Kumar', role: 'VP Operations', company: 'DELHIVERY', initials: 'RK', featured: true
+  },
+  {
+    text: 'The route optimizer alone paid for the annual subscription in two weeks. We\'re saving 18% on fuel across 200 vehicles. Absolutely staggering ROI.',
+    name: 'Priya Sharma', role: 'Head of Fleet', company: 'EKART', initials: 'PS', featured: false
+  },
+  {
+    text: 'Finally a logistics tool that doesn\'t feel like it was built in 2010. The UI is clean, the data is accurate, and the alerts actually fire before problems escalate.',
+    name: 'Arjun Nair', role: 'Logistics Director', company: 'SHADOWFAX', initials: 'AN', featured: false
+  },
+];
+
+const feedEvents = [
+  { type:'delivered', icon:'fa-circle-check', iconClass:'green', title:'TF-334501X Delivered', sub:'Delhi Hub · Signature confirmed', time:'Just now' },
+  { type:'transit',   icon:'fa-truck-moving', iconClass:'cyan',  title:'TF-884729K in Transit', sub:'NH-44 Hyderabad · On schedule', time:'2 min ago' },
+  { type:'alert',     icon:'fa-gas-pump',     iconClass:'amber', title:'V003 — Low Fuel Warning', sub:'Pune Bypass · Action needed', time:'5 min ago' },
+  { type:'delivered', icon:'fa-circle-check', iconClass:'green', title:'TF-771024M Delivered', sub:'Bengaluru · Customer notified', time:'8 min ago' },
+  { type:'transit',   icon:'fa-plane-arrival',iconClass:'cyan',  title:'TF-991023Z — Air Cargo', sub:'Chennai Airport cleared customs', time:'11 min ago' },
+];
+
+const intData = [
+  { icon:'fa-ship',           name:'Maersk',    type:'Ocean Freight' },
+  { icon:'fa-plane-departure',name:'FedEx',     type:'Air Express' },
+  { icon:'fa-box',            name:'DHL',       type:'International' },
+  { icon:'fa-brands fa-shopify',name:'Shopify', type:'eCommerce' },
+  { icon:'fa-brands fa-amazon', name:'Amazon',  type:'Marketplace' },
+  { icon:'fa-database',       name:'SAP TM',    type:'ERP' },
+  { icon:'fa-brands fa-whatsapp',name:'WhatsApp',type:'Notifications' },
+  { icon:'fa-chart-bar',      name:'Zoho CRM',  type:'CRM Sync' },
+  { icon:'fa-cloud',          name:'Salesforce',type:'CRM' },
+  { icon:'fa-brands fa-slack',name:'Slack',     type:'Alerts' },
+  { icon:'fa-receipt',        name:'Razorpay',  type:'Payments' },
+  { icon:'fa-truck',          name:'BlueDart',  type:'Domestic' },
+];
+
+const tickerEvents = [
+  { dot:'', text:'TF-884729K · IN TRANSIT · ETA 14:30 · Mumbai → Chennai' },
+  { dot:'green', text:'TF-334501X · DELIVERED · Delhi Hub · 09:12 IST' },
+  { dot:'', text:'TF-991023Z · ON SCHEDULE · No delay detected' },
+  { dot:'', text:'Fleet Avg Efficiency · 94.2% · This Week' },
+  { dot:'amber', text:'V003 ⚡ LOW FUEL · Pune Bypass · Action Required' },
+  { dot:'green', text:'SLA Streak · 97 On-Time Deliveries · Today' },
+  { dot:'', text:'Route Optimizer · Saved 2,840 km · Last 24h' },
+  { dot:'', text:'API Status · All Systems Operational · 99.97% Uptime' },
+];
+
+/* ── TICKER ────────────────────────────────────── */
+function buildTicker() {
+  const el = document.getElementById('ticker');
+  const all = [...tickerEvents, ...tickerEvents];
+  el.innerHTML = all.map(t=>`
+    <div class="tick-item">
+      <div class="tick-dot ${t.dot}"></div>
+      ${t.text}
+    </div>`).join('');
+}
+
+/* ── FEATURES ──────────────────────────────────── */
+let activeFeat = 0;
+function buildFeatures() {
+  const cards = document.getElementById('featCards');
+  cards.innerHTML = features.map((f,i)=>`
+    <div class="feat-card ${i===0?'active':''}" onclick="selectFeat(${i})">
+      <div class="feat-card-icon"><i class="fa-solid ${f.icon}"></i></div>
+      <div>
+        <div class="feat-card-title">${f.title}</div>
+        <div class="feat-card-desc">${f.desc}</div>
+      </div>
+    </div>
+  `).join('');
+  renderFeatDisplay(0);
+}
+function selectFeat(i) {
+  activeFeat = i;
+  document.querySelectorAll('.feat-card').forEach((el,idx)=>el.classList.toggle('active',idx===i));
+  renderFeatDisplay(i);
+}
+function renderFeatDisplay(i) {
+  const f = features[i].display;
+  document.getElementById('featDisplay').innerHTML = `
+    <div class="feat-display-tag"><i class="fa-solid ${f.tag.split('·')[0].trim()}"></i> ${f.tag.split('·')[1]?.trim()||''}</div>
+    <h3>${f.title}</h3>
+    ${f.content}
+  `;
+}
+
+/* ── STEPS ─────────────────────────────────────── */
+function buildSteps() {
+  document.getElementById('stepsLayout').innerHTML = steps.map((s,i)=>`
+    <div class="step reveal delay-${i+1}">
+      <div class="step-num" data-n="${s.n}">
+        <i class="fa-solid ${s.icon}"></i>
+      </div>
+      <div class="step-title">${s.title}</div>
+      <div class="step-desc">${s.desc}</div>
+    </div>
+  `).join('');
+}
+
+/* ── METRICS ───────────────────────────────────── */
+function buildMetrics() {
+  document.getElementById('metricsGrid').innerHTML = metricsData.map((m,i)=>`
+    <div class="metric-cell reveal delay-${i+1}">
+      <div class="metric-icon"><i class="fa-solid ${m.icon}"></i></div>
+      <div class="metric-val" data-target="${m.val}">${m.val}</div>
+      <div class="metric-lbl">${m.lbl}</div>
+      <div class="metric-sub">${m.sub}</div>
+    </div>
+  `).join('');
+}
+
+/* ── TESTIMONIALS ──────────────────────────────── */
+function buildTestimonials() {
+  document.getElementById('testiGrid').innerHTML = testimonials.map((t,i)=>`
+    <div class="testi-card ${t.featured?'featured':''} reveal delay-${i+1}">
+      <div class="testi-company">${t.company}</div>
+      <div class="stars">★★★★★</div>
+      <div class="testi-quote">"</div>
+      <div class="testi-text">${t.text}</div>
+      <div class="testi-author">
+        <div class="testi-avatar">${t.initials}</div>
+        <div>
+          <div class="testi-name">${t.name}</div>
+          <div class="testi-role">${t.role}</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── FEED ──────────────────────────────────────── */
+function buildFeed() {
+  const el = document.getElementById('feedList');
+  el.innerHTML = feedEvents.map((e,i)=>`
+    <div class="feed-item type-${e.type}" style="animation-delay:${i*0.12}s">
+      <i class="fa-solid ${e.icon} feed-icon ${e.iconClass}"></i>
+      <div class="feed-body" style="flex:1;">
+        <div class="feed-body-title">${e.title}</div>
+        <div class="feed-body-sub">${e.sub}</div>
+      </div>
+      <div class="feed-time">${e.time}</div>
+    </div>
+  `).join('');
+}
+/* Simulate live feed updates */
+const newEvents = [
+  { type:'delivered', icon:'fa-circle-check', iconClass:'green', title:'TF-662310P Delivered', sub:'Hyderabad · POD confirmed', time:'Just now' },
+  { type:'transit',   icon:'fa-truck-moving', iconClass:'cyan',  title:'TF-774421C Dispatched', sub:'Chennai Hub · On route', time:'Just now' },
+  { type:'alert',     icon:'fa-wind',         iconClass:'amber', title:'V007 — Traffic Delay', sub:'NH-48 BLR · ETA +45 min', time:'Just now' },
+];
+let newIdx = 0;
+setInterval(()=>{
+  const el = document.getElementById('feedList');
+  if (!el) return;
+  const e = newEvents[newIdx % newEvents.length];
+  newIdx++;
+  const div = document.createElement('div');
+  div.className = `feed-item type-${e.type}`;
+  div.style.animationDelay = '0s';
+  div.innerHTML = `
+    <i class="fa-solid ${e.icon} feed-icon ${e.iconClass}"></i>
+    <div class="feed-body" style="flex:1;">
+      <div class="feed-body-title">${e.title}</div>
+      <div class="feed-body-sub">${e.sub}</div>
+    </div>
+    <div class="feed-time">Just now</div>`;
+  el.prepend(div);
+  if (el.children.length > 6) el.lastChild.remove();
+}, 5000);
+
+/* ── INTEGRATIONS ──────────────────────────────── */
+function buildIntegrations() {
+  document.getElementById('intGrid').innerHTML = intData.map((d,i)=>`
+    <div class="int-card reveal delay-${(i%4)+1}">
+      <div class="int-icon"><i class="${d.icon.includes('brands')?d.icon:'fa-solid '+d.icon}"></i></div>
+      <div class="int-name">${d.name}</div>
+      <div class="int-type">${d.type}</div>
+      <div class="int-status">Connected</div>
+    </div>
+  `).join('');
+}
+
+/* ── VEHICLE ANIMATION ─────────────────────────── */
+const vehicles = [
+  { id:'v1', path:[[10,72],[15,68],[22,62],[28,55],[35,50]] },
+  { id:'v2', path:[[48,48],[52,45],[56,42],[50,45],[46,48]] },
+  { id:'v3', path:[[80,30],[82,28],[78,26],[80,30],[82,28]] },
+  { id:'v4', path:[[28,25],[30,23],[26,22],[28,25],[30,23]] },
+  { id:'v5', path:[[63,60],[65,58],[60,56],[63,60],[65,58]] },
+];
+let vFrame = 0;
+setInterval(()=>{
+  vehicles.forEach(v=>{
+    const el = document.getElementById(v.id);
+    if (!el) return;
+    const pos = v.path[vFrame % v.path.length];
+    el.style.left = pos[0]+'%';
+    el.style.top  = pos[1]+'%';
+  });
+  vFrame++;
+}, 2000);
+
+/* ── SCROLL REVEAL ─────────────────────────────── */
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.08 });
+function observeAll() {
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el=>observer.observe(el));
+}
+
+/* ── COUNTER ANIMATION ─────────────────────────── */
+function animateCounters() {
+  document.querySelectorAll('[data-target]').forEach(el=>{
+    const raw = el.dataset.target.replace('%','').replace('M','').replace('s','').replace('+','');
+    const target = parseFloat(raw);
+    if (isNaN(target)) return;
+    const suffix = el.dataset.target.replace(/[0-9.]/g,'');
+    const dur = 1400, step = 16, steps = dur/step;
+    let current = 0;
+    const inc = target / steps;
+    const t = setInterval(()=>{
+      current += inc;
+      if (current >= target) { current = target; clearInterval(t); }
+      const dec = target % 1 !== 0 ? 1 : 0;
+      el.textContent = (dec ? current.toFixed(dec) : Math.floor(current)) + suffix;
+    }, step);
+  });
+}
+const counterObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if (e.isIntersecting) { animateCounters(); counterObs.disconnect(); } });
+}, { threshold: 0.2 });
+document.addEventListener('DOMContentLoaded', ()=>{
+  const mg = document.getElementById('metricsGrid');
+  if (mg) counterObs.observe(mg);
+});
+
+/* ── TOAST ─────────────────────────────────────── */
+function toast(title, msg) {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<div class="toast-title">${title}</div><div class="toast-msg">${msg}</div>`;
+  t.onclick = ()=>{ t.classList.add('out'); setTimeout(()=>t.remove(),300); };
+  c.appendChild(t);
+  setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(),300); }, 4000);
+}
+
+/* ── NAV ───────────────────────────────────────── */
+window.addEventListener('scroll', ()=>{
+  const nav = document.getElementById('mainNav');
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+function toggleMobile() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+/* ── INIT ──────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', ()=>{
+  buildTicker();
+  buildFeatures();
+  buildSteps();
+  buildMetrics();
+  buildTestimonials();
+  buildFeed();
+  buildIntegrations();
+  setTimeout(observeAll, 100);
+});
+</script>
+</body>
+</html>

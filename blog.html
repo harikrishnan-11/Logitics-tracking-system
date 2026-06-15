@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STACKLY — Blog & Insights</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    :root {
+      --bg:         #080d14;
+      --bg-2:       #0d1520;
+      --bg-3:       #111c2b;
+      --surface:    #0f1e30;
+      --border:     #1a3050;
+      --cyan:       #00e5ff;
+      --cyan-dim:   #00b8cc;
+      --cyan-glow:  rgba(0,229,255,0.12);
+      --amber:      #ffab00;
+      --green:      #00e676;
+      --red:        #ff5252;
+      --purple:     #e040fb;
+      --text-1:     #e8f4fb;
+      --text-2:     #7a9bb5;
+      --text-3:     #3d607a;
+      --mono:       'Space Mono', monospace;
+      --sans:       'Space Grotesk', sans-serif;
+      --ease:       cubic-bezier(.25,.46,.45,.94);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; width: 100%; overflow-x: hidden; }
+    body {
+      font-family: var(--sans);
+      background: var(--bg);
+      color: var(--text-1);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--cyan-dim); border-radius: 2px; }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.18;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 64px;
+      background: rgba(8,13,20,0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      transition: background .3s var(--ease);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 1.1rem; font-weight: 700;
+      color: var(--cyan); letter-spacing: .04em;
+    }
+    .nav-logo-dot {
+      width: 8px; height: 8px; background: var(--cyan);
+      border-radius: 50%; animation: pulse-dot 2s infinite;
+    }
+    @keyframes pulse-dot {
+      0%,100% { box-shadow: 0 0 0 0 rgba(0,229,255,.5); }
+      50%      { box-shadow: 0 0 0 6px rgba(0,229,255,0); }
+    }
+    .nav-links { display: flex; gap: 32px; }
+    .nav-links a {
+      font-size: .82rem; font-weight: 500; letter-spacing: .08em;
+      text-transform: uppercase; color: var(--text-2);
+      transition: color .2s; display: flex; align-items: center; gap: 6px;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
+    .nav-cta {
+      background: transparent; border: 1px solid var(--cyan); color: var(--cyan);
+      font-family: var(--mono); font-size: .78rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 8px 20px; border-radius: 2px; cursor: pointer;
+      transition: all .25s var(--ease);
+    }
+    .nav-cta:hover { background: var(--cyan); color: var(--bg); }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: var(--text-1); border-radius: 2px; }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .7s var(--ease), transform .7s var(--ease);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+
+    /* ── SECTION SHARED ── */
+    section { position: relative; z-index: 1; padding: 100px 5%; }
+    .section-tag {
+      font-family: var(--mono); font-size: .7rem;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700; letter-spacing: -.02em; line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-sub { max-width: 520px; color: var(--text-2); font-size: .95rem; }
+    .section-header { margin-bottom: 60px; }
+
+    /* ══════════════════════════════
+       SECTION 1 — HERO
+    ══════════════════════════════ */
+    #blog-hero {
+      min-height: 60vh;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 140px 5% 80px;
+      position: relative; overflow: hidden;
+      background: var(--bg);
+    }
+    .hero-bg-line {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 70% 30%, rgba(0,229,255,.07), transparent),
+        radial-gradient(ellipse 40% 40% at 20% 70%, rgba(224,64,251,.05), transparent);
+      pointer-events: none;
+    }
+    .blog-hero-eyebrow {
+      font-family: var(--mono); font-size: .72rem;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--cyan); margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .blog-hero-eyebrow::before {
+      content: ''; display: block;
+      width: 36px; height: 1px; background: var(--cyan);
+    }
+    .blog-hero-title {
+      font-size: clamp(2.8rem, 6vw, 5.2rem);
+      font-weight: 700; line-height: 1.05;
+      letter-spacing: -.03em; max-width: 820px;
+      margin-bottom: 28px;
+    }
+    .blog-hero-title span { color: var(--cyan); }
+    .blog-hero-sub {
+      max-width: 520px; color: var(--text-2); font-size: 1rem;
+      margin-bottom: 48px;
+    }
+    .blog-hero-meta {
+      display: flex; gap: 40px; flex-wrap: wrap;
+      padding-top: 40px; border-top: 1px solid var(--border);
+    }
+    .blog-meta-item { display: flex; flex-direction: column; gap: 4px; }
+    .blog-meta-val {
+      font-family: var(--mono); font-size: 1.5rem; font-weight: 700; color: var(--cyan);
+    }
+    .blog-meta-lbl { font-size: .75rem; text-transform: uppercase; letter-spacing: .1em; color: var(--text-2); }
+
+    /* ══════════════════════════════
+       SECTION 2 — FEATURED POST
+    ══════════════════════════════ */
+    #featured { background: var(--bg-2); }
+    .featured-grid {
+      display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: center;
+    }
+    .featured-img {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; aspect-ratio: 16/10; position: relative; overflow: hidden;
+    }
+    .featured-img-inner {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(0,229,255,.15), transparent 60%),
+        repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(0,229,255,.03) 20px, rgba(0,229,255,.03) 21px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .featured-img-icon { font-size: 4rem; color: var(--cyan); opacity: .3; }
+    .featured-badge {
+      position: absolute; top: 16px; left: 16px;
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .64rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 2px;
+    }
+    .featured-category {
+      font-family: var(--mono); font-size: .7rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--cyan); margin-bottom: 14px;
+    }
+    .featured-title {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 700; line-height: 1.2; margin-bottom: 16px;
+      letter-spacing: -.02em;
+    }
+    .featured-excerpt { color: var(--text-2); font-size: .92rem; line-height: 1.75; margin-bottom: 28px; }
+    .featured-author {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    }
+    .author-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--cyan-glow); border: 1px solid rgba(0,229,255,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: .8rem; color: var(--cyan); font-weight: 700;
+    }
+    .author-name { font-weight: 600; font-size: .88rem; }
+    .author-meta { font-size: .75rem; color: var(--text-2); font-family: var(--mono); }
+    .read-more-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; border: 1px solid var(--cyan); color: var(--cyan);
+      font-family: var(--mono); font-size: .78rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 12px 24px; border-radius: 2px; cursor: pointer;
+      transition: all .25s var(--ease);
+    }
+    .read-more-btn:hover { background: var(--cyan); color: var(--bg); }
+
+    /* ══════════════════════════════
+       SECTION 3 — CATEGORIES / TAGS
+    ══════════════════════════════ */
+    #categories { background: var(--bg); padding: 60px 5%; }
+    .cat-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .cat-label {
+      font-family: var(--mono); font-size: .7rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--text-3); margin-right: 8px;
+    }
+    .cat-tag {
+      font-family: var(--mono); font-size: .72rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      padding: 6px 14px; border-radius: 2px;
+      border: 1px solid var(--border); color: var(--text-2);
+      cursor: pointer; transition: all .2s;
+      background: transparent;
+    }
+    .cat-tag:hover, .cat-tag.active {
+      border-color: var(--cyan); color: var(--cyan);
+      background: var(--cyan-glow);
+    }
+    .cat-tag.active { background: var(--cyan); color: var(--bg); border-color: var(--cyan); }
+
+    /* ══════════════════════════════
+       SECTION 4 — POST GRID
+    ══════════════════════════════ */
+    #posts { background: var(--bg); }
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .post-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; overflow: hidden;
+      transition: border-color .3s, transform .3s var(--ease);
+      cursor: pointer; display: flex; flex-direction: column;
+    }
+    .post-card:hover { border-color: var(--cyan-dim); transform: translateY(-6px); }
+    .post-thumb {
+      aspect-ratio: 16/9; background: var(--bg-3);
+      position: relative; overflow: hidden;
+    }
+    .post-thumb-inner {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .post-thumb-icon { font-size: 2.2rem; opacity: .18; }
+    .post-thumb-bar {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .post-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+    .post-cat {
+      font-family: var(--mono); font-size: .65rem; letter-spacing: .12em;
+      text-transform: uppercase; margin-bottom: 10px;
+    }
+    .post-title {
+      font-size: 1rem; font-weight: 700; line-height: 1.35;
+      margin-bottom: 10px; letter-spacing: -.01em;
+    }
+    .post-excerpt { font-size: .82rem; color: var(--text-2); line-height: 1.7; flex: 1; margin-bottom: 20px; }
+    .post-footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 16px; border-top: 1px solid var(--border);
+    }
+    .post-read-time {
+      font-family: var(--mono); font-size: .68rem; color: var(--text-3);
+      display: flex; align-items: center; gap: 6px;
+    }
+    .post-read-time i { color: var(--cyan); }
+    .post-arrow { color: var(--text-3); font-size: .8rem; transition: color .2s, transform .2s; }
+    .post-card:hover .post-arrow { color: var(--cyan); transform: translateX(4px); }
+
+    .posts-load-more {
+      text-align: center; margin-top: 52px;
+    }
+    .load-more-btn {
+      background: transparent; border: 1px solid var(--border); color: var(--text-2);
+      font-family: var(--mono); font-size: .78rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 14px 40px; border-radius: 2px; cursor: pointer;
+      transition: all .25s;
+    }
+    .load-more-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+
+    /* ══════════════════════════════
+       SECTION 5 — NEWSLETTER
+    ══════════════════════════════ */
+    #newsletter { background: var(--bg-2); }
+    .newsletter-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 64px 60px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .newsletter-box::before {
+      content: ''; position: absolute; top: -1px; left: 10%; right: 10%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    }
+    .newsletter-box::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(0,229,255,.05), transparent);
+      pointer-events: none;
+    }
+    .nl-title {
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem); font-weight: 700;
+      letter-spacing: -.02em; margin-bottom: 12px;
+    }
+    .nl-title span { color: var(--cyan); }
+    .nl-sub { color: var(--text-2); font-size: .9rem; line-height: 1.7; }
+    .nl-form { display: flex; flex-direction: column; gap: 14px; position: relative; z-index: 1; }
+    .nl-input-row { display: flex; gap: 0; }
+    .nl-input {
+      flex: 1; background: var(--bg); border: 1px solid var(--border);
+      border-right: none; color: var(--text-1);
+      font-family: var(--sans); font-size: .88rem;
+      padding: 13px 16px; outline: none;
+      transition: border-color .2s;
+    }
+    .nl-input:focus { border-color: var(--cyan); }
+    .nl-input::placeholder { color: var(--text-3); }
+    .nl-submit {
+      background: var(--cyan); color: var(--bg);
+      font-family: var(--mono); font-size: .78rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      border: none; padding: 13px 22px; cursor: pointer;
+      transition: background .2s; white-space: nowrap;
+    }
+    .nl-submit:hover { background: var(--cyan-dim); }
+    .nl-note { font-family: var(--mono); font-size: .68rem; color: var(--text-3); }
+    .nl-stats { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 24px; }
+    .nl-stat-val { font-family: var(--mono); font-size: 1.2rem; font-weight: 700; color: var(--cyan); }
+    .nl-stat-lbl { font-size: .72rem; color: var(--text-2); }
+
+    /* ══════════════════════════════
+       SECTION 6 — TRENDING TOPICS
+    ══════════════════════════════ */
+    #trending { background: var(--bg); }
+    .trending-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .topic-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 28px 24px;
+      transition: border-color .25s, transform .25s;
+      cursor: pointer; position: relative; overflow: hidden;
+    }
+    .topic-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .3s var(--ease);
+    }
+    .topic-card:hover { border-color: var(--cyan-dim); transform: translateY(-4px); }
+    .topic-card:hover::before { transform: scaleX(1); }
+    .topic-icon { font-size: 1.8rem; margin-bottom: 16px; }
+    .topic-name { font-weight: 700; font-size: .95rem; margin-bottom: 6px; }
+    .topic-count { font-family: var(--mono); font-size: .72rem; color: var(--text-2); }
+    .topic-bar {
+      height: 2px; background: var(--border); border-radius: 1px;
+      margin-top: 16px; overflow: hidden;
+    }
+    .topic-bar-fill { height: 100%; border-radius: 1px; transition: width 1.2s var(--ease); }
+
+    /* ══════════════════════════════
+       SECTION 7 — AUTHOR SPOTLIGHT
+    ══════════════════════════════ */
+    #authors { background: var(--bg-2); }
+    .authors-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .author-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 32px 28px; text-align: center;
+      transition: border-color .25s, transform .25s;
+    }
+    .author-card:hover { border-color: var(--cyan-dim); transform: translateY(-4px); }
+    .author-card-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--cyan-glow); border: 2px solid rgba(0,229,255,.3);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--mono); font-size: 1.4rem; font-weight: 700;
+      color: var(--cyan); margin: 0 auto 16px;
+    }
+    .author-card-name { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+    .author-card-role { font-size: .8rem; color: var(--cyan); font-family: var(--mono); margin-bottom: 12px; }
+    .author-card-bio { font-size: .82rem; color: var(--text-2); line-height: 1.65; margin-bottom: 20px; }
+    .author-card-stats { display: flex; justify-content: center; gap: 28px; }
+    .ac-stat-val { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--text-1); }
+    .ac-stat-lbl { font-size: .68rem; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em; }
+
+    /* ══════════════════════════════
+       SECTION 8 — CASE STUDIES CTA
+    ══════════════════════════════ */
+    #case-cta { background: var(--bg); padding: 100px 5%; }
+    .case-cta-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 40px; }
+    .case-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 4px; padding: 36px 32px;
+      display: flex; gap: 24px; align-items: flex-start;
+      transition: border-color .25s, transform .25s; cursor: pointer;
+    }
+    .case-card:hover { border-color: var(--cyan); transform: translateY(-4px); }
+    .case-card-num {
+      font-family: var(--mono); font-size: 2rem; font-weight: 700;
+      color: var(--border); line-height: 1; flex-shrink: 0;
+      transition: color .25s;
+    }
+    .case-card:hover .case-card-num { color: var(--cyan); }
+    .case-card-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+    .case-card-desc { font-size: .82rem; color: var(--text-2); line-height: 1.7; margin-bottom: 16px; }
+    .case-card-tag {
+      font-family: var(--mono); font-size: .65rem; letter-spacing: .1em;
+      text-transform: uppercase; color: var(--cyan);
+      background: var(--cyan-glow); border: 1px solid rgba(0,229,255,.2);
+      padding: 3px 8px; border-radius: 2px; display: inline-block;
+    }
+    .case-cta-bottom { text-align: center; }
+    .case-cta-bottom p { color: var(--text-2); margin-bottom: 24px; }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 1;
+      background: var(--bg-2); border-top: 1px solid var(--border);
+      padding: 60px 5% 28px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+      gap: 48px; margin-bottom: 48px;
+    }
+    .footer-brand-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--mono); font-size: 1.05rem; font-weight: 700;
+      color: var(--cyan); margin-bottom: 14px;
+    }
+    .footer-desc { font-size: .82rem; color: var(--text-2); line-height: 1.7; margin-bottom: 20px; }
+    .footer-socials { display: flex; gap: 10px; }
+    .social-btn {
+      width: 34px; height: 34px; border-radius: 6px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-2); font-size: .82rem; transition: all .2s; cursor: pointer;
+    }
+    .social-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+    .footer-col h4 {
+      font-family: var(--mono); font-size: .66rem; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--text-3); margin-bottom: 16px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .footer-col a { font-size: .83rem; color: var(--text-2); transition: color .2s; display: flex; align-items: center; gap: 6px; }
+    .footer-col a:hover { color: var(--cyan); }
+    .footer-col a i { font-size: .7rem; opacity: .5; }
+    .footer-bottom {
+      border-top: 1px solid var(--border); padding-top: 24px;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+    .footer-copy { font-family: var(--mono); font-size: .72rem; color: var(--text-3); }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-family: var(--mono); font-size: .7rem; color: var(--text-3); transition: color .2s; }
+    .footer-legal a:hover { color: var(--cyan); }
+    .status-pill { display: flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: .68rem; color: var(--green); }
+
+    /* ── TOAST ── */
+    .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+    .toast {
+      background: var(--surface); border: 1px solid var(--cyan); border-left: 3px solid var(--cyan);
+      padding: 14px 18px; border-radius: 2px; font-size: .85rem; max-width: 320px;
+      cursor: pointer; box-shadow: 0 8px 32px rgba(0,0,0,.4);
+      animation: tin .3s var(--ease) forwards;
+    }
+    .toast.removing { animation: tout .3s var(--ease) forwards; }
+    @keyframes tin  { from { opacity:0; transform:translateX(24px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes tout { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(24px); } }
+    .toast-title { font-weight: 600; margin-bottom: 3px; }
+    .toast-msg { font-size: .78rem; color: var(--text-2); }
+
+    /* ── Mobile Nav ── */
+    #mobileNav {
+      display: none; position: fixed; top: 64px; inset-x: 0;
+      background: rgba(8,13,20,.97); z-index: 99;
+      padding: 28px 5%; border-bottom: 1px solid var(--border);
+    }
+    #mobileNav a {
+      display: block; color: var(--text-1); font-weight: 600;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+      font-size: .95rem;
+    }
+
+    /* ══════════════════════════════
+       RESPONSIVE
+    ══════════════════════════════ */
+    @media (max-width: 1000px) {
+      .posts-grid { grid-template-columns: repeat(2, 1fr); }
+      .trending-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .featured-grid { grid-template-columns: 1fr; }
+      .newsletter-box { grid-template-columns: 1fr; padding: 40px 28px; gap: 36px; }
+      .authors-grid { grid-template-columns: repeat(2, 1fr); }
+      .case-cta-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      section { padding: 72px 5%; }
+      #blog-hero { padding: 120px 5% 60px; }
+      .posts-grid { grid-template-columns: 1fr; }
+      .trending-grid { grid-template-columns: 1fr 1fr; }
+      .authors-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .blog-hero-meta { gap: 24px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav" id="mainNav">
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    STACKLY
+  </div>
+  <div class="nav-links">
+    <a href="index.html"><i class="fa-solid fa-location-dot"></i> Home</a>
+    <a href="index.html#shipments"><i class="fa-solid fa-boxes-stacked"></i> About</a>
+    <a href="index.html#fleet"><i class="fa-solid fa-truck"></i> Service</a>
+    <a href="blog.html" class="active"><i class="fa-solid fa-chart-line"></i> Blog</a>
+    <a href="contact.html"><i class="fa-solid fa-headset"></i> Contact</a>
+  </div>
+  <button class="nav-cta">Login</button>
+  <div class="hamburger" id="hamburger" onclick="toggleMobileNav()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div id="mobileNav">
+  <a href="index.html" onclick="closeMobileNav()">Home</a>
+  <a href="index.html#shipments" onclick="closeMobileNav()">About</a>
+  <a href="index.html#fleet" onclick="closeMobileNav()">Service</a>
+  <a href="blog.html" onclick="closeMobileNav()">Blog</a>
+  <a href="contact.html" onclick="closeMobileNav()">Contact</a>
+</div>
+
+<!-- ══════════════════════════════
+     §1 HERO
+══════════════════════════════ -->
+<section id="blog-hero">
+  <div class="hero-bg-line"></div>
+  <div class="blog-hero-eyebrow reveal">Logistics Intelligence · Blog</div>
+  <h1 class="blog-hero-title reveal reveal-delay-1">
+    Ideas that move<br><span>supply chains forward.</span>
+  </h1>
+  <p class="blog-hero-sub reveal reveal-delay-2">
+    Deep dives, field reports, and data-backed analysis from the STACKLY research team — written for operations leaders who refuse to guess.
+  </p>
+  <div class="blog-hero-meta reveal reveal-delay-3">
+    <div class="blog-meta-item">
+      <div class="blog-meta-val">148</div>
+      <div class="blog-meta-lbl">Articles Published</div>
+    </div>
+    <div class="blog-meta-item">
+      <div class="blog-meta-val">32K</div>
+      <div class="blog-meta-lbl">Monthly Readers</div>
+    </div>
+    <div class="blog-meta-item">
+      <div class="blog-meta-val">11</div>
+      <div class="blog-meta-lbl">Expert Contributors</div>
+    </div>
+    <div class="blog-meta-item">
+      <div class="blog-meta-val">Weekly</div>
+      <div class="blog-meta-lbl">Publish Cadence</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     §2 FEATURED POST
+══════════════════════════════ -->
+<section id="featured">
+  <div class="section-header">
+    <div class="section-tag reveal">Featured</div>
+    <h2 class="section-title reveal reveal-delay-1">This week's deep dive</h2>
+  </div>
+  <div class="featured-grid">
+    <div class="featured-img reveal">
+      <div class="featured-img-inner">
+        <i class="fa-solid fa-route featured-img-icon"></i>
+      </div>
+      <div class="featured-badge">Featured</div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <div class="featured-category">Route Optimization · 12 min read</div>
+      <h3 class="featured-title">Why 94% of Indian logistics firms are still routing blind — and what the 6% do differently</h3>
+      <p class="featured-excerpt">
+        Our 2024 State of Logistics Operations survey reveals a stark divide between teams using real-time route intelligence and those still relying on static dispatch sheets. The cost gap is larger than most operations directors expect.
+      </p>
+      <div class="featured-author">
+        <div class="author-avatar">AK</div>
+        <div>
+          <div class="author-name">Arjun Kapoor</div>
+          <div class="author-meta">Head of Research · Jun 10, 2024</div>
+        </div>
+      </div>
+      <button class="read-more-btn" onclick="showToast('Opening article','Loading full post...')">
+        Read Full Article <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     §3 CATEGORIES
+══════════════════════════════ -->
+<section id="categories">
+  <div class="cat-row reveal" id="catRow">
+    <span class="cat-label">Filter by:</span>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     §4 POST GRID
+══════════════════════════════ -->
+<section id="posts" style="padding-top: 20px;">
+  <div class="posts-grid" id="postsGrid"></div>
+  <div class="posts-load-more reveal">
+    <button class="load-more-btn" onclick="showToast('Loading more','Fetching next 6 articles...')">
+      <i class="fa-solid fa-plus"></i> &nbsp;Load More Articles
+    </button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     §5 NEWSLETTER
+══════════════════════════════ -->
+<section id="newsletter">
+  <div class="newsletter-box reveal">
+    <div>
+      <div class="section-tag" style="margin-bottom:14px;">Weekly Dispatch</div>
+      <h2 class="nl-title">Get the logistics <span>edge in your inbox.</span></h2>
+      <p class="nl-sub" style="margin-top:12px;">
+        Every Thursday: one data story, one framework, one tool — curated for operations leaders. No filler, no vendor fluff.
+      </p>
+      <div class="nl-stats">
+        <div>
+          <div class="nl-stat-val">8,400+</div>
+          <div class="nl-stat-lbl">Subscribers</div>
+        </div>
+        <div>
+          <div class="nl-stat-val">61%</div>
+          <div class="nl-stat-lbl">Open Rate</div>
+        </div>
+        <div>
+          <div class="nl-stat-val">4.9★</div>
+          <div class="nl-stat-lbl">Reader Rating</div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <div class="nl-form">
+        <div>
+          <div class="form-label" style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:8px;">Your name</div>
+          <input class="nl-input" style="width:100%;border-right:1px solid var(--border);border-radius:2px;" type="text" placeholder="Priya Sharma" />
+        </div>
+        <div>
+          <div class="form-label" style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:8px;">Work email</div>
+          <div class="nl-input-row">
+            <input class="nl-input" type="email" placeholder="priya@yourbrand.com" />
+            <button class="nl-submit" onclick="showToast('Subscribed!','Weekly Dispatch confirmed. Check your inbox.')">Subscribe</button>
+          </div>
+        </div>
+        <div class="nl-note"><i class="fa-solid fa-shield-halved" style="color:var(--cyan);margin-right:6px;"></i>No spam. Unsubscribe anytime. We never share your email.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════
+     §6 TRENDING TOPICS
+══════════════════════════════ -->
+<section id="trending">
+  <div class="section-header">
+    <div class="section-tag reveal">Browse by Topic</div>
+    <h2 class="section-title reveal reveal-delay-1">What operations teams<br>are reading most.</h2>
+  </div>
+  <div class="trending-grid" id="trendingGrid"></div>
+</section>
+
+<!-- ══════════════════════════════
+     §7 AUTHOR SPOTLIGHT
+══════════════════════════════ -->
+<section id="authors">
+  <div class="section-header">
+    <div class="section-tag reveal">Contributors</div>
+    <h2 class="section-title reveal reveal-delay-1">Written by people<br>who've run operations.</h2>
+    <p class="section-sub reveal reveal-delay-2">Not content marketers. Our contributors are logistics engineers, fleet managers, and supply chain analysts writing from the field.</p>
+  </div>
+  <div class="authors-grid" id="authorsGrid"></div>
+</section>
+
+<!-- ══════════════════════════════
+     §8 CASE STUDIES CTA
+══════════════════════════════ -->
+<section id="case-cta">
+  <div class="section-header">
+    <div class="section-tag reveal">Case Studies</div>
+    <h2 class="section-title reveal reveal-delay-1">Real results from<br>real operations teams.</h2>
+    <p class="section-sub reveal reveal-delay-2">See how companies like yours used STACKLY to cut delays, reduce fuel spend, and improve on-time rates.</p>
+  </div>
+  <div class="case-cta-grid reveal reveal-delay-2" id="casesGrid"></div>
+  <div class="case-cta-bottom reveal reveal-delay-3">
+    <p>Want your team's story featured on the STACKLY blog?</p>
+    <button class="read-more-btn" onclick="showToast('Pitch submitted','Our editorial team will reach out in 3–5 days.')">
+      Submit a Case Study <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-brand-logo"><i class="fa-solid fa-route"></i> STACKLY</div>
+      <p class="footer-desc">Real-time logistics intelligence for operations teams that refuse to be in the dark.</p>
+      <div class="footer-socials">
+        <div class="social-btn"><i class="fa-brands fa-x-twitter"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-linkedin-in"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-github"></i></div>
+        <div class="social-btn"><i class="fa-brands fa-youtube"></i></div>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Product</h4>
+      <ul>
+        <li><a href="index.html#tracking"><i class="fa-solid fa-chevron-right"></i>Live Tracking</a></li>
+        <li><a href="index.html#fleet"><i class="fa-solid fa-chevron-right"></i>Fleet Manager</a></li>
+        <li><a href="index.html#routes"><i class="fa-solid fa-chevron-right"></i>Route Optimizer</a></li>
+        <li><a href="index.html#analytics"><i class="fa-solid fa-chevron-right"></i>Analytics</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>About</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Team</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Careers</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <ul>
+        <li><a href="blog.html"><i class="fa-solid fa-chevron-right"></i>Blog</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Case Studies</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>API Docs</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Status</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Privacy</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Terms</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Security</a></li>
+        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Cookies</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2024 STACKLY Technologies Pvt. Ltd. · Bengaluru, India</div>
+    <div class="status-pill"><i class="fa-solid fa-circle-check"></i> All systems operational</div>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Security</a>
+    </div>
+  </div>
+</footer>
+
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+/* ── DATA ── */
+const categories = ['All','Route Optimization','Fleet Management','Last-Mile','Analytics','Technology','Case Studies','Industry News'];
+
+const posts = [
+  {
+    cat: 'Route Optimization', catColor: '#00e5ff', icon: 'fa-route', iconColor: '#00e5ff',
+    title: 'How live traffic rebalancing cut delivery failures by 31% across Mumbai\'s last-mile network',
+    excerpt: 'When a road closure on the Western Express Highway disrupted 400+ deliveries in real time, one carrier\'s response time made the difference.',
+    read: '8 min', date: 'Jun 08'
+  },
+  {
+    cat: 'Fleet Management', catColor: '#00e676', icon: 'fa-truck', iconColor: '#00e676',
+    title: 'The hidden cost of idle vehicles: what telematics data reveals about depot efficiency',
+    excerpt: 'Analysis of 6,200 vehicle-days across 12 depots shows idle time averaging 38% — and the operational changes that brought it to 14%.',
+    read: '11 min', date: 'Jun 05'
+  },
+  {
+    cat: 'Analytics', catColor: '#ffab00', icon: 'fa-chart-bar', iconColor: '#ffab00',
+    title: 'Predictive ETA models: how we cut "where is my order?" support tickets by 62%',
+    excerpt: 'Building a confidence-interval-based ETA system that customers trust more than static delivery windows.',
+    read: '9 min', date: 'Jun 01'
+  },
+  {
+    cat: 'Technology', catColor: '#e040fb', icon: 'fa-microchip', iconColor: '#e040fb',
+    title: 'IoT sensors on the dock: five signals every warehouse should be capturing today',
+    excerpt: 'Temperature, weight variance, dwell time, zone utilization, and gate cycle — the five metrics that predict dispatch delays before they happen.',
+    read: '7 min', date: 'May 28'
+  },
+  {
+    cat: 'Last-Mile', catColor: '#ff5252', icon: 'fa-person-biking', iconColor: '#ff5252',
+    title: 'The urban density paradox: why more delivery attempts doesn\'t mean better coverage',
+    excerpt: 'Dense urban grids create counter-intuitive routing failures. Here\'s the clustering logic that solves them.',
+    read: '10 min', date: 'May 24'
+  },
+  {
+    cat: 'Case Studies', catColor: '#00e5ff', icon: 'fa-building', iconColor: '#00e5ff',
+    title: 'How Delhivery reduced fuel spend by ₹1.2 Cr/month using dynamic load consolidation',
+    excerpt: 'A detailed breakdown of the consolidation algorithm, the rollout challenges, and the final numbers after 90 days.',
+    read: '14 min', date: 'May 20'
+  },
+];
+
+const trending = [
+  { icon: '<i class="fa-solid fa-route" style="color:#00e5ff"></i>', name: 'Route Optimization', count: '34 articles', pct: 88, color: '#00e5ff' },
+  { icon: '<i class="fa-solid fa-truck" style="color:#00e676"></i>', name: 'Fleet Management', count: '28 articles', pct: 72, color: '#00e676' },
+  { icon: '<i class="fa-solid fa-person-biking" style="color:#ffab00"></i>', name: 'Last-Mile Delivery', count: '22 articles', pct: 60, color: '#ffab00' },
+  { icon: '<i class="fa-solid fa-chart-line" style="color:#e040fb"></i>', name: 'Analytics & BI', count: '19 articles', pct: 50, color: '#e040fb' },
+];
+
+const authors = [
+  { initials: 'AK', name: 'Arjun Kapoor', role: 'Head of Research', bio: 'Former VP Operations at Delhivery. 14 years running multi-modal freight networks across South Asia.', posts: 38, reads: '140K' },
+  { initials: 'PS', name: 'Priya Subramaniam', role: 'Fleet Intelligence Lead', bio: 'Built telematics infrastructure for 8,000+ vehicles. Writes about hardware, sensors, and real-time data pipelines.', posts: 24, reads: '89K' },
+  { initials: 'RN', name: 'Ravi Nair', role: 'Last-Mile Specialist', bio: 'Urban logistics consultant turned engineer. Obsessed with density math and hyperlocal delivery economics.', posts: 19, reads: '62K' },
+];
+
+const cases = [
+  { num: '01', title: 'Shadowfax: 22% reduction in failed first-attempt deliveries', desc: 'How Shadowfax used STACKLY\'s predictive alerting to pre-route around 800 monthly address-exception failures.', tag: 'Last-Mile' },
+  { num: '02', title: 'DTDC Express: ₹80L fuel saving in Q1 2024', desc: 'Dynamic load consolidation across 240 depots — the implementation timeline, team structure, and outcome breakdown.', tag: 'Fleet' },
+  { num: '03', title: 'XpressBees: SLA breach rate cut from 8.2% to 1.7%', desc: 'Real-time exception management + proactive customer notification replacing manual exception handling overnight.', tag: 'Analytics' },
+  { num: '04', title: 'Ekart: 0-to-live on route optimizer in 11 days', desc: 'The fastest enterprise deployment in our history — and the playbook that made it possible.', tag: 'Integration' },
+];
+
+/* ── BUILDERS ── */
+function buildCategories() {
+  const row = document.getElementById('catRow');
+  categories.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-tag' + (i === 0 ? ' active' : '');
+    btn.textContent = c;
+    btn.onclick = () => {
+      document.querySelectorAll('.cat-tag').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      showToast('Filter applied', `Showing: ${c}`);
+    };
+    row.appendChild(btn);
+  });
+}
+
+function buildPosts() {
+  const grid = document.getElementById('postsGrid');
+  grid.innerHTML = posts.map((p, i) => `
+    <div class="post-card reveal reveal-delay-${(i % 3) + 1}" onclick="showToast('Opening article', '${p.title.substring(0, 40)}...')">
+      <div class="post-thumb">
+        <div class="post-thumb-inner">
+          <i class="fa-solid ${p.icon} post-thumb-icon" style="color:${p.iconColor}"></i>
+        </div>
+        <div class="post-thumb-bar" style="background:${p.catColor};opacity:.7;"></div>
+      </div>
+      <div class="post-body">
+        <div class="post-cat" style="color:${p.catColor}">${p.cat}</div>
+        <div class="post-title">${p.title}</div>
+        <div class="post-excerpt">${p.excerpt}</div>
+        <div class="post-footer">
+          <div class="post-read-time"><i class="fa-regular fa-clock"></i> ${p.read} · ${p.date}</div>
+          <i class="fa-solid fa-arrow-right post-arrow"></i>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function buildTrending() {
+  document.getElementById('trendingGrid').innerHTML = trending.map((t, i) => `
+    <div class="topic-card reveal reveal-delay-${i + 1}" style="--tc:${t.color}" onclick="showToast('Topic selected', '${t.name}')">
+      <style>.topic-card:nth-child(${i+1})::before { background: ${t.color}; }</style>
+      <div class="topic-icon">${t.icon}</div>
+      <div class="topic-name">${t.name}</div>
+      <div class="topic-count">${t.count}</div>
+      <div class="topic-bar">
+        <div class="topic-bar-fill" style="width:0;background:${t.color}" data-width="${t.pct}"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function buildAuthors() {
+  document.getElementById('authorsGrid').innerHTML = authors.map((a, i) => `
+    <div class="author-card reveal reveal-delay-${i + 1}">
+      <div class="author-card-avatar">${a.initials}</div>
+      <div class="author-card-name">${a.name}</div>
+      <div class="author-card-role">${a.role}</div>
+      <div class="author-card-bio">${a.bio}</div>
+      <div class="author-card-stats">
+        <div><div class="ac-stat-val">${a.posts}</div><div class="ac-stat-lbl">Posts</div></div>
+        <div><div class="ac-stat-val">${a.reads}</div><div class="ac-stat-lbl">Total reads</div></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function buildCases() {
+  document.getElementById('casesGrid').innerHTML = cases.map((c, i) => `
+    <div class="case-card reveal reveal-delay-${(i % 2) + 1}" onclick="showToast('Opening case study', '${c.title.substring(0,40)}...')">
+      <div class="case-card-num">${c.num}</div>
+      <div>
+        <div class="case-card-title">${c.title}</div>
+        <div class="case-card-desc">${c.desc}</div>
+        <span class="case-card-tag">${c.tag}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── UTILS ── */
+function showToast(title, msg) {
+  const c = document.getElementById('toastContainer');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<div class="toast-title">${title}</div><div class="toast-msg">${msg}</div>`;
+  t.onclick = () => { t.classList.add('removing'); setTimeout(() => t.remove(), 300); };
+  c.appendChild(t);
+  setTimeout(() => { t.classList.add('removing'); setTimeout(() => t.remove(), 300); }, 4000);
+}
+
+function toggleMobileNav() {
+  const n = document.getElementById('mobileNav');
+  n.style.display = n.style.display === 'block' ? 'none' : 'block';
+}
+function closeMobileNav() { document.getElementById('mobileNav').style.display = 'none'; }
+
+window.addEventListener('scroll', () => {
+  document.getElementById('mainNav').style.background =
+    window.scrollY > 60 ? 'rgba(8,13,20,0.97)' : 'rgba(8,13,20,0.85)';
+});
+
+/* ── REVEAL ── */
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      // Animate topic bars
+      e.target.querySelectorAll('.topic-bar-fill[data-width]').forEach(el => {
+        setTimeout(() => el.style.width = el.dataset.width + '%', 100);
+      });
+    }
+  });
+}, { threshold: 0.1 });
+
+function observeAll() {
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  buildCategories();
+  buildPosts();
+  buildTrending();
+  buildAuthors();
+  buildCases();
+  observeAll();
+  setTimeout(observeAll, 200);
+});
+</script>
+</body>
+</html>
