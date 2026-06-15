@@ -74,23 +74,18 @@
 }
 
 .nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--mono);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--cyan);
-  letter-spacing: .04em;
-}
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 180px;
+        height: 55px;
+      }
+            .nav-logo img{
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+            }
 
-.nav-logo-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--cyan);
-  border-radius: 50%;
-  animation: pulse-dot 2s infinite;
-}
 
 @keyframes pulse-dot {
 
@@ -522,7 +517,20 @@
     ══════════════════════════════════════════════════ */
     footer { position: relative; z-index: 1; background: var(--bg-2); border-top: 1px solid var(--border); padding: 60px 5% 28px; }
     .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
-    .footer-brand-logo { display: flex; align-items: center; gap: 10px; font-family: var(--mono); font-size: 1.05rem; font-weight: 700; color: var(--cyan); margin-bottom: 14px; }
+    .footer-brand-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 200px;
+  height: 60px;
+  margin-bottom: 14px;
+}
+.footer-brand-logo img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
     .footer-desc { font-size: .82rem; color: var(--text-2); line-height: 1.7; margin-bottom: 20px; }
     .footer-socials { display: flex; gap: 10px; }
     .social-btn { width: 34px; height: 34px; border-radius: 6px; background: var(--surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-2); font-size: .82rem; transition: all .2s; cursor: pointer; }
