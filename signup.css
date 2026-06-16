@@ -803,7 +803,7 @@ body::after {
 }
 
 .back-link {
-    position: fixed;
+    position: absolute;
     top: 22px;
     left: 24px;
     z-index: 50;
