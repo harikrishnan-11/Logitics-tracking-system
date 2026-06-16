@@ -200,7 +200,7 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        padding: 10px 3% 10px;
+        padding: 10px 2% 10px;
         overflow: hidden;
       }
 
@@ -2162,7 +2162,7 @@ footer {
           height: 340px;
         }
               #hero {
-                        padding: 10px 2% 20px;
+                        padding: 0px 1% 10px;
 
               }
                .footer-grid {

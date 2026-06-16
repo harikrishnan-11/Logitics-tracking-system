@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<a class="back-link" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
+<a class="back-link" href="home.html"><i class="fa-solid fa-arrow-left"></i> Back</a>
 
 <div class="page">
 
@@ -23,7 +23,7 @@
       <div class="radar-dot rd1"></div><div class="radar-dot rd2"></div><div class="radar-dot rd3"></div>
     </div>
     <div class="brand-logo">
-      <a href="./index.html">
+      <a href="./home.html">
         <img src="./src/Untitled design-compressed.webp" alt="">
       </a>
   </div>
@@ -56,7 +56,7 @@
     <div class="form-box">
 
       <div class="mobile-logo">
-        <a href="./index.html">
+        <a href="./home.html">
           <img src="./src/Untitled design-compressed.webp" alt="">
         </a>
   </div>
@@ -231,6 +231,11 @@ document.querySelectorAll('.social-btn').forEach(btn => {
   }
 
   if (!isValid) return;
+
+
+
+
+
 const emailId = document.getElementById("email").value;
 localStorage.setItem("userEmail", emailId);  // Redirect based on role
   if (role === "admin") {
