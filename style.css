@@ -200,13 +200,13 @@
         align-items: center;
         justify-content: center;
         text-align: center;
-        padding: 120px 5% 60px;
+        padding: 10px 3% 10px;
         overflow: hidden;
       }
 
       .hero-radar {
         position: absolute;
-        top: 50%;
+        top: 40%;
         left: 50%;
         transform: translate(-50%, -50%);
         width: 700px;

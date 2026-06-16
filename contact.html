@@ -106,7 +106,6 @@
 <!-- ══════════════════════════════
      §3 CONTACT FORM
 ══════════════════════════════ -->
-```html
 <section id="contact-form-section">
   <div class="section-header">
     <div class="section-tag reveal">Send a Message</div>
@@ -254,7 +253,6 @@
     <div class="contact-sidebar reveal reveal-delay-2" id="contactSidebar"></div>
   </div>
 </section>
-```
 
 
 <!-- ══════════════════════════════
@@ -703,55 +701,133 @@ function buildSalesSlots() {
 function updateChar(el) {
   document.getElementById('charCount').textContent = el.value.length;
 }
-
 function handleForm() {
+  const firstName = document.getElementById('firstName');
+  const lastName = document.getElementById('lastName');
   const email = document.getElementById('email');
   const phone = document.getElementById('phone');
+  const company = document.getElementById('company');
+  const teamSize = document.getElementById('teamSize');
+  const enquiryType = document.getElementById('enquiryType');
+  const msgArea = document.getElementById('msgArea');
 
-  const emailError = document.getElementById('emailError');
-  const phoneError = document.getElementById('phoneError');
+  const fields = [
+    'firstName',
+    'lastName',
+    'email',
+    'phone',
+    'company',
+    'teamSize',
+    'enquiryType',
+    'msgArea'
+  ];
+
+  // Reset all errors
+  fields.forEach(id => {
+    const errorEl = document.getElementById(id + 'Error') ||
+                    document.getElementById('enquiryError') ||
+                    document.getElementById('messageError');
+
+    document.getElementById(id).classList.remove('input-error');
+
+    if (errorEl) errorEl.textContent = '';
+  });
 
   let isValid = true;
 
-  // Reset
-  emailError.textContent = '';
-  phoneError.textContent = '';
+  // First Name
+  if (firstName.value.trim() === '') {
+    document.getElementById('firstNameError').textContent =
+      'First name is required';
+    firstName.classList.add('input-error');
+    isValid = false;
+  }
 
-  email.classList.remove('input-error');
-  phone.classList.remove('input-error');
+  // Last Name
+  if (lastName.value.trim() === '') {
+    document.getElementById('lastNameError').textContent =
+      'Last name is required';
+    lastName.classList.add('input-error');
+    isValid = false;
+  }
 
-  // Email Validation
+  // Email
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (email.value.trim() === '') {
-    emailError.textContent = 'Email is required';
+    document.getElementById('emailError').textContent =
+      'Email is required';
     email.classList.add('input-error');
     isValid = false;
   } else if (!emailPattern.test(email.value.trim())) {
-    emailError.textContent = 'Enter a valid email address';
+    document.getElementById('emailError').textContent =
+      'Enter a valid email address';
     email.classList.add('input-error');
     isValid = false;
   }
 
-  // Phone Validation (10 digits)
+  // Phone
   const phoneValue = phone.value.replace(/\D/g, '');
 
-  if (phone.value.trim() !== '') {
-    if (!/^\d{10}$/.test(phoneValue)) {
-      phoneError.textContent = 'Enter a valid 10-digit mobile number';
-      phone.classList.add('input-error');
-      isValid = false;
-    }
+  if (phoneValue === '') {
+    document.getElementById('phoneError').textContent =
+      'Phone number is required';
+    phone.classList.add('input-error');
+    isValid = false;
+  } else if (!/^\d{10}$/.test(phoneValue)) {
+    document.getElementById('phoneError').textContent =
+      'Enter a valid 10-digit mobile number';
+    phone.classList.add('input-error');
+    isValid = false;
+  }
+
+  // Company
+  if (company.value.trim() === '') {
+    document.getElementById('companyError').textContent =
+      'Company name is required';
+    company.classList.add('input-error');
+    isValid = false;
+  }
+
+  // Team Size
+  if (teamSize.value === '') {
+    document.getElementById('teamSizeError').textContent =
+      'Please select team size';
+    teamSize.classList.add('input-error');
+    isValid = false;
+  }
+
+  // Enquiry Type
+  if (enquiryType.value === '') {
+    document.getElementById('enquiryError').textContent =
+      'Please select an enquiry type';
+    enquiryType.classList.add('input-error');
+    isValid = false;
+  }
+
+  // Message
+  if (msgArea.value.trim() === '') {
+    document.getElementById('messageError').textContent =
+      'Message is required';
+    msgArea.classList.add('input-error');
+    isValid = false;
+  } else if (msgArea.value.trim().length < 10) {
+    document.getElementById('messageError').textContent =
+      'Message must be at least 10 characters';
+    msgArea.classList.add('input-error');
+    isValid = false;
   }
 
   if (!isValid) return;
 
   showToast(
-    'Message sent!',
+    'Message Sent!',
     'Our team will respond within 2 hours. Check your inbox.'
   );
-}
 
+  document.getElementById('contactForm').reset();
+  document.getElementById('charCount').textContent = '0';
+}
 function showToast(title, msg) {
   const c = document.getElementById('toastContainer');
   const t = document.createElement('div');

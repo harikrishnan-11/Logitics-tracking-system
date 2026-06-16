@@ -714,6 +714,14 @@
         color: var(--cyan);
         border-color: var(--cyan);
     }
+    select.field-input {
+  appearance: none;
+  cursor: pointer;
+}
+
+#roleError {
+  display: none;
+}
 
     .back-link {
         position: absolute;

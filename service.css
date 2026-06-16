@@ -266,8 +266,7 @@
     }
     .hero-bg-img {
       position: absolute; inset: 0; z-index: 0;
-      background: url('') center/cover no-repeat;
-      opacity: .08; filter: saturate(0);
+background: url("./src/image_10-compressed.webp") center/cover no-repeat;      opacity: .05; filter: saturate(0);
     }
     .hero-overlay { position: absolute; inset: 0; z-index: 0; background: linear-gradient(135deg, rgba(6,11,17,.97) 40%, rgba(6,11,17,.75) 100%); }
     .orb { position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; animation: orb-drift 10s ease-in-out infinite alternate; }
