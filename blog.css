@@ -280,9 +280,10 @@
       display: grid; grid-template-columns: 1.4fr 1fr; gap: 48px; align-items: center;
     }
     .featured-img {
-      background: var(--surface); border: 1px solid var(--border);
+      background: url(./src/route-marked-on-a-map-compressed.webp); border: 1px solid var(--border);background-position: center;background-size: cover;
       border-radius: 4px; aspect-ratio: 16/10; position: relative; overflow: hidden;
     }
+   
     .featured-img-inner {
       position: absolute; inset: 0;
       background:
@@ -517,6 +518,8 @@
     .ac-stat-val { font-family: var(--mono); font-size: 1.1rem; font-weight: 700; color: var(--text-1); }
     .ac-stat-lbl { font-size: .68rem; color: var(--text-3); text-transform: uppercase; letter-spacing: .08em; }
 
+
+    
     /* ══════════════════════════════
        SECTION 8 — CASE STUDIES CTA
     ══════════════════════════════ */

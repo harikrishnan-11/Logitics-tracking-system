@@ -249,44 +249,61 @@
 <script>
 /* ── DATA ── */
 const categories = ['All','Route Optimization','Fleet Management','Last-Mile','Analytics','Technology','Case Studies','Industry News'];
-
 const posts = [
   {
-    cat: 'Route Optimization', catColor: '#00e5ff', icon: 'fa-route', iconColor: '#00e5ff',
-    title: 'How live traffic rebalancing cut delivery failures by 31% across Mumbai\'s last-mile network',
-    excerpt: 'When a road closure on the Western Express Highway disrupted 400+ deliveries in real time, one carrier\'s response time made the difference.',
-    read: '8 min', date: 'Jun 08'
+    img:'./src/image_3-compressed.webp',
+    cat:'Route Optimization',
+    catColor:'#00e5ff',
+    title:'How live traffic rebalancing cut delivery failures by 31% across Mumbai\'s last-mile network',
+    excerpt:'When a road closure on the Western Express Highway disrupted 400+ deliveries in real time, one carrier\'s response time made the difference.',
+    read:'8 min',
+    date:'Jun 08'
   },
   {
-    cat: 'Fleet Management', catColor: '#00e676', icon: 'fa-truck', iconColor: '#00e676',
-    title: 'The hidden cost of idle vehicles: what telematics data reveals about depot efficiency',
-    excerpt: 'Analysis of 6,200 vehicle-days across 12 depots shows idle time averaging 38% — and the operational changes that brought it to 14%.',
-    read: '11 min', date: 'Jun 05'
+    img:'./src/image_4-compressed.webp',
+    cat:'Fleet Management',
+    catColor:'#00e676',
+    title:'The hidden cost of idle vehicles: what telematics data reveals about depot efficiency',
+    excerpt:'Analysis of 6,200 vehicle-days across 12 depots shows idle time averaging 38% — and the operational changes that brought it to 14%.',
+    read:'11 min',
+    date:'Jun 05'
   },
   {
-    cat: 'Analytics', catColor: '#ffab00', icon: 'fa-chart-bar', iconColor: '#ffab00',
-    title: 'Predictive ETA models: how we cut "where is my order?" support tickets by 62%',
-    excerpt: 'Building a confidence-interval-based ETA system that customers trust more than static delivery windows.',
-    read: '9 min', date: 'Jun 01'
+    img:'./src/image_6-compressed.webp',
+    cat:'Analytics',
+    catColor:'#ffab00',
+    title:'Predictive ETA models: how we cut "where is my order?" support tickets by 62%',
+    excerpt:'Building a confidence-interval-based ETA system that customers trust more than static delivery windows.',
+    read:'9 min',
+    date:'Jun 01'
   },
   {
-    cat: 'Technology', catColor: '#e040fb', icon: 'fa-microchip', iconColor: '#e040fb',
-    title: 'IoT sensors on the dock: five signals every warehouse should be capturing today',
-    excerpt: 'Temperature, weight variance, dwell time, zone utilization, and gate cycle — the five metrics that predict dispatch delays before they happen.',
-    read: '7 min', date: 'May 28'
+    img:'./src/image_7-compressed.webp',
+    cat:'Technology',
+    catColor:'#e040fb',
+    title:'IoT sensors on the dock: five signals every warehouse should be capturing today',
+    excerpt:'Temperature, weight variance, dwell time, zone utilization, and gate cycle — the five metrics that predict dispatch delays before they happen.',
+    read:'7 min',
+    date:'May 28'
   },
   {
-    cat: 'Last-Mile', catColor: '#ff5252', icon: 'fa-person-biking', iconColor: '#ff5252',
-    title: 'The urban density paradox: why more delivery attempts doesn\'t mean better coverage',
-    excerpt: 'Dense urban grids create counter-intuitive routing failures. Here\'s the clustering logic that solves them.',
-    read: '10 min', date: 'May 24'
+    img:'./src/image_8-compressed.webp',
+    cat:'Last-Mile',
+    catColor:'#ff5252',
+    title:'The urban density paradox: why more delivery attempts doesn\'t mean better coverage',
+    excerpt:'Dense urban grids create counter-intuitive routing failures. Here\'s the clustering logic that solves them.',
+    read:'10 min',
+    date:'May 24'
   },
   {
-    cat: 'Case Studies', catColor: '#00e5ff', icon: 'fa-building', iconColor: '#00e5ff',
-    title: 'How Delhivery reduced fuel spend by ₹1.2 Cr/month using dynamic load consolidation',
-    excerpt: 'A detailed breakdown of the consolidation algorithm, the rollout challenges, and the final numbers after 90 days.',
-    read: '14 min', date: 'May 20'
-  },
+    img:'./src/image_9-compressed.webp',
+    cat:'Case Studies',
+    catColor:'#00e5ff',
+    title:'How Delhivery reduced fuel spend by ₹1.2 Cr/month using dynamic load consolidation',
+    excerpt:'A detailed breakdown of the consolidation algorithm, the rollout challenges, and the final numbers after 90 days.',
+    read:'14 min',
+    date:'May 20'
+  }
 ];
 
 const trending = [
@@ -333,22 +350,26 @@ function buildPosts() {
          onclick="openPost('${p.title.replace(/'/g, "\\'")}')">
 
       <div class="post-thumb">
-        <div class="post-thumb-inner">
-          <i class="fa-solid ${p.icon} post-thumb-icon" style="color:${p.iconColor}"></i>
-        </div>
-        <div class="post-thumb-bar" style="background:${p.catColor};opacity:.7;"></div>
+        <img src="${p.img}" alt="${p.title}" class="post-thumb-img">
       </div>
 
       <div class="post-body">
-        <div class="post-cat" style="color:${p.catColor}">${p.cat}</div>
+        <div class="post-cat" style="color:${p.catColor}">
+          ${p.cat}
+        </div>
+
         <div class="post-title">${p.title}</div>
-        <div class="post-excerpt">${p.excerpt}</div>
+
+        <div class="post-excerpt">
+          ${p.excerpt}
+        </div>
 
         <div class="post-footer">
           <div class="post-read-time">
             <i class="fa-regular fa-clock"></i>
             ${p.read} · ${p.date}
           </div>
+
           <i class="fa-solid fa-arrow-right post-arrow"></i>
         </div>
       </div>
