@@ -384,15 +384,19 @@ onclick="showToast('Connecting...','Opening live chat with sales team.'); setTim
   </div>
 </section>
 
-<!-- ── FOOTER ── -->
+
 <footer>
   <div class="footer-grid">
     <div>
-      <div class="footer-brand-logo"> <a href="./home.html">
+      <div class="footer-brand-logo">
+     <a href="./home.html">
        <img src="./src/Untitled design-compressed.webp" alt="">
-     </a>  </div>
-      <p class="footer-desc">Real-time logistics intelligence for operations teams that refuse to be in the dark.</p>
+     </a>  
+  </div>
+     
+      <p class="footer-desc">Real-time logistics intelligence for operations teams that refuse to be in the dark. Track, predict, optimise — all in one platform.</p>
       <div class="footer-socials">
+
         <div class="social-btn"><i class="fa-brands fa-x-twitter"></i></div>
         <div class="social-btn"><i class="fa-brands fa-linkedin-in"></i></div>
         <div class="social-btn"><i class="fa-brands fa-github"></i></div>
@@ -411,37 +415,37 @@ onclick="showToast('Connecting...','Opening live chat with sales team.'); setTim
     <div class="footer-col">
       <h4>Company</h4>
       <ul>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>About</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Team</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Careers</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Press</a></li>
+        <li><a href="about.html"><i class="fa-solid fa-chevron-right"></i>About</a></li>
+        <li><a href="about.html#team"><i class="fa-solid fa-chevron-right"></i>Team</a></li>
+        <li><a href="about.html#culture"><i class="fa-solid fa-chevron-right"></i>Careers</a></li>
+        <li><a href="about.html#investors"><i class="fa-solid fa-chevron-right"></i>Investors</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Resources</h4>
+      <h4>Developers</h4>
       <ul>
-        <li><a href="blog.html"><i class="fa-solid fa-chevron-right"></i>Blog</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Case Studies</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>API Docs</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Status</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>API Reference</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Webhooks</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>SDKs</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Status Page</a></li>
       </ul>
     </div>
     <div class="footer-col">
       <h4>Legal</h4>
       <ul>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Privacy</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Terms</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Security</a></li>
-        <li><a href="#"><i class="fa-solid fa-chevron-right"></i>Cookies</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Privacy Policy</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Terms of Service</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Security</a></li>
+        <li><a href="./404.html"><i class="fa-solid fa-chevron-right"></i>Cookie Policy</a></li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy">© 2026 STACKLY Technologies Pvt. Ltd. · Bengaluru, India</div>
+    <div class="footer-copy">© 2026 Stackly Logistics Pvt. Ltd. Salem, India</div>
     <div class="footer-legal">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="#">Security</a>
+      <a href="./404.html">Privacy</a>
+      <a href="./404.html">Terms</a>
+      <a href="./404.html">Security</a>
     </div>
   </div>
 </footer>
@@ -484,32 +488,32 @@ const channels = [
 const sidebarItems = [
   { icon: 'fa-envelope', label: 'Email', val: 'support@stackly.in', sub: 'Response within 2 hours' },
   { icon: 'fa-phone', label: 'Phone', val: '+91 80 4567 8900', sub: 'Mon–Fri · 10AM – 6PM IST' },
-  { icon: 'fa-location-dot', label: 'Headquarters', val: 'Bengaluru, Karnataka', sub: 'STACKLY Technologies Pvt. Ltd.' },
+  { icon: 'fa-location-dot', label: 'Headquarters', val: 'Salem, Karnataka', sub: 'STACKLY Technologies Pvt. Ltd.' },
   { icon: 'fa-brands fa-linkedin-in', label: 'LinkedIn', val: 'linkedin.com/company/stackly', sub: 'Follow for product updates' },
   { icon: 'fa-shield-halved', label: 'Security', val: 'security@stackly.in', sub: 'For responsible disclosures' },
 ];
 
 const offices = [
   {
-    city: "New York",
+    city: "Salem",
     type: "Head Office",
-    address: "123 Business Street\nNew York, USA",
-    map: "https://maps.google.com/maps?q=New%20York&t=&z=13&ie=UTF8&iwloc=&output=embed"
+    address: "123 Business Street\nSalem, Tamil Nadu",
+    map: "https://maps.google.com/maps?q=MMR%20Complex,%20Chinna%20Thirupathi,%20Salem,%20Tamil%20Nadu%20636008&t=&z=15&ie=UTF8&iwloc=&output=embed"
   },
   {
-    city: "London",
+    city: "Coimbatore",
     type: "Regional Office",
-    address: "45 King Street\nLondon, UK",
-    map: "https://maps.google.com/maps?q=London&t=&z=13&ie=UTF8&iwloc=&output=embed"
+    address: "45 King Street\nCoimbatore, Tamil Nadu",
+    map: "https://maps.google.com/maps?q=79%20Aiswarya%20Complex,%20Nethaji%20Road,%20PN%20Palayam,%20Coimbatore&t=&z=15&ie=UTF8&iwloc=&output=embed"
   },
   {
   city: 'Bengaluru',
   type: 'Headquarters',
   dotColor: '#00e5ff',
-  address: '4th Floor, Tower B, RMZ Infinity\nOld Madras Road\nBengaluru – 560 016',
+  address: '4th Floor, Tower B, RMZ Infinity\nOld Madras Road\nBengaluru ,Karnataka',
   lat: '12.9716',
   lng: '77.5946',
-  map: 'https://maps.google.com/maps?q=12.9716,77.5946&t=&z=13&ie=UTF8&iwloc=&output=embed'
+  map: 'https://maps.google.com/maps?q=12.8799,77.6325&t=&z=15&ie=UTF8&iwloc=&output=embed'
 }
   
 ];

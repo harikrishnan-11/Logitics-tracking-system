@@ -438,7 +438,7 @@ const fleetD=[
   {id:'TF-V002',dr:'Priya Nair',  loc:'Chennai Depot',     cargo:'Idle',       fuel:100,eta:'—',    st:'idle'},
   {id:'TF-V003',dr:'Suresh Patil',loc:'Pune Bypass',       cargo:'Pharma',     fuel:31, eta:'18:20',st:'low'},
   {id:'TF-V004',dr:'Meena K.',    loc:'Maintenance Bay',   cargo:'—',          fuel:45, eta:'—',    st:'maint'},
-  {id:'TF-V005',dr:'Arjun Reddy', loc:'NH-48, Bengaluru',  cargo:'FMCG',       fuel:67, eta:'16:55',st:'active'},
+  {id:'TF-V005',dr:'Arjun Reddy', loc:'NH-48, Salem',  cargo:'FMCG',       fuel:67, eta:'16:55',st:'active'},
   {id:'TF-V006',dr:'Deepa Menon', loc:'Delhi Ring Rd',     cargo:'Textiles',   fuel:54, eta:'19:10',st:'active'},
 ];
 const fleetFullD=[
@@ -465,9 +465,9 @@ const shipmentsD=[
   {id:'TF-884729K',route:'Mumbai → Chennai',     carrier:'Delhivery', pct:62, st:'transit',   eta:'Jun 13, 14:30'},
   {id:'TF-334501X',route:'Delhi → Pune',         carrier:'BlueDart',  pct:100,st:'delivered', eta:'Delivered'},
   {id:'TF-991023Z',route:'Kolkata → Hyderabad',  carrier:'DTDC',      pct:35, st:'transit',   eta:'Jun 14, 09:00'},
-  {id:'TF-228847Y',route:'Ahmedabad → Bengaluru',carrier:'Shadowfax', pct:10, st:'delayed',   eta:'Jun 15 (delay)'},
+  {id:'TF-228847Y',route:'Ahmedabad → Salem',carrier:'Shadowfax', pct:10, st:'delayed',   eta:'Jun 15 (delay)'},
   {id:'TF-447620M',route:'Chennai → Delhi',      carrier:'XpressBees',pct:0,  st:'pending',   eta:'Awaiting'},
-  {id:'TF-661135N',route:'Bengaluru → Kochi',    carrier:'BlueDart',  pct:88, st:'transit',   eta:'Jun 12, 22:00'},
+  {id:'TF-661135N',route:'Salem → Kochi',    carrier:'BlueDart',  pct:88, st:'transit',   eta:'Jun 12, 22:00'},
   {id:'TF-772341P',route:'Surat → Kolkata',      carrier:'Delhivery', pct:55, st:'transit',   eta:'Jun 14, 16:00'},
   {id:'TF-884892Q',route:'Hyderabad → Mumbai',   carrier:'DTDC',      pct:100,st:'delivered', eta:'Delivered'},
 ];
@@ -476,7 +476,7 @@ const shipmentsFullD=[
   {id:'TF-552201R',route:'Pune → Jaipur',        carrier:'Shadowfax', pct:42, st:'transit',   eta:'Jun 14, 11:20'},
   {id:'TF-663312S',route:'Kochi → Surat',        carrier:'XpressBees',pct:0,  st:'pending',   eta:'Awaiting'},
   {id:'TF-774423T',route:'Kanpur → Chennai',     carrier:'Delhivery', pct:100,st:'delivered', eta:'Delivered'},
-  {id:'TF-885534U',route:'Bengaluru → Delhi',    carrier:'DTDC',      pct:18, st:'delayed',   eta:'Jun 16 (delay)'},
+  {id:'TF-885534U',route:'Salem → Delhi',    carrier:'DTDC',      pct:18, st:'delayed',   eta:'Jun 16 (delay)'},
 ];
 
 const activityD=[
@@ -500,7 +500,7 @@ const warehouseD=[
   {name:'Mumbai Central Hub',loc:'Andheri East, Mumbai',cap:78,inv:12840,status:'operational',color:'#00e676'},
   {name:'Delhi NCR Depot',   loc:'Gurugram, Haryana',   cap:62,inv:9210, status:'operational',color:'#00e676'},
   {name:'Chennai Hub',       loc:'Ambattur, Chennai',   cap:91,inv:7650, status:'near-full',  color:'#ffab00'},
-  {name:'Bengaluru South',   loc:'Electronic City, BLR',cap:45,inv:5320, status:'operational',color:'#00e676'},
+  {name:'Salem South',   loc:'Electronic City, BLR',cap:45,inv:5320, status:'operational',color:'#00e676'},
   {name:'Kolkata Depot',     loc:'Howrah, Kolkata',     cap:38,inv:3180, status:'operational',color:'#00e676'},
   {name:'Surat Logistics Park',loc:'Hazira Road, Surat',cap:95,inv:8460, status:'near-full',  color:'#ffab00'},
 ];
@@ -508,7 +508,7 @@ const warehouseD=[
 const routesD=[
   {id:'RT-001',name:'Mumbai → Pune Corridor',     stops:4,distance:'148 km',duration:'3h 10m',saved:'22 min saved',vehicles:12,status:'optimized'},
   {id:'RT-002',name:'Delhi → Jaipur Express',     stops:3,distance:'271 km',duration:'4h 45m',saved:'35 min saved',vehicles:9, status:'optimized'},
-  {id:'RT-003',name:'Chennai → Bengaluru Loop',   stops:5,distance:'346 km',duration:'5h 50m',saved:'18 min saved',vehicles:14,status:'optimized'},
+  {id:'RT-003',name:'Chennai → Salem Loop',   stops:5,distance:'346 km',duration:'5h 50m',saved:'18 min saved',vehicles:14,status:'optimized'},
   {id:'RT-004',name:'Kolkata → Bhubaneswar',      stops:3,distance:'442 km',duration:'7h 20m',saved:'Pending recalculation',vehicles:6, status:'pending'},
   {id:'RT-005',name:'Hyderabad → Vijayawada',     stops:4,distance:'275 km',duration:'4h 35m',saved:'27 min saved',vehicles:8, status:'optimized'},
 ];

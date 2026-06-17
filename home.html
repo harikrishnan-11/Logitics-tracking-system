@@ -490,7 +490,7 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <div class="footer-copy">© 2026 Stackly Logistics Pvt. Ltd. · Bengaluru, India</div>
+    <div class="footer-copy">© 2026 Stackly Logistics Pvt. Ltd. · Salem, India</div>
     <div class="footer-legal">
       <a href="./404.html">Privacy</a>
       <a href="./404.html">Terms</a>
@@ -510,9 +510,9 @@ const shipments = [
   { id:'TF-884729K', route:'Mumbai → Chennai', pct:62, eta:'Jun 13, 14:30', status:'transit' },
   { id:'TF-334501X', route:'Delhi → Pune', pct:100, eta:'Delivered Jun 10', status:'delivered' },
   { id:'TF-991023Z', route:'Kolkata → Hyderabad', pct:35, eta:'Jun 14, 09:00', status:'transit' },
-  { id:'TF-228847Y', route:'Ahmedabad → Bengaluru', pct:10, eta:'Jun 15 (delayed)', status:'delayed' },
+  { id:'TF-228847Y', route:'Ahmedabad → Salem', pct:10, eta:'Jun 15 (delayed)', status:'delayed' },
   { id:'TF-447620M', route:'Chennai → Delhi', pct:0, eta:'Awaiting pickup', status:'pending' },
-  { id:'TF-661135N', route:'Bengaluru → Kochi', pct:88, eta:'Jun 12, 22:00', status:'transit' },
+  { id:'TF-661135N', route:'Salem → Kochi', pct:88, eta:'Jun 12, 22:00', status:'transit' },
 ];
 
 const fleet = [
@@ -520,7 +520,7 @@ const fleet = [
   { id:'TF-V002', driver:'Priya Nair', loc:'Chennai Depot', cargo:'Idle', fuel:100, eta:'–', status:'idle' },
   { id:'TF-V003', driver:'Suresh Patil', loc:'Pune Bypass', cargo:'Pharma', fuel:31, eta:'18:20', status:'active' },
   { id:'TF-V004', driver:'Meena Krishnan', loc:'Maintenance Bay 3', cargo:'–', fuel:45, eta:'–', status:'maint' },
-  { id:'TF-V005', driver:'Arjun Reddy', loc:'NH-48, Bengaluru', cargo:'FMCG', fuel:67, eta:'16:55', status:'active' },
+  { id:'TF-V005', driver:'Arjun Reddy', loc:'NH-48, Salem', cargo:'FMCG', fuel:67, eta:'16:55', status:'active' },
   { id:'TF-V006', driver:'Deepa Menon', loc:'Delhi NCR Ring Rd', cargo:'Textiles', fuel:54, eta:'19:10', status:'active' },
 ];
 
@@ -528,7 +528,7 @@ const routes = [
   { name:'Mumbai → Pune Express', stops:'4 stops', score:'96', dist:'148 km', time:'2h 10m', fuel:'18L', co2:'-12%', status:'good' },
   { name:'Delhi → Agra Corridor', stops:'3 stops', score:'88', dist:'233 km', time:'3h 45m', fuel:'28L', co2:'-8%', status:'good' },
   { name:'Chennai → Coimbatore', stops:'6 stops', score:'71', dist:'497 km', time:'6h 20m', fuel:'54L', co2:'+4%', status:'warn' },
-  { name:'Bengaluru Hub Loop', stops:'12 stops', score:'94', dist:'78 km', time:'1h 50m', fuel:'10L', co2:'-18%', status:'good' },
+  { name:'Salem Hub Loop', stops:'12 stops', score:'94', dist:'78 km', time:'1h 50m', fuel:'10L', co2:'-18%', status:'good' },
 ];
 
 const alertsData = [
@@ -823,8 +823,18 @@ function removeToast(t) {
 /* ── TRACK SIMULATE ───────────────────────────────────────── */
 function simulateTrack() {
   const id = document.getElementById('trackInput').value || 'TF-SAMPLE';
+
   showToast('Tracking ' + id, 'Locating shipment on live network...');
-  setTimeout(() => showToast('Found', 'In transit — 62% complete · ETA tomorrow 14:30'), 1200);
+
+  setTimeout(() => {
+    showToast('Found', 'In transit — 62% complete · ETA tomorrow 14:30');
+
+    // Redirect to 404 page after 1 second
+    setTimeout(() => {
+      window.location.href = '404.html';
+    }, 1000);
+
+  }, 1200);
 }
 
 /* ── CONTACT FORM ─────────────────────────────────────────── */
