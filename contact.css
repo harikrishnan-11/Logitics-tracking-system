@@ -316,17 +316,26 @@
     /* ══════════════════════════════
        §1 HERO
     ══════════════════════════════ */
-    #contact-hero {
-        min-height: 58vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        padding: 140px 5% 80px;
-        position: relative;
-        overflow: hidden;
-        background: var(--bg);
-    }
+  #contact-hero {
+    min-height: 58vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 140px 5% 80px;
+    position: relative;
+    overflow: hidden;
 
+    background:
+        linear-gradient(
+            rgba(8, 13, 20, 0.75),
+            rgba(8, 13, 20, 0.85)
+        ),
+        url('./src/image_3-compressed.webp');
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
     .hero-glow {
         position: absolute;
         inset: 0;
